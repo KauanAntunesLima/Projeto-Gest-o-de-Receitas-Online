@@ -6,3 +6,125 @@
     box-sizing: border-box;
     font-family: "Poppins", sans-serif;
 }
+:root {
+    --cor-primaria: #1C931C; 
+    --cor-secundaria: #FF8000;
+  }
+body{
+    width: 100%;
+}
+header{
+    display: flex;
+    align-items: center;
+    height: 150px;
+    justify-content: space-between;
+}
+.logo{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-left: 63px;
+}
+.logo span{
+    color: var(--cor-primaria);
+    font-size: 38px;
+}
+.logo span span{
+    color: var(--cor-secundaria);
+}
+.options{
+    display: flex;
+    align-items: center;
+    height: 100%;
+    margin-right: 97px;
+    gap: 10px;
+}
+.search-bar{
+    display: flex;
+    align-items: center;
+    padding-left: 30px;
+    height: 41px;
+    border-radius: 45px;
+    width: 448px;
+    background-color: var(--cor-primaria);
+    
+}
+.search-bar input,
+button,
+textarea,
+select{
+    font-size: 20px;
+    font-weight: 300;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    border: none;
+    color: white;
+}
+.search-bar input::placeholder{
+    color: white;
+}
+.profile{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 41px;
+    width: 41px;
+    border-radius: 45px;
+    background-color: var(--cor-secundaria);
+}
+main{
+    width: 100%;
+}
+.section-hero{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    height: 556px;
+    overflow: hidden;
+    background-color: wheat;
+    background-image: url("./src/img/lasanha.png");
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+.hero-description{
+    display: flex;
+    gap: 25px;
+    justify-content: center;
+    flex-direction: column;
+    padding-left: 110px;
+    background-color: rgba(0, 0, 0, 0.37);
+    height: 100%;
+    width: 100%;
+
+}
+.hero-description h1{
+    color: rgba(255, 255, 255, 0.9);
+    width: 572px;
+    font-weight: 500;
+}
+.hero-description p{
+    width: 572px;
+    font-weight: 300;
+    color: rgb(255, 255, 255, 0.85);
+}
+.hero-slide-count{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 32px;
+    gap: 8px;
+    background-color: rgba(0, 0, 0, 0.37);
+}
+.slide-position{
+    height: 14px;
+    width: 14px;
+    border-radius: 20px;
+    background-color: rgba(255, 255, 255, 0.596);
+}
+.slide-position:nth-child(3){
+    background-color: #FF8000;;
+}
