@@ -10,13 +10,12 @@ const { PrismaClient } = require('../../generated/prisma')
 //Cria um objeto do prisma client para manipular os scripts SQL
 const prisma = new PrismaClient()
 
-const getSelectBYreceita = async function () {
+const getSelectAllreceita = async function () {
     try{
-        //script my sql
 
-        let sql = `select * from tbl_receita or by id desc`
+        let sql = `select * from tbl_receita order by id_receita desc`
         let result = await prisma.$queryRawUnsafe(sql)
-
+        console.log(result, "AAAAA")
         if (Array.isArray(result)){
             return result
         }
@@ -46,7 +45,7 @@ const setInsertReceita = async function (receita){
         let sql = `insert into tbl_receita (
         titulo,
         descricao,
-        tempo_preparo
+        tempo_preparo,
         dificuldade,
         data_criacao,
         data_edicao,
@@ -73,7 +72,7 @@ const setInsertReceita = async function (receita){
 const getSelectLastIdReceita = async function (params){
 
     try {
-        let sql = `select id from tbl_receita order by id_receita desc limit 1`
+        let sql = `select id_receita from tbl_receita order by id_receita desc limit 1`
 
         let result = await prisma.$queryRawUnsafe(sql)
 
@@ -132,7 +131,7 @@ const setDeleteReceita = async function (id) {
 }
 
 module.exports = {
-    getSelectBYreceita,
+    getSelectAllreceita,
     getSelectByIdReceita,
     getSelectLastIdReceita,
     setInsertReceita,
