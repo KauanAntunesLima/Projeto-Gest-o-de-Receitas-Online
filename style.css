@@ -1,45 +1,56 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
-*{
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: "Poppins", sans-serif;
 }
+
 :root {
-    --cor-primaria: #1C931C; 
+    --cor-primaria: #1C931C;
     --cor-secundaria: #FF8000;
-  }
-body{
+}
+
+body {
     width: 100%;
 }
-header{
+
+header {
     display: flex;
     align-items: center;
     height: 150px;
     justify-content: space-between;
 }
-.logo{
+
+.logo {
     display: flex;
     align-items: center;
     gap: 10px;
     padding-left: 63px;
+
 }
-.logo span{
+
+.logo span {
     color: var(--cor-primaria);
     font-size: 38px;
+    background-color: transparent;
+
 }
-.logo span span{
+
+.logo span span {
     color: var(--cor-secundaria);
 }
-.options{
+
+.options {
     display: flex;
     align-items: center;
     height: 100%;
     margin-right: 97px;
     gap: 10px;
 }
-.search-bar{
+
+.search-bar {
     display: flex;
     align-items: center;
     padding-left: 30px;
@@ -47,12 +58,13 @@ header{
     border-radius: 45px;
     width: 448px;
     background-color: var(--cor-primaria);
-    
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
+
 .search-bar input,
 button,
 textarea,
-select{
+select {
     font-size: 20px;
     font-weight: 300;
     border: none;
@@ -60,11 +72,14 @@ select{
     background-color: transparent;
     border: none;
     color: white;
+
 }
-.search-bar input::placeholder{
+
+.search-bar input::placeholder {
     color: white;
 }
-.profile{
+
+.profile {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -72,11 +87,14 @@ select{
     width: 41px;
     border-radius: 45px;
     background-color: var(--cor-secundaria);
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
-main{
+
+main {
     width: 100%;
 }
-.section-hero{
+
+.section-hero {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -90,7 +108,8 @@ main{
     background-size: cover;
     background-repeat: no-repeat;
 }
-.hero-description{
+
+.hero-description {
     display: flex;
     gap: 25px;
     justify-content: center;
@@ -101,17 +120,20 @@ main{
     width: 100%;
 
 }
-.hero-description h1{
+
+.hero-description h1 {
     color: rgba(255, 255, 255, 0.9);
     width: 572px;
     font-weight: 500;
 }
-.hero-description p{
+
+.hero-description p {
     width: 572px;
     font-weight: 300;
     color: rgb(255, 255, 255, 0.85);
 }
-.hero-slide-count{
+
+.hero-slide-count {
     display: flex;
     justify-content: center;
     width: 100%;
@@ -119,12 +141,89 @@ main{
     gap: 8px;
     background-color: rgba(0, 0, 0, 0.37);
 }
-.slide-position{
+
+.slide-position {
     height: 14px;
     width: 14px;
     border-radius: 20px;
     background-color: rgba(255, 255, 255, 0.596);
 }
-.slide-position:nth-child(3){
-    background-color: #FF8000;;
+
+.slide-position:nth-child(3) {
+    background-color: #FF8000;
+    ;
 }
+
+.recipe-list {
+    display: flex;
+    flex-direction: column;
+    height: 1529px;
+    width: 100%;
+}
+
+.recipe-list {
+    font-size: 34px;
+}
+
+.recipe-list span {
+    padding-top: 93px;
+    padding-left: 62px;
+}
+
+.recipe-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 20px;
+    width: 100%;
+    padding: 41px 115px;
+}
+
+.recipe-cards .card {
+    position: relative;
+    display: flex;
+    align-items: end;
+    width: 396px;
+    height: 264px;
+    border-radius: 20px;
+    transition: 0.6s;
+    overflow: hidden;
+}
+.card .recipe-preview{
+    position: absolute;
+    z-index: -999;
+    height: 264px;
+    filter: brightness(0.7);
+}
+.card-title{
+    display: flex;
+    align-items: end;
+    
+    background-color: rgba(0, 0, 0, 0.226);
+}
+.card-title-ratio{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.card-title-ratio span{
+    color: #ffffffe3;
+    font-size: 26px;
+    padding: 0px;
+    padding-left: 10px;
+    width: 50%;
+    padding-bottom: 6px;
+}
+.card-title-ratio .star{
+    height: 26px;
+}
+.ratio{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 30%;
+    margin-right: 6px;
+    margin-bottom: 6px;
+    gap: 2px;
+}
+
