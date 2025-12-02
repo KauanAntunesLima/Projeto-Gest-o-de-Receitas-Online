@@ -15,6 +15,7 @@ const getSelectAllreceita = async function () {
 
         let sql = `select * from tbl_receita order by id_receita desc`
         let result = await prisma.$queryRawUnsafe(sql)
+        console.log(result)
         console.log(result, "AAAAA")
         if (Array.isArray(result)){
             return result

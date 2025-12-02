@@ -35,7 +35,7 @@ const listarReceita = async function () {
     }
 }
 
-const pegarId = async function (id) {
+const pegarIdReceita = async function (id) {
     
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
 
@@ -86,13 +86,13 @@ const atualizarReceita = async function (receita, id, contentType) {
             if (!validarDados) {
 
                 //chama a função para validar a consistencia do id e verificar se existe no banco de dados
-                let validarId = await buscarFilmeId(id)
+                let validarId = await pegarId(id)
 
                 //verifica se o id existe no BD, caso exista teremos o status 200
                 if (validarId.status_code == 200) {
 
                     //adicionando o id no json com os dados do filme
-                    filme.id = parseInt(id)
+                    receita.id = parseInt(id)
 
                     //Chama a função do DAO para atualizar um novo filme
                     let result = await receitaDAO.setUpdateReceita(receita)
@@ -141,7 +141,7 @@ const inserirReceita = async function (receita, contentType) {
                 console.log(result, "CCCCCC")
                 let lastIdReceita = await receitaDAO.setInsertReceita()
 
-                if (lastIdEmpresa) {
+                if (lastIdReceita) {
 
                     //adiciona no Json de filme o ID que foi gerado no BD
                     receita.id = lastIdReceita
@@ -177,7 +177,7 @@ const deletarReceita = async function (id) {
     
         if(id != '' && id!= null && id != undefined && !isNaN(id)){
     
-            let excluirReceita = await receitaId(id)
+            let excluirReceita = await pegarIdReceita(id)
            
             if (excluirReceita.status_code == 200) {
             /*     console.log(excluirEmpresa, "AAAAAAAS") */
@@ -240,9 +240,8 @@ const validarDadosReceita = async function (receita){
 }
 module.exports = {
     listarReceita,
-    pegarId,
+    pegarIdReceita,
     inserirReceita,
     atualizarReceita,
     deletarReceita,
-    validarDadosReceita
 }
