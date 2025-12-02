@@ -181,41 +181,68 @@ main {
 .recipe-cards .card {
     position: relative;
     display: flex;
+    flex-direction: column;
     align-items: end;
     width: 396px;
-    height: 264px;
+    height: fit-content;
     border-radius: 20px;
     transition: 0.6s;
-    overflow: hidden;
+    background-color: black;
 }
-.card .recipe-preview{
-    position: absolute;
-    z-index: -999;
-    height: 264px;
-    filter: brightness(0.7);
-}
-.card-title{
+.card-preview{
     display: flex;
     align-items: end;
+    position: relative;
+    z-index: 99;
+    height: 264px;
+    width: 100%;
+    background-color: #1C931C;
+    border-radius: 20px;
     
-    background-color: rgba(0, 0, 0, 0.226);
+}
+.card-preview span{
+    width: 70%;
+    color: white;
+    padding: 0;
+}
+.recipe-preview{
+    z-index: 20;
+    position: absolute;
+    height: 264px;
+    width: 100%;
+    border-radius: 20px;
+    filter: brightness(0.8);
+}
+.card-description{
+    display: flex;
+    align-items: end;
+    padding: 20px;
+    position: absolute;
+    z-index: -50;
+    padding-top: 10px;
+    height: 250px;
+    width: 100%;
+    border-radius: 20px;
+    background-color: var(--cor-secundaria);
+    transition: 0.5s;
+    overflow: hidden;
+}
+.card:hover .card-description{
+    transition: 0.8s;
+    height: 450px;
+    
+}
+.card-description p{
+    font-size: 18px;
+    color: white;
 }
 .card-title-ratio{
-    width: 100%;
     display: flex;
-    align-items: center;
     justify-content: space-between;
-}
-.card-title-ratio span{
-    color: #ffffffe3;
-    font-size: 26px;
-    padding: 0px;
-    padding-left: 10px;
-    width: 50%;
-    padding-bottom: 6px;
-}
-.card-title-ratio .star{
-    height: 26px;
+    width: 90%;
+    position: relative;
+    z-index: 98;
+    padding-inline: 10px;
 }
 .ratio{
     display: flex;
@@ -226,4 +253,6 @@ main {
     margin-bottom: 6px;
     gap: 2px;
 }
-
+.star{
+    height: 26px;
+}
