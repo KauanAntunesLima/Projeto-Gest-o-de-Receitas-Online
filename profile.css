@@ -101,3 +101,14 @@ header .options{
 .recipe-cards{
     padding: 0;
 }
+
+@media screen and (max-width: 1360px) {
+    
+    .recipe-cards{
+        grid-template-columns: 1fr 1fr 1fr;
+        padding: 0;
+    }
+    .recipe-cards .card{
+        width: 100%;
+    }
+  }
