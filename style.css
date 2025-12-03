@@ -28,7 +28,7 @@ header {
     align-items: center;
     gap: 10px;
     padding-left: 63px;
-
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
 .logo span {
@@ -128,6 +128,7 @@ main {
 }
 
 .hero-description p {
+    font-size: 22px;
     width: 572px;
     font-weight: 300;
     color: rgb(255, 255, 255, 0.85);
@@ -151,20 +152,22 @@ main {
 
 .slide-position:nth-child(3) {
     background-color: #FF8000;
-    ;
+
 }
 
 .recipe-list {
     display: flex;
     flex-direction: column;
-    height: 1529px;
+    height: fit-content;
     width: 100%;
     font-size: 34px;
+    margin-bottom: 100px;
 }
 
 
 .recipe-list span {
     position: relative;
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     z-index: -999;
     padding-top: 93px;
     padding-left: 62px;
@@ -175,8 +178,9 @@ main {
     grid-template-columns: 1fr 1fr 1fr 1fr;
     gap: 20px;
     width: 100%;
-    height: fit-content;
+    height: 350px;
     padding: 41px 115px;
+    transition: 0.6s;
 }
 
 .recipe-cards .card {
@@ -189,6 +193,11 @@ main {
     border-radius: 20px;
     transition: 0.6s;
     background-color: black;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+.recipe-cards:has(.card:hover) {
+    transition: 0.8s;
+    height: 500px;
 }
 .card-preview{
     display: flex;
@@ -278,6 +287,128 @@ main {
     color: black;
     padding-right: 6%;
 }
+.feature{
+    position: relative;
+    height: 700px;
+    width: 100%;
+    background-image: url(./src/img/Group\ 14.png);
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.feature img:nth-child(1){
+    position: relative;
+    top: 100px;
+}
+.feature img:nth-child(3){
+    position: relative;
+    top: 150px;
+}
+.feature-box{
+    display: flex;
+    flex-direction: column;
+    margin-top: 280px;
+    padding-top: 20px;
+    padding-left: 50px;
+    width: 42%;
+    height: 376px;
+    background-color: #fe7a7ae1;
+    border-radius: 50px;
+    color: rgba(255, 255, 255, 0.9);
+}
+.feature-box span{
+    padding: 5px;
+    height: 68px;
+    width: 683px;
+    font-size: 24px;
+}
+.feature-box p{
+    padding-top: 15px;
+    padding-left: 5px;
+    width: 690px;
+    height: 182px;
+    font-size: 22px;
+    font-weight: 300;
+    color: rgba(255, 255, 255, 0.8);
+    
+}
+footer{
+    display: flex;
+    align-items: center;
+    height: 674px;
+    width: 100%;
+    margin-top: 100px;
+    padding: 91px;
+}
+footer .left-content{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 70%;
+    height: 100%;
+}
+.left-content span{
+    font-size: 35px;
+    padding-bottom: 20px;
+}
+.left-content p{
+    width: 858px;
+    font-size: 20px;
+}
+footer .right-content{
+    display: flex;
+    gap: 100px;
+    align-items: center;
+    height: 100%;
+    width: 50%;
+}
+.contact{
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+.right-content span{
+    font-size: 30px;
+}
+.right-content .contact-description:nth-child(2) span{
+    color: #FF285E;
+}
+.right-content .contact-description:nth-child(3) span{
+    color: #0022FF;
+}
+.right-content .contact-description:nth-child(4) span{
+    color: #3F78C2;
+}
+.right-content .contact-description{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.contact-description span{
+    font-size: 22px;
+    padding-bottom: 5px;
+}
+.authors{
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    color: #0022FF;
+}
+.authors span{
+    font-size: 22px;
+}
+.authors-description{
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 10px;
+    margin-bottom: 25px;
+}
+.authors-description span{
+    font-size: 30px;
+}
+
 @media screen and (max-width: 1360px) {
 
     .recipe-cards{
