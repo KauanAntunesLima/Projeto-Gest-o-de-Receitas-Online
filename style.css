@@ -421,3 +421,8 @@ footer .right-content{
         display: none;
     }
   }
+  @media (max-width: 768px) {
+    .recipe-cards{
+        grid-template-columns: 1fr;
+    }
+  }
