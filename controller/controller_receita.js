@@ -22,6 +22,7 @@ const listarReceita = async function () {
                 MESSAGE.HEADER.status_code = MESSAGE.SUCCESS_REQUEST.status_code
                 MESSAGE.HEADER.response.receita = result
 
+             
                 return MESSAGE.HEADER
             }else{
                 return MESSAGE.ERROR_NOT_FOUND
@@ -45,6 +46,7 @@ const pegarIdReceita = async function (id) {
 
             //Chama a função para filtrar pelo ID
             let result = await receitaDAO.getSelectByIdReceita(parseInt(id))
+            console.log(result)
 
             if (result) {
                 if (result.length > 0) {
@@ -52,6 +54,7 @@ const pegarIdReceita = async function (id) {
                     MESSAGE.HEADER.status_code = MESSAGE.SUCCESS_REQUEST.status_code
                     MESSAGE.HEADER.response.receita = result
 
+                    console.log(result)
                     return MESSAGE.HEADER //200
                 } else {
                     return MESSAGE.ERROR_NOT_FOUND //404
@@ -65,7 +68,8 @@ const pegarIdReceita = async function (id) {
             return MESSAGE.ERROR_REQUIRED_FIELDS //400
         }
 
-    } catch (eror) {
+    } catch (error) {
+        console.log(error)
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER //500
 
     }
@@ -86,13 +90,13 @@ const atualizarReceita = async function (receita, id, contentType) {
             if (!validarDados) {
 
                 //chama a função para validar a consistencia do id e verificar se existe no banco de dados
-                let validarId = await pegarId(id)
+                let validarId = await pegarIdReceita(id)
+
 
                 //verifica se o id existe no BD, caso exista teremos o status 200
                 if (validarId.status_code == 200) {
-
-                    //adicionando o id no json com os dados do filme
-                    receita.id = parseInt(id)
+                    console.log(id)
+                    receita.id_receita = parseInt(id)
 
                     //Chama a função do DAO para atualizar um novo filme
                     let result = await receitaDAO.setUpdateReceita(receita)
@@ -128,6 +132,7 @@ const atualizarReceita = async function (receita, id, contentType) {
 }
 
 const inserirReceita = async function (receita, contentType) {
+
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
 
     try {
@@ -136,10 +141,10 @@ const inserirReceita = async function (receita, contentType) {
             let dadosValidos = await validarDadosReceita(receita)
 
             if (!dadosValidos){
-                console.log(dadosValidos, "BBBBB")
+               
+                let result = await receitaDAO.setInsertReceita(receita)
             if (result) {
-                console.log(result, "CCCCCC")
-                let lastIdReceita = await receitaDAO.setInsertReceita()
+                let lastIdReceita = await receitaDAO.getSelectLastIdReceita(receita)
 
                 if (lastIdReceita) {
 
@@ -150,7 +155,7 @@ const inserirReceita = async function (receita, contentType) {
                     MESSAGE.HEADER.message = MESSAGE.SUCCES_CREATED_ITEM.message
                     MESSAGE.HEADER.response = receita
 
-                    console.log(lastIdEmpresa, "CCCCCC")
+                 
                     return MESSAGE.HEADER
                 } else {
                     return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
@@ -208,7 +213,7 @@ const deletarReceita = async function (id) {
 
 const validarDadosReceita = async function (receita){
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
-
+   
     if(receita.titulo == '' || receita.titulo == null || receita.titulo == undefined || receita.titulo.length > 100){
         MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [Receita] invalido!!!'
         return MESSAGE.ERROR_REQUIRED_FIELDS
@@ -229,7 +234,7 @@ const validarDadosReceita = async function (receita){
         MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [Receita] invalido!!!'
         return MESSAGE.ERROR_REQUIRED_FIELDS
 
-    }else if(receita.data_edicao == '' || receita.data_edicao == null){
+    }else if(receita.data_edicao == ''){
         MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [Receita] invalido!!!'
         return MESSAGE.ERROR_REQUIRED_FIELDS
 

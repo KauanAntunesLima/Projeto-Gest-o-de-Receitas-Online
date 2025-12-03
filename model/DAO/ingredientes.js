@@ -4,20 +4,18 @@
  * versão: 1.0
  * Objetivo: Arquivo responsavel pelarealização do CRUD no Banco de dados my sql da tabela de alergenos
  ************************************/
-
-//Import da biblioteca do PrismaClient
+//import da biblioteca
 const { PrismaClient } = require('../../generated/prisma')
 
-//Cria um objeto do prisma client para manipular os scripts SQL
 const prisma = new PrismaClient()
 
-const getSelectAllAlergenos = async function () {
-
+const getSelectAllIngredientes = async function () {
     try{
 
-        let sql = `select * from tbl_alergenos order by id_alergenos desc`
+        let sql = `select * from tbl_ingredientes order by id_ingredientes desc`
         let result = await prisma.$queryRawUnsafe(sql)
-    
+        console.log(result, "AAAAA")
+        
         if (Array.isArray(result)){
             return result
         }
@@ -26,13 +24,35 @@ const getSelectAllAlergenos = async function () {
     }   
 }
 
-const getSelectByIdAlergenos = async function (id) {
-    try {
-        let sql = `select * from tbl_alergenos where id_alergenos=${id}`
-        let result = await prisma.$queryRawUnsafe(sql)
+const getSelectByIdIngredientes = async function (id) {
     
-        if (Array.isArray(result)){
-            return result
+try {
+    let sql = `select * from tbl_ingredientes where id_inredientes=${id}`
+    let result = await prisma.$queryRawUnsafe(sql)
+
+    if (Array.isArray(result)){
+        return result
+    }else{
+        return false
+    }
+}catch(error){
+    return false
+}    
+}
+
+const setInsertReceita = async function (ingredientes){
+    try{
+        let sql = `insert into tbl_ingredientes (
+        nome,
+        tipo
+        )
+        values('${ingredientes.nome}',
+                '${ingredientes.tipo}'
+                                    ')`
+
+        let result = await prisma.$executeRawUnsafe(sql)
+        if (result){
+            return true
         }else{
             return false
         }
@@ -41,37 +61,15 @@ const getSelectByIdAlergenos = async function (id) {
     }
 }
 
-const setInsertAlergenos = async function (alergenos) {
-    try{
-        let sql = `insert into tbl_alergenos(
-        nome,
-        descricao
-        )
-        values('${alergenos.nome}')
-        ('${alergenos.descricao}'),
-        `
-        let result = await prisma.$executeRawUnsafe(sql)
-        if (result){
-            return true
-        }else{
-            return false
-        }
-
-    }catch (error){
-        return false
-    }
-    
-}
-
-const getSelectLastIdAlergenos = async function (params){
+const getSelectLastIdIngrediente = async function (params){
 
     try {
-        let sql = `select id_alergenos from tbl_alergenos order by id_alergenos desc limit 1`
+        let sql = `select id_ingredientes from tbl_ingredientes order by id_ingredientes desc limit 1`
 
         let result = await prisma.$queryRawUnsafe(sql)
 
         if(Array.isArray(result)){
-            return Number(result[0].id_alergenos)
+            return Number(result[0].id_ingredientes)
         }else{
             return false
         }
@@ -79,15 +77,15 @@ const getSelectLastIdAlergenos = async function (params){
         return false
     }
 }
-    
-const setUpdateAlergenos = async function (alergenos) {
+
+const setUpdateIngrediente = async function (ingredientes) {
 
     try{
-        let sql = `update tbl_alergenos set
-        nome     = '${alergenos.nome}',
-        descricao          = '${alergenos.descricao}'
-
-        where id_alergenos = ${alergenos.id_alergenos}`
+        let sql = `update tbl_ingredientes set
+        nome          = '${ingredientes.nome}',
+        tipo          = '${ingredientes.tipo}'
+    
+        where id_ingredientes = ${ingredientes.id_ingredientes}`
 
         let result = await prisma.$executeRawUnsafe(sql)
 
@@ -102,10 +100,10 @@ const setUpdateAlergenos = async function (alergenos) {
     
 }
 
-const setDeleteAlergenos = async function (id) {
+const setDeleteIngredientes = async function (id) {
 
     try {
-        let sql = `DELETE FROM tbl_alergenos where id_alergenos = ${id}`
+        let sql = `DELETE FROM tbl_ingredientes where id_ingredientes = ${id}`
 
         //$executeRawUnsafe()  -> permite apenas executar scripts sql que não tem retorno de dados (INSERT, UPDATE, DELETE)
         let result = await prisma.$executeRawUnsafe(sql)
@@ -120,11 +118,6 @@ const setDeleteAlergenos = async function (id) {
     }
 }
 
-module.exports = {
-    getSelectAllAlergenos,
-    getSelectByIdAlergenos,
-    setInsertAlergenos,
-    setUpdateAlergenos,
-    getSelectLastIdAlergenos,
-    setDeleteAlergenos
-}
+
+
+

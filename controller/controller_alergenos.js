@@ -130,72 +130,74 @@ const inserirAlergenos = async function (alergenos, contentType) {
         if (String(contentType).toUpperCase() == 'APPLICATION/JSON') {
             let dadosValidos = await validarDadosAlergenos(alergenos)
 
-            if (!dadosValidos){
-              
-            if (result) {
+            if (!dadosValidos) {
 
-                let lastIdAlergenos = await alergenosDAO.setInsertAlergenos()
-
-                if (lastIdAlergenos) {
-
-                    alergenos.id = lastIdAlergenos
-                    MESSAGE.HEADER.status = MESSAGE.SUCCES_CREATED_ITEM.status
-                    MESSAGE.HEADER.status_code = MESSAGE.SUCCES_CREATED_ITEM.status_code
-                    MESSAGE.HEADER.message = MESSAGE.SUCCES_CREATED_ITEM.message
-                    MESSAGE.HEADER.response = alergenos
-
+                let result = await alergenosDAO.setInsertAlergenos(alergenos)
                 
-                    return MESSAGE.HEADER
+                if (result) {
+
+                    let lastIdAlergenos = await alergenosDAO.getSelectLastIdAlergenos(alergenos)
+
+                    if (lastIdAlergenos) {
+
+                        alergenos.id = lastIdAlergenos
+                        MESSAGE.HEADER.status = MESSAGE.SUCCES_CREATED_ITEM.status
+                        MESSAGE.HEADER.status_code = MESSAGE.SUCCES_CREATED_ITEM.status_code
+                        MESSAGE.HEADER.message = MESSAGE.SUCCES_CREATED_ITEM.message
+                        MESSAGE.HEADER.response = alergenos
+
+
+                        return MESSAGE.HEADER
+                    } else {
+                        return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
+                    }
                 } else {
                     return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
                 }
             } else {
-                return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
+                return dadosValidos
             }
-        } else {
-            return dadosValidos
         }
+    } catch (eror) {
+        return MESSAGE_DEFAULT.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
-}catch (eror){
-    return MESSAGE_DEFAULT.ERROR_INTERNAL_SERVER_CONTROLLER //500
-}
 
 }
 
 const deletarAlergenos = async function (id) {
     //apaga um filme filtrando pelo id
-            let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
-        
-         try{
-        
-            if(id != '' && id!= null && id != undefined && !isNaN(id)){
-        
-                let excluirAlergenos = await pegarIdAlergenos(id)
-               
-                if (excluirAlergenos.status_code == 200) {
-                 
+    let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
+
+    try {
+
+        if (id != '' && id != null && id != undefined && !isNaN(id)) {
+
+            let excluirAlergenos = await pegarIdAlergenos(id)
+
+            if (excluirAlergenos.status_code == 200) {
+
                 let result = await alergenosDAO.setDeleteAlergenos(parseInt(id))
-             if(result){
-                MESSAGE.HEADER.status = MESSAGE.SUCCESS_DELETE_ITEM.status
-                MESSAGE.HEADER.status_code = MESSAGE.SUCCESS_DELETE_ITEM.status_code
-                MESSAGE.HEADER.message = MESSAGE.SUCCESS_DELETE_ITEM.message
-        
-            
-                return MESSAGE.HEADER
-             }else{
-                return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
-             }
-             }else{
-               return excluirAlergenos
-               
-             }
-            }else{
-                MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [ID] inválido!!'
-                return MESSAGE.ERROR_REQUIRED_FIELDS // 400
+                if (result) {
+                    MESSAGE.HEADER.status = MESSAGE.SUCCESS_DELETE_ITEM.status
+                    MESSAGE.HEADER.status_code = MESSAGE.SUCCESS_DELETE_ITEM.status_code
+                    MESSAGE.HEADER.message = MESSAGE.SUCCESS_DELETE_ITEM.message
+
+
+                    return MESSAGE.HEADER
+                } else {
+                    return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
+                }
+            } else {
+                return excluirAlergenos
+
             }
-         }catch(error){
-            return MESSAGE.ERROR_INTERNAL_SERVER_MODEL
-         }
+        } else {
+            MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [ID] inválido!!'
+            return MESSAGE.ERROR_REQUIRED_FIELDS // 400
+        }
+    } catch (error) {
+        return MESSAGE.ERROR_INTERNAL_SERVER_MODEL
+    }
 }
 
 const validarDadosAlergenos = async function (alergenos) {

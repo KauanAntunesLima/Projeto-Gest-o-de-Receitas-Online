@@ -15,8 +15,8 @@ const getSelectAllreceita = async function () {
 
         let sql = `select * from tbl_receita order by id_receita desc`
         let result = await prisma.$queryRawUnsafe(sql)
-        console.log(result)
         console.log(result, "AAAAA")
+
         if (Array.isArray(result)){
             return result
         }
@@ -26,22 +26,20 @@ const getSelectAllreceita = async function () {
 }
 
 const getSelectByIdReceita = async function (id) {
-    
-try {
-    let sql = `select * from tbl_receita where id_receita=${id}`
-    let result = await prisma.$queryRawUnsafe(sql)
-
-    if (Array.isArray(result)){
-        return result
-    }else{
+    try {
+        const result = await prisma.$queryRaw`
+            SELECT * FROM tbl_receita WHERE id_receita = ${id}
+        `
+        return result 
+    } catch (error) {
+        console.log(error)
         return false
     }
-}catch(error){
-    return false
-}    
 }
 
+
 const setInsertReceita = async function (receita){
+
     try{
         let sql = `insert into tbl_receita (
         titulo,
@@ -51,9 +49,10 @@ const setInsertReceita = async function (receita){
         data_criacao,
         data_edicao,
         imagem)
-        values('${receita.titulo}',
+        values(
+        '${receita.titulo}',
         '${receita.descricao}',
-        '${receita. tempo_preparo}',
+        ${receita.tempo_preparo},
         '${receita.dificuldade}',
         '${receita.data_criacao}',
         '${receita.data_edicao}',
@@ -69,7 +68,7 @@ const setInsertReceita = async function (receita){
         return false
     }
 }
-
+setInsertReceita()
 const getSelectLastIdReceita = async function (params){
 
     try {
@@ -88,21 +87,20 @@ const getSelectLastIdReceita = async function (params){
 }
 
 const setUpdateReceita = async function (receita) {
-
+    console.log(receita)
     try{
         let sql = `update tbl_receita set
         titulo          = '${receita.titulo}',
-        descricao       = '${receita.descricao},'
-        tempo_preparo   = '${receita.tempo_preparo}',
-        dificuldade     = '${receita.dificuldade},' 
+        descricao       = '${receita.descricao}',
+        tempo_preparo   =  ${receita.tempo_preparo},
+        dificuldade     = '${receita.dificuldade}', 
         data_criacao    = '${receita.data_criacao}',
         data_edicao     = '${receita.data_edicao}',
         imagem          = '${receita.imagem}'
-
         where id_receita = ${receita.id_receita}`
 
         let result = await prisma.$executeRawUnsafe(sql)
-
+        console.log(result)
         if(result){
             return true
         }else{
