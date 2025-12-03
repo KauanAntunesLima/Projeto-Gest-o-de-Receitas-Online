@@ -143,15 +143,5 @@ header .options{
         flex-direction: column;
         width: 100%;
     }
-    .recipe-cards{
-        display: flex;
-        flex-direction: column;
-        height: 1000px;
-    }
-    .recipe-cards:has(.card:hover){
-        gap: 1000px;
-    }
-    .recipe-list{
-        flex-direction: column;
-    }
+    
 }

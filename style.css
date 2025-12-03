@@ -425,4 +425,12 @@ footer .right-content{
     .recipe-cards{
         grid-template-columns: 1fr;
     }
+    .recipe-cards{
+        display: flex;
+        flex-direction: column;
+        height: 1000px;
+    }
+    .recipe-list{
+        flex-direction: column;
+    }
   }
