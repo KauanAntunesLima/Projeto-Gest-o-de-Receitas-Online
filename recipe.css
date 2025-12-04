@@ -1,0 +1,57 @@
+
+header .logo{
+    padding-inline: 0;
+}
+header{
+    padding-top: 60px;
+    padding-inline: 188px;
+}
+.options{
+    margin: 0;
+}
+body{
+    position: relative;
+    height: 100%;
+    width: 100%;
+    background-color: black;
+}
+.background{
+    width: 100%;
+    position: absolute;
+    z-index: -999   ;
+}
+.background img{
+    position: absolute;
+    z-index: -999;
+    width: 100%;
+}
+.search-bar{
+    background-color: white;
+    
+}
+.search-bar input::placeholder{
+    font-weight: 400;
+    color: black;
+}
+.background-effect{
+    height: 1189px;
+    width: 100%;
+    position: absolute;
+    z-index: -998;
+    background: #ffffff;
+    background: linear-gradient(180deg,rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.35) 43%, rgba(0, 0, 0, 1) 100%);
+}
+main{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    padding-top: 60px;
+    padding-inline: 188px;
+}
+.recipe-details{
+    background-color: white;
+    width: 100%;
+    height: 100px;
+}
+
