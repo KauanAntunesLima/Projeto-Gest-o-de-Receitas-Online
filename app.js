@@ -116,6 +116,19 @@ app.post ('/v1/toque_gourmet/alergenos', cors(), bodyParserJSON, async function 
     
 })
 
+//ambiente PUT
+
+app.put('/v1/toque_gourmet/alergenos/:id', cors(), bodyParserJSON, async function (req, res) {
+
+    let dadosBody = req.body
+    let idAlergeno = req.params.id
+    let contentType = req.headers['content-type']
+
+    let alergeno = await controllerAlergenos.atualizarAlergenos(dadosBody, idAlergeno, contentType)
+    res.status(alergeno.status_code)
+    res.json(alergeno)
+})
+
 
 /****************************************************************** */
 

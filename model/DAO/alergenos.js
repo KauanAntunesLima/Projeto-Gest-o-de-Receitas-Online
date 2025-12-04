@@ -47,9 +47,10 @@ const setInsertAlergenos = async function (alergenos) {
         nome,
         descricao
         )
-        values('${alergenos.nome}')
-        ('${alergenos.descricao}'),
-        `
+        values(
+        '${alergenos.nome}',
+        '${alergenos.descricao}')`
+
         let result = await prisma.$executeRawUnsafe(sql)
         if (result){
             return true

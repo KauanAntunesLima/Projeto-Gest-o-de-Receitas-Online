@@ -76,19 +76,19 @@ const atualizarAlergenos = async function (alergenos, id, contentType) {
 
         //validção do content-type
         if (String(contentType).toUpperCase() == 'APPLICATION/JSON') {
-
+            console.log("1")
             //chama a função de validação dos dados de cadastro
-            let validarDados = await validarDadosAlergenos(receita)
+            let validarDados = await validarDadosAlergenos(alergenos)
 
             if (!validarDados) {
-
+                console.log("2")
                 //chama a função para validar a consistencia do id e verificar se existe no banco de dados
-                let validarId = await buscarFilmeId(id)
+                let validarId = await pegarIdAlergenos(id)
 
                 //verifica se o id existe no BD, caso exista teremos o status 200
                 if (validarId.status_code == 200) {
                     alergenos.id = parseInt(id)
-
+                    console.log("3")
                     //Chama a função do DAO para atualizar um novo filme
                     let result = await alergenosDAO.setUpdateAlergenos(alergenos)
 
@@ -100,6 +100,7 @@ const atualizarAlergenos = async function (alergenos, id, contentType) {
                         MESSAGE.HEADER.message = MESSAGE.SUCCES_UPDATE_ITEM.message
                         MESSAGE.HEADER.response = alergenos
 
+                        console.log(result)
                         return MESSAGE.HEADER
                     } else {
 
