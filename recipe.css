@@ -1,57 +1,214 @@
-
-header .logo{
+header .logo {
     padding-inline: 0;
 }
-header{
+
+header {
     padding-top: 60px;
     padding-inline: 188px;
 }
-.options{
+
+.options {
     margin: 0;
 }
-body{
+
+body {
     position: relative;
     height: 100%;
     width: 100%;
     background-color: black;
 }
-.background{
+
+.background {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 100%;
     position: absolute;
-    z-index: -999   ;
+    z-index: -999;
 }
-.background img{
-    position: absolute;
+
+.background img {
+    position: relative;
+    object-fit: cover;
+    object-position: bottom;
+    height: 1189px;
     z-index: -999;
     width: 100%;
 }
-.search-bar{
+
+.search-bar {
     background-color: white;
-    
+
 }
-.search-bar input::placeholder{
+
+.search-bar input::placeholder {
     font-weight: 400;
     color: black;
 }
-.background-effect{
+
+.search-bar input {
+    color: black;
+    font-weight: 500;
+}
+
+.background-effect {
     height: 1189px;
     width: 100%;
     position: absolute;
     z-index: -998;
     background: #ffffff;
-    background: linear-gradient(180deg,rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.35) 43%, rgba(0, 0, 0, 1) 100%);
-}
-main{
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    height: 100%;
-    padding-top: 60px;
-    padding-inline: 188px;
-}
-.recipe-details{
-    background-color: white;
-    width: 100%;
-    height: 100px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(212, 200, 200, 0.45) 43%, rgba(0, 0, 0, 1) 100%);
 }
 
+main {
+    display: flex;
+    flex-direction: column;
+
+    padding-top: 60px;
+    padding-inline: 188px;
+    color: white;
+}
+
+.recipe-introduction {
+    display: flex;
+    align-items: center;
+    padding-top: 8%;
+    padding-bottom: 26px;
+    padding-inline: 18px;
+}
+
+.recipe-introduction h1 {
+    font-size: 3.2rem;
+    font-weight: 400;
+    width: 50%;
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.recipe-introduction .dificulty {
+    display: flex;
+    margin-left: 10%;
+    flex-direction: column;
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.dificulty span {
+    font-size: 26px;
+}
+
+.dificulty span:nth-child(2) {
+    font-size: 50px;
+}
+
+.review {
+    display: flex;
+    flex-direction: column;
+    padding-left: 5%;
+    gap: 1rem;
+    height: 125px;
+    width: 523px;
+    font-size: 26px;
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.review-stars {
+
+    display: flex;
+    align-items: center;
+}
+
+.review-stars img {
+    height: 3.26rem;
+}
+
+.review-stars button {
+    background-color: white;
+    color: black;
+    margin-left: 14%;
+    width: 122px;
+    height: 38px;
+    border-radius: 20px;
+}
+
+.recipe-details {
+    display: flex;
+    padding-top: 85px;
+    background-color: white;
+    color: black;
+    width: 100%;
+    min-height: 1000px;
+    font-size: 35px;
+
+}
+
+.recipe-details h2 {
+    font-weight: 400;
+}
+
+.ingredients {
+    display: flex;
+    flex-direction: column;
+    padding-left: 78px;
+    background-color: rgb(255, 255, 255);
+    width: calc(40% - 1px);
+    gap: 20px;
+    padding-bottom: 20px;
+}
+
+.ingredient-info {
+    display: flex;
+    justify-content: center;
+    padding: 15px;
+    padding-left: 20px;
+    flex-direction: column;
+    gap: 5px;
+    background: rgba(180, 170, 160, 0.35);
+    height: 10%;
+    width: 80%;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    font-weight: 500;
+    color: #2b2b2b;
+    gap: 4px;
+}
+
+.ingredient-info span {
+    font-size: 25px;
+}
+
+.unity-info {
+    display: flex;
+    gap: 20px;
+
+}
+
+.unity-info span {
+    font-size: 20px;
+}
+
+.divider {
+    width: 2px;
+    background-color: rgb(0, 0, 0);
+}
+
+.steps {
+    padding-left: 88px;
+    background-color: rgb(255, 255, 255);
+    width: 55%;
+    counter-reset: step-counter;
+}
+
+.step {
+    position: relative;
+    padding: 12px 16px;
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: 10px;
+    font-size: 20px;
+    color: #222;
+    counter-increment: step-counter;
+}
+.step::before {
+  content: counter(step-counter) " - ";
+  font-weight: 700;
+  font-size: 22px;
+}
