@@ -103,7 +103,7 @@ main {
     height: 556px;
     overflow: hidden;
     background-color: wheat;
-    background-image: url("./src/img/lasanha.png");
+    background-image: url("./src/assets/img/lasanha.png");
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -281,17 +281,26 @@ main {
 }
 .recipe-list button{
     position: relative;
-    z-index: -900;
     font-weight: 500;
     align-self: flex-end;
     color: black;
-    padding-right: 6%;
+    border-radius: 10px;
+    height: 35px;
+    width: 120px;
+    margin-right: 6%;
+    transition: 0.6s;
+}
+.recipe-list button:hover{
+    transition: 0.6s;
+
+    color: white;
+    background-color: var(--cor-primaria);
 }
 .feature{
     position: relative;
     height: 700px;
     width: 100%;
-    background-image: url(./src/img/Group\ 14.png);
+    background-image: url(./src/assets/img/Group\ 14.png);
     background-position: center;
     display: flex;
     align-items: center;
