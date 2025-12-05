@@ -1,0 +1,111 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+:root {
+    --cor-primaria: #1C931C;
+    --cor-secundaria: #FF8000;
+}
+body{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100vw;
+    color: var(--cor-primaria);
+}
+.modal{
+    display: flex;
+    flex-direction: column;
+    padding: 50px;
+    gap: 2px;
+    height: 420px;
+    width: 600px;
+    background-color: rgb(255, 255, 255);
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    border-radius: 20px;
+}
+.modal h1{
+    font-size: 30px;
+    color: black;
+    font-weight: 400;
+    margin-bottom: 10px;
+    
+}
+.feedback{
+    width: 100%;
+}
+.feedback .star{
+    height: 60px;
+    padding-bottom: 15px;
+}
+input {
+
+    height: 100%;
+    width: 100%;
+    background-color: #F3F3FB;
+    padding: 0;
+    margin: 0;
+    font-size: 1.1rem;
+    padding: 10px   ;
+    border: none;
+    margin-bottom: 20px;
+    border-radius: 45px;
+    color: black;
+    transition: 0.2s;
+    outline: 0px solid rgb(0, 190, 0);
+
+}
+
+input::placeholder {
+    height: 100%;
+    width: 100%;
+    color: black;
+    color: inherit;
+    opacity: 1;
+    font: inherit;
+}
+.search-bar input,
+button,
+textarea,
+select {
+    font-size: 20px;
+    font-weight: 300;
+    border: none;
+    outline: none;
+    border: none;
+}
+
+input:focus{
+    transition: 0.5s;
+    outline: 5px solid rgb(0, 190, 0);
+}
+.response{
+    display: flex;
+    justify-content: end;
+    width: 100%;    
+    gap: 10px;
+}
+button{
+    font-size: 16px;
+    font-weight: 400;
+    height: 51px;
+    width: 120px;
+    border-radius: 42px;
+    background-color: var(--cor-primaria);
+    color: white;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    transition: 0.2s;
+}
+button:hover{
+    transition: 0.2s;
+    transform: scale(1.1);
+}
+button:first-child{
+    background-color: black;
+    color: white;
+}
