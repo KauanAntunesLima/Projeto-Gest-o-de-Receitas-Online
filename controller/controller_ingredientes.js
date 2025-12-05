@@ -1,55 +1,61 @@
 /****************************************************************************************
  * Objetivo: Arquivo responsável pela manipulação de dados entreo App e a Model 
  *           (validações, tratamento de dados, tratamento de errros, etc)
- * Data: 01/12/2025
+ * Data: 05/12/2025
  * Autor: Gabriel Cavalcante
  * Versão: 2.0
  ****************************************************************************************/
-const alergenosDAO = require('../model/DAO/alergenos.js')
+const ingredientesDAO = require('../model/DAO/ingredientes.js')
 
 const MESSAGE_DEFAULT = require('../modulo/config_messages.js')
 
-const listarAlergenos = async function () {
-
+const listarIngredientes = async function () {
+    
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
 
-    try {
+    try{
 
-        let result = await alergenosDAO.getSelectAllAlergenos()
-        if (result) {
-            if (result.length > 0) {
+        let result = await ingredientesDAO.getSelectAllIngredientes()
+        if (result){
+            if (result.length > 0){
                 MESSAGE.HEADER.status = MESSAGE.SUCCESS_REQUEST.status
                 MESSAGE.HEADER.status_code = MESSAGE.SUCCESS_REQUEST.status_code
-                MESSAGE.HEADER.response.alergenos = result
+                MESSAGE.HEADER.response.ingrediente = result
 
+             
                 return MESSAGE.HEADER
-            } else {
+            }else{
                 return MESSAGE.ERROR_NOT_FOUND
             }
-        } else {
+        }else{
             return MESSAGE_DEFAULT.ERROR_INTERNAL_SERVER_MODEL
         }
 
-    } catch (error) {
+    }catch (error){
+        console.log(error)
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER
     }
 }
 
-const pegarIdAlergenos = async function (id) {
+const pegarIdIngrediente = async function (id) {
+    
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
 
     try {
+        //Validaçaõ de campo obrigatório
         if (id != '' && id != null && id != undefined && !isNaN(id) && id > 0) {
 
             //Chama a função para filtrar pelo ID
-            let result = await alergenosDAO.getSelectByIdAlergenos(parseInt(id))
+            let result = await ingredientesDAO.getSelectByIdIngredientes(parseInt(id))
+            console.log(result)
 
             if (result) {
                 if (result.length > 0) {
                     MESSAGE.HEADER.status = MESSAGE.SUCCESS_REQUEST.status
                     MESSAGE.HEADER.status_code = MESSAGE.SUCCESS_REQUEST.status_code
-                    MESSAGE.HEADER.response.alergenos = result
+                    MESSAGE.HEADER.response.ingrediente = result
 
+                    
                     return MESSAGE.HEADER //200
                 } else {
                     return MESSAGE.ERROR_NOT_FOUND //404
@@ -63,13 +69,56 @@ const pegarIdAlergenos = async function (id) {
             return MESSAGE.ERROR_REQUIRED_FIELDS //400
         }
 
-    } catch (eror) {
+    } catch (error) {
+        console.log(error)
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER //500
 
     }
 }
 
-const atualizarAlergenos = async function (alergenos, id, contentType) {
+const inserirIngrediente = async function (ingrediente, contentType) {
+
+    let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
+
+    try {
+
+        if (String(contentType).toUpperCase() == 'APPLICATION/JSON') {
+            let dadosValidos = await validarDadosIngrediente(ingrediente)
+
+            if (!dadosValidos){
+               
+                let result = await ingredientesDAO.setInsertReceita(ingrediente)
+            if (result) {
+                let lastIdIngrediente = await ingredientesDAO.getSelectLastIdIngrediente(ingrediente)
+
+                if (lastIdIngrediente) {
+
+                    //adiciona no Json de filme o ID que foi gerado no BD
+                    ingrediente.id_ingredientes = lastIdIngrediente
+                    MESSAGE.HEADER.status = MESSAGE.SUCCES_CREATED_ITEM.status
+                    MESSAGE.HEADER.status_code = MESSAGE.SUCCES_CREATED_ITEM.status_code
+                    MESSAGE.HEADER.message = MESSAGE.SUCCES_CREATED_ITEM.message
+                    MESSAGE.HEADER.response = ingrediente
+
+                 
+                    return MESSAGE.HEADER
+                } else {
+                    return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
+                }
+            } else {
+                return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
+            }
+        } else {
+            return dadosValidos
+        }
+    }
+}catch (eror){
+    console.log(eror)
+    return MESSAGE_DEFAULT.ERROR_INTERNAL_SERVER_CONTROLLER //500
+}
+}
+
+const atualizarIngredientes = async function (ingredientes, id, contentType) {
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
 
     try {
@@ -78,26 +127,26 @@ const atualizarAlergenos = async function (alergenos, id, contentType) {
         if (String(contentType).toUpperCase() == 'APPLICATION/JSON') {
            
             //chama a função de validação dos dados de cadastro
-            let validarDados = await validarDadosAlergenos(alergenos)
+            let validarDados = await validarDadosIngrediente(ingredientes)
 
             if (!validarDados) {
               
                 //chama a função para validar a consistencia do id e verificar se existe no banco de dados
-                let validarId = await pegarIdAlergenos(id)
+                let validarId = await pegarIdIngrediente(id)
 
                 //verifica se o id existe no BD, caso exista teremos o status 200
                 if (validarId.status_code == 200) {
-                    alergenos.id_alergenos = parseInt(id)
+                    ingredientes.id_ingredientes = parseInt(id)
                  
                     //Chama a função do DAO para atualizar um novo filme
-                    let result = await alergenosDAO.setUpdateAlergenos(alergenos)
+                    let result = await ingredientesDAO.setUpdateIngredientes(ingredientes)
 
                     if (result) {
 
                         MESSAGE.HEADER.status = MESSAGE.SUCCES_UPDATE_ITEM.status
                         MESSAGE.HEADER.status_code = MESSAGE.SUCCES_UPDATE_ITEM.status_code
                         MESSAGE.HEADER.message = MESSAGE.SUCCES_UPDATE_ITEM.message
-                        MESSAGE.HEADER.response = alergenos
+                        MESSAGE.HEADER.response = ingredientes
 
                       
                         return MESSAGE.HEADER
@@ -122,61 +171,19 @@ const atualizarAlergenos = async function (alergenos, id, contentType) {
     }
 }
 
-const inserirAlergenos = async function (alergenos, contentType) {
-    let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
+const deletarIngrediente = async function (id) {
 
-    try {
-
-        if (String(contentType).toUpperCase() == 'APPLICATION/JSON') {
-            let dadosValidos = await validarDadosAlergenos(alergenos)
-
-            if (!dadosValidos) {
-
-                let result = await alergenosDAO.setInsertAlergenos(alergenos)
-                
-                if (result) {
-
-                    let lastIdAlergenos = await alergenosDAO.getSelectLastIdAlergenos(alergenos)
-
-                    if (lastIdAlergenos) {
-
-                        alergenos.id = lastIdAlergenos
-                        MESSAGE.HEADER.status = MESSAGE.SUCCES_CREATED_ITEM.status
-                        MESSAGE.HEADER.status_code = MESSAGE.SUCCES_CREATED_ITEM.status_code
-                        MESSAGE.HEADER.message = MESSAGE.SUCCES_CREATED_ITEM.message
-                        MESSAGE.HEADER.response = alergenos
-
-
-                        return MESSAGE.HEADER
-                    } else {
-                        return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
-                    }
-                } else {
-                    return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
-                }
-            } else {
-                return dadosValidos
-            }
-        }
-    } catch (eror) {
-        return MESSAGE_DEFAULT.ERROR_INTERNAL_SERVER_CONTROLLER //500
-    }
-
-}
-
-const deletarAlergenos = async function (id) {
-    //apaga um filme filtrando pelo id
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
 
     try {
 
         if (id != '' && id != null && id != undefined && !isNaN(id)) {
 
-            let excluirAlergenos = await pegarIdAlergenos(id)
+            let excluirIngrediente = await pegarIdIngrediente(id)
 
-            if (excluirAlergenos.status_code == 200) {
+            if (excluirIngrediente.status_code == 200) {
 
-                let result = await alergenosDAO.setDeleteAlergenos(parseInt(id))
+                let result = await ingredientesDAO.setDeleteIngredientes(parseInt(id))
                 if (result) {
                     MESSAGE.HEADER.status = MESSAGE.SUCCESS_DELETE_ITEM.status
                     MESSAGE.HEADER.status_code = MESSAGE.SUCCESS_DELETE_ITEM.status_code
@@ -188,7 +195,7 @@ const deletarAlergenos = async function (id) {
                     return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
                 }
             } else {
-                return excluirAlergenos
+                return excluirIngrediente
 
             }
         } else {
@@ -200,26 +207,25 @@ const deletarAlergenos = async function (id) {
     }
 }
 
-
-const validarDadosAlergenos = async function (alergenos) {
+const validarDadosIngrediente = async function (ingredientes) {
 
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
 
-    if (alergenos.nome == '' || alergenos.nome == null || alergenos.nome == undefined || alergenos.nome.length > 100) {
+    if (ingredientes.nome == '' || ingredientes.nome == null || ingredientes.nome == undefined || ingredientes.nome.length > 100) {
         MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [nome] invalido!!!'
         return MESSAGE.ERROR_REQUIRED_FIELDS
 
-    } else if (alergenos.descricao == '' || alergenos.descricao == null || alergenos.descricao == undefined) {
-        MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [descrição] invalido!!!'
+    } else if (ingredientes.tipo == '' || ingredientes.tipo == null || ingredientes.tipo == undefined || ingredientes.tipo.length > 100) {
+        MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [tipo] invalido!!!'
         return MESSAGE.ERROR_REQUIRED_FIELDS
     }
 
 }
 
 module.exports = {
-    listarAlergenos,
-    pegarIdAlergenos,
-    atualizarAlergenos,
-    inserirAlergenos,
-    deletarAlergenos
+    listarIngredientes,
+    pegarIdIngrediente,
+    inserirIngrediente,
+    atualizarIngredientes,
+    deletarIngrediente
 }

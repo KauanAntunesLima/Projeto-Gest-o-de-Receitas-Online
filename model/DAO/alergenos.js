@@ -22,6 +22,7 @@ const getSelectAllAlergenos = async function () {
             return result
         }
     }catch(error){
+        console.log(error)
         return false
     }   
 }

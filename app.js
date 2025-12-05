@@ -24,6 +24,8 @@ app.use((request, response, next) => {
 
 const controllerReceita = require('./controller/controller_receita.js')
 const controllerAlergenos = require('./controller/controller_alergenos.js')
+const controllerIngredientes = require('./controller/controller_ingredientes.js')
+const controllerCategoria = require('./controller/controller_categoria.js')
 
 /***********************
  * EndPoints tbl_receita
@@ -118,22 +120,124 @@ app.post ('/v1/toque_gourmet/alergenos', cors(), bodyParserJSON, async function 
 
 //ambiente PUT
 
-app.put('/v1/toque_gourmet/alergenos/:id', cors(), bodyParserJSON, async function (req, res) {
+app.put('/v1/toque_gourmet/alergenos/:id', cors(), bodyParserJSON, async function (request, response) {
 
-    let dadosBody = req.body
-    let idAlergeno = req.params.id
-    let contentType = req.headers['content-type']
+    let dadosBody = request.body
+    let idAlergeno = request.params.id
+    let contentType = request.headers['content-type']
 
-    let alergeno = await controllerAlergenos.atualizarAlergenos(dadosBody, idAlergeno, contentType)
-    res.status(alergeno.status_code)
-    res.json(alergeno)
+    let alergenos = await controllerAlergenos.atualizarAlergenos(dadosBody, idAlergeno, contentType)
+    response.status(alergenos.status_code)
+    response.json(alergenos)
 })
 
+//ambiente delete
+
+app.delete('/v1/toque_gourmet/alergenos/:id', cors(), async function(request, response){
+
+    let idAlergeno = request.params.id
+    let alergeno = await controllerAlergenos.deletarAlergenos(idAlergeno)
+    response.status(alergeno.status_code)
+    response.json(alergeno)
+})
 
 /****************************************************************** */
 
+/***********************
+ * EndPoints tbl_alergenos
+ * **********************/
+
+//ambiente GET
+
+app.get('/v1/toque_gourmet/ingredientes', cors(), async function(req, res){
+
+    let ingrediente = await controllerIngredientes.listarIngredientes() 
+    res.status(ingrediente.status_code)
+    res.json(ingrediente)
+})
+
+app.get('/v1/toque_gourmet/ingredientes/:id', cors(), async function (request, response) {
+
+    let idIngrediente = request.params.id
+    let ingrediente = await controllerIngredientes.pegarIdIngrediente(idIngrediente)
+    response.status(ingrediente.status_code)
+    response.json(ingrediente)
+    
+})
+
+//ambiente post
+
+app.post ('/v1/toque_gourmet/ingredientes', cors(), bodyParserJSON, async function (req, res) {
+
+    let dadosBody = req.body
+    let contentType = req.headers['content-type']
+  
+    let ingrediente = await controllerIngredientes.inserirIngrediente(dadosBody, contentType)
+    res.status(ingrediente.status_code)
+    res.json(ingrediente)
+    
+})
+
+//ambiente PUT
+
+app.put('/v1/toque_gourmet/ingredientes/:id', cors(), bodyParserJSON, async function (request, response) {
+
+    let dadosBody = request.body
+    let idIngrediente = request.params.id
+    let contentType = request.headers['content-type']
+
+    let ingredientes = await controllerIngredientes.atualizarIngredientes(dadosBody, idIngrediente, contentType)
+    response.status(ingredientes.status_code)
+    response.json(ingredientes)
+})
+
+//ambiente delete
+
+app.delete('/v1/toque_gourmet/ingredientes/:id', cors(), async function(request, response){
+
+    let idIngrediente = request.params.id
+    let ingrediente = await controllerIngredientes.deletarIngrediente(idIngrediente)
+    response.status(ingrediente.status_code)
+    response.json(ingrediente)
+})
+
+/***********************
+ * EndPoints tbl_categoria
+ * **********************/
+
+//ambiente GET
+
+app.get('/v1/toque_gourmet/categoria', cors(), async function(req, res){
+
+    let categoria = await controllerCategoria.listarCategoria() 
+    res.status(categoria.status_code)
+    res.json(categoria)
+})
+
+app.get('/v1/toque_gourmet/categoria/:id', cors(), async function (request, response) {
+
+    let idCategoria = request.params.id
+    let categoria = await controllerCategoria.pegarIdCategoria(idCategoria)
+    response.status(categoria.status_code)
+    response.json(categoria)
+    
+})
+
+//ambiente POST
+
+app.post ('/v1/toque_gourmet/categoria', cors(), bodyParserJSON, async function (req, res) {
+
+    let dadosBody = req.body
+    let contentType = req.headers['content-type']
+  
+    let categoria = await controllerCategoria.inserirCategoria(dadosBody, contentType)
+    res.status(categoria.status_code)
+    res.json(categoria)
+    
+})
 
 //ultima linha do codigo 
 app.listen(PORT, function () {
     console.log('API aguardando requisição')
 })
+ 

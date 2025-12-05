@@ -14,7 +14,6 @@ const getSelectAllIngredientes = async function () {
 
         let sql = `select * from tbl_ingredientes order by id_ingredientes desc`
         let result = await prisma.$queryRawUnsafe(sql)
-        console.log(result, "AAAAA")
         
         if (Array.isArray(result)){
             return result
@@ -26,18 +25,14 @@ const getSelectAllIngredientes = async function () {
 
 const getSelectByIdIngredientes = async function (id) {
     
-try {
-    let sql = `select * from tbl_ingredientes where id_inredientes=${id}`
-    let result = await prisma.$queryRawUnsafe(sql)
-
-    if (Array.isArray(result)){
-        return result
-    }else{
+    try {
+        const result = await prisma.$queryRaw`
+            SELECT * FROM tbl_ingredientes WHERE id_ingredientes = ${id}`
+        return result 
+    } catch (error) {
+        console.log(error)
         return false
     }
-}catch(error){
-    return false
-}    
 }
 
 const setInsertReceita = async function (ingredientes){
@@ -47,8 +42,7 @@ const setInsertReceita = async function (ingredientes){
         tipo
         )
         values('${ingredientes.nome}',
-                '${ingredientes.tipo}'
-                                    ')`
+                '${ingredientes.tipo}')`
 
         let result = await prisma.$executeRawUnsafe(sql)
         if (result){
@@ -78,7 +72,7 @@ const getSelectLastIdIngrediente = async function (params){
     }
 }
 
-const setUpdateIngrediente = async function (ingredientes) {
+const setUpdateIngredientes = async function (ingredientes) {
 
     try{
         let sql = `update tbl_ingredientes set
@@ -118,6 +112,13 @@ const setDeleteIngredientes = async function (id) {
     }
 }
 
-
+module.exports = {
+    getSelectAllIngredientes,
+    getSelectByIdIngredientes,
+    setInsertReceita,
+    getSelectLastIdIngrediente,
+    setUpdateIngredientes,
+    setDeleteIngredientes
+}
 
 

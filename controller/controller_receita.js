@@ -95,7 +95,7 @@ const atualizarReceita = async function (receita, id, contentType) {
 
                 //verifica se o id existe no BD, caso exista teremos o status 200
                 if (validarId.status_code == 200) {
-                    console.log(id)
+                   
                     receita.id_receita = parseInt(id)
 
                     //Chama a função do DAO para atualizar um novo filme
