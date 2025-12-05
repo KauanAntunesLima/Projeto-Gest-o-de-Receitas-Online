@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./recipe.css">
+    <link rel="stylesheet" href="./newrecipe.css">
+    <title>Toque Gourmet</title>
+</head>
+
+<body>
+    <header>
+        <div class="logo"> <span>TOQUE <span>GOURMET</span></span>
+            <img src="./src/img/gourmetlogo.svg" alt="">
+        </div>
+        <div class="options">
+            <span>CADASTRO DE <span>RECEITAS</span></span>
+        </div>
+        </div>
+    </header>
+
+    <main class="recipe-form">
+
+        <section class="top-infos">
+            <div class="input-group">
+                <label>Nome da Receita</label>
+                <input type="text" />
+            </div>
+
+            <div class="time-group">
+                <label>Tempo de preparo</label>
+                <div class="time-inputs">
+                    <input type="number" placeholder="00" />
+                    <input type="number" placeholder="00" />
+                    <input type="number" placeholder="00" />
+                </div>
+            </div>
+        </section>
+
+        <section class="steps-section">
+            <h3>Passo a Passo</h3>
+
+            <div class="steps-list">
+
+                <div class="step-item">
+                    <textarea>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat</textarea>
+
+                    <div class="step-actions">
+                        <button class="delete"><img src="./src/img/remove.png" alt=""></button>
+                        <button class="add"><img src="./src/img/add.png" alt=""></button>
+                    </div>
+                </div>
+
+                <div class="step-item">
+                    <textarea>
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat
+                </textarea>
+
+                    <div class="step-actions">
+                        <button class="add"><img src="./src/img/add.png" alt=""></button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="ingredients-photo">
+
+            <div class="ingredients-box">
+                <div class="ingredients-header">
+                    <h3>Ingredientes</h3>
+                    <span>Quantidade</span>
+                    <span>Tipo de Unidade</span>
+                </div>
+
+                <div class="ingredient-row">
+                    <input type="text" />
+                    <input type="text" />
+                    <input type="text" />
+                    <button class="delete"><img src="./src/img/remove.png" alt=""></button>
+                    <button class="add"><img src="./src/img/add.png" alt=""></button>
+                </div>
+
+                <div class="ingredient-row">
+                    <input type="text" />
+                    <input type="text" />
+                    <input type="text" />
+                    <button class="add"><img src="./src/img/add.png" alt=""></button>
+                </div>
+            </div>
+
+            <div class="photo-upload">
+                <label class="photo-preview">
+                    <input type="file" id="img-input" accept="image/*" />
+                    <img id="preview-img" src="https://via.placeholder.com/500x300?text=Preview" />
+                </label>
+            </div>
+
+        </section>
+
+        <section class="extra-info">
+
+            <div class="extra-row">
+                <label>Alérgenos</label>
+                <input type="text" />
+                <button class="delete"><img src="./src/img/remove.png" alt=""></button>
+                <button class="add"><img src="./src/img/add.png" alt=""></button>
+            </div>
+
+            <div class="extra-row">
+                <label>Categoria</label>
+                <input type="text" />
+                <button class="delete"><img src="./src/img/remove.png" alt=""></button>
+                <button class="add"><img src="./src/img/add.png" alt=""></button>
+            </div>
+
+            <div class="extra-row">
+                <label>Nível de Dificuldade</label>
+                <input type="text" />
+                <button class="delete"><img src="./src/img/remove.png" alt=""></button>
+                <button class="add"><img src="./src/img/add.png" alt=""></button>
+            </div>
+
+            <div class="extra-row">
+                <label>Avaliação</label>
+                <input type="text" />
+                <button class="delete"><img src="./src/img/remove.png" alt=""></button>
+                <button class="add"><img src="./src/img/add.png" alt=""></button>
+            </div>
+
+        </section>
+
+    </main>
+
+</body>
+
+</html>
