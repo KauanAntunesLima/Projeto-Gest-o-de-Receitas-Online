@@ -6,13 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/style.css">
     <link rel="stylesheet" href="./recipe.css">
+    <script src="/app.js" type="module" defer></script>
     <title>Toque Gourmet</title>
 </head>
 
 <body>
     <div class="background">
-
-        <img src="../img/lasanha.png" alt="">
+        <img id="recipe-bg-img" src="../img/lasanha.png" alt="Imagem da Receita">
     </div>
     <div class="background-effect"></div>
     <header>
@@ -27,10 +27,10 @@
     </header>
     <main>
         <div class="recipe-introduction">
-            <h1>Batata Frita sem oleo e sem panela</h1>
+            <h1 id="recipe-title">Carregando Receita...</h1>
             <div class="dificulty">
                 <span>Dificuldade</span>
-                <span>Fácil</span>
+                <span id="recipe-difficulty-text">--</span>
             </div>
             <div class="review">
                 <span>Avaliação</span>
@@ -47,262 +47,13 @@
         <div class="recipe-details">
             <div class="ingredients">
                 <h2>Ingredientes</h2>
-                <div class="ingredient-info">
-                    <span>Farinha de Trigo</span>
-                    <div class="unity-info">
-                        <span>Quantidade: 300</span>
-                        <span>Unidade: g</span>
-                    </div>
-                </div>
-
-                <div class="ingredient-info">
-                    <span>Açúcar</span>
-                    <div class="unity-info">
-                        <span>Quantidade: 150</span>
-                        <span>Unidade: g</span>
-                    </div>
-                </div>
-
-                <div class="ingredient-info">
-                    <span>Ovo</span>
-                    <div class="unity-info">
-                        <span>Quantidade: 3</span>
-                        <span>Unidade: un</span>
-                    </div>
-                </div>
-
-                <div class="ingredient-info">
-                    <span>Leite</span>
-                    <div class="unity-info">
-                        <span>Quantidade: 200</span>
-                        <span>Unidade: ml</span>
-                    </div>
-                </div>
-
-                <div class="ingredient-info">
-                    <span>Manteiga</span>
-                    <div class="unity-info">
-                        <span>Quantidade: 100</span>
-                        <span>Unidade: g</span>
-                    </div>
-                </div>
-
-                <div class="ingredient-info">
-                    <span>Fermento em Pó</span>
-                    <div class="unity-info">
-                        <span>Quantidade: 10</span>
-                        <span>Unidade: g</span>
-                    </div>
-                </div>
-
-                <div class="ingredient-info">
-                    <span>Sal</span>
-                    <div class="unity-info">
-                        <span>Quantidade: 5</span>
-                        <span>Unidade: g</span>
-                    </div>
-                </div>
-
-                <div class="ingredient-info">
-                    <span>Óleo</span>
-                    <div class="unity-info">
-                        <span>Quantidade: 50</span>
-                        <span>Unidade: ml</span>
-                    </div>
-                </div>
-
-                <div class="ingredient-info">
-                    <span>Água</span>
-                    <div class="unity-info">
-                        <span>Quantidade: 250</span>
-                        <span>Unidade: ml</span>
-                    </div>
-                </div>
-
-                <div class="ingredient-info">
-                    <span>Chocolate em Pó</span>
-                    <div class="unity-info">
-                        <span>Quantidade: 100</span>
-                        <span>Unidade: g</span>
-                    </div>
-                </div>
-
-                <div class="ingredient-info">
-                    <span>Cacau</span>
-                    <div class="unity-info">
-                        <span>Quantidade: 80</span>
-                        <span>Unidade: g</span>
-                    </div>
-                </div>
-
-                <div class="ingredient-info">
-                    <span>Cenoura</span>
-                    <div class="unity-info">
-                        <span>Quantidade: 2</span>
-                        <span>Unidade: un</span>
-                    </div>
-                </div>
-
-                <div class="ingredient-info">
-                    <span>Creme de Leite</span>
-                    <div class="unity-info">
-                        <span>Quantidade: 1</span>
-                        <span>Unidade: lata</span>
-                    </div>
-                </div>
-
-                <div class="ingredient-info">
-                    <span>Leite Condensado</span>
-                    <div class="unity-info">
-                        <span>Quantidade: 1</span>
-                        <span>Unidade: lata</span>
-                    </div>
-                </div>
-
-                <div class="ingredient-info">
-                    <span>Amido de Milho</span>
-                    <div class="unity-info">
-                        <span>Quantidade: 40</span>
-                        <span>Unidade: g</span>
-                    </div>
-                </div>
-
-                <div class="ingredient-info">
-                    <span>Baunilha</span>
-                    <div class="unity-info">
-                        <span>Quantidade: 5</span>
-                        <span>Unidade: ml</span>
-                    </div>
-                </div>
-
-                <div class="ingredient-info">
-                    <span>Fermento Biológico</span>
-                    <div class="unity-info">
-                        <span>Quantidade: 10</span>
-                        <span>Unidade: g</span>
-                    </div>
-                </div>
-
-                <div class="ingredient-info">
-                    <span>Aveia</span>
-                    <div class="unity-info">
-                        <span>Quantidade: 60</span>
-                        <span>Unidade: g</span>
-                    </div>
-                </div>
-
-                <div class="ingredient-info">
-                    <span>Mel</span>
-                    <div class="unity-info">
-                        <span>Quantidade: 20</span>
-                        <span>Unidade: ml</span>
-                    </div>
-                </div>
-
-                <div class="ingredient-info">
-                    <span>Uva Passa</span>
-                    <div class="unity-info">
-                        <span>Quantidade: 30</span>
-                        <span>Unidade: g</span>
-                    </div>
-                </div>
-
-                <div class="ingredient-info">
-                    <span>Tomate</span>
-                    <div class="unity-info">
-                        <span>Quantidade: 2</span>
-                        <span>Unidade: un</span>
-                    </div>
-                </div>
-
-                <div class="ingredient-info">
-                    <span>Cebola</span>
-                    <div class="unity-info">
-                        <span>Quantidade: 1</span>
-                        <span>Unidade: un</span>
-                    </div>
-                </div>
-
-                <div class="ingredient-info">
-                    <span>Alho</span>
-                    <div class="unity-info">
-                        <span>Quantidade: 3</span>
-                        <span>Unidade: dentes</span>
-                    </div>
-                </div>
-
-                <div class="ingredient-info">
-                    <span>Arroz</span>
-                    <div class="unity-info">
-                        <span>Quantidade: 200</span>
-                        <span>Unidade: g</span>
-                    </div>
-                </div>
-
-                <div class="ingredient-info">
-                    <span>Feijão</span>
-                    <div class="unity-info">
-                        <span>Quantidade: 150</span>
-                        <span>Unidade: g</span>
-                    </div>
-                </div>
-
-                <div class="ingredient-info">
-                    <span>Macarrão</span>
-                    <div class="unity-info">
-                        <span>Quantidade: 250</span>
-                        <span>Unidade: g</span>
-                    </div>
-                </div>
-
-                <div class="ingredient-info">
-                    <span>Frango</span>
-                    <div class="unity-info">
-                        <span>Quantidade: 300</span>
-                        <span>Unidade: g</span>
-                    </div>
-                </div>
-
-                <div class="ingredient-info">
-                    <span>Carne Moída</span>
-                    <div class="unity-info">
-                        <span>Quantidade: 400</span>
-                        <span>Unidade: g</span>
-                    </div>
-                </div>
-
-                <div class="ingredient-info">
-                    <span>Queijo Mussarela</span>
-                    <div class="unity-info">
-                        <span>Quantidade: 150</span>
-                        <span>Unidade: g</span>
-                    </div>
-                </div>
-
-                <div class="ingredient-info">
-                    <span>Presunto</span>
-                    <div class="unity-info">
-                        <span>Quantidade: 120</span>
-                        <span>Unidade: g</span>
-                    </div>
+                <div id="ingredients-list">
                 </div>
             </div>
             <div class="divider"></div>
             <div class="steps">
                 <h2>Passo a Passo</h2>
-                <div class="steps-description">
-                    <div class="step">Pré-aqueça o forno a 180°C.</div>
-                    <div class="step">Misture a farinha e o açúcar.</div>
-                    <div class="step">Adicione os ovos e mexa até ficar homogêneo.</div>
-                    <div class="step">Pré-aqueça o forno a 180°C.</div>
-                    <div class="step">Misture a farinha e o açúcar.</div>
-                    <div class="step">Adicione os ovos e mexa até ficar homogêneo.</div>
-                    <div class="step">Pré-aqueça o forno a 180°C.</div>
-                    <div class="step">Misture a farinha e o açúcar.</div>
-                    <div class="step">Adicione os ovos e mexa até ficar homogêneo.</div>
-                    <div class="step">Pré-aqueça o forno a 180°C.</div>
-                    <div class="step">Misture a farinha e o açúcar.</div>
-                    <div class="step">Adicione os ovos e mexa até ficar homogêneo.</div>
+                <div id="steps-list" class="steps-description">
                 </div>
             </div>
         </div>

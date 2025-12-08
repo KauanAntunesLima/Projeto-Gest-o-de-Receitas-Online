@@ -221,3 +221,114 @@ textarea {
     font-weight: 500;
     width: 20%;
 }
+
+/* Estilos para ingredientes numerados */
+.ingredients-header {
+    display: grid;
+    grid-template-columns: 40px 2fr 1fr 1fr auto auto;
+    gap: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #dfdfdf;
+}
+
+.ingredients-header h3 {
+    font-size: 22px;
+    grid-column: span 1;
+}
+
+.ingredient-row {
+    display: grid;
+    grid-template-columns: 40px 2fr 1fr 1fr auto auto;
+    gap: 10px;
+    margin: 10px 0;
+    align-items: center;
+}
+
+.ingredient-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 16px;
+    color: #666;
+}
+
+/* Estilos para seção de alérgenos */
+.allergens-section {
+    margin-bottom: 30px;
+}
+
+.allergens-section h3 {
+    font-size: 20px;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.allergens-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto auto;
+    gap: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.allergen-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto auto;
+    gap: 10px;
+    margin: 10px 0;
+    align-items: center;
+}
+
+.allergen-row input {
+    width: 100%;
+}
+
+.ingredient-select {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #cfcfcf;
+    border-radius: 6px;
+    outline: none;
+    font-size: 14px;
+    background: #fff;
+    color: black;
+    cursor: pointer;
+}
+
+.ingredient-select:focus {
+    border-color: var(--cor-primaria);
+    box-shadow: 0 0 0 2px rgba(28, 147, 28, 0.1);
+}
+
+.other-fields {
+    margin-top: 30px;
+}
+
+.other-fields .extra-row label {
+    font-weight: 600;
+    color: #333;
+}
+
+.other-fields .extra-row select {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #cfcfcf;
+    border-radius: 6px;
+    outline: none;
+    font-size: 14px;
+    background: #fff;
+    color: black;
+    cursor: pointer;
+}
+
+.other-fields .extra-row select:focus {
+    border-color: var(--cor-primaria);
+    box-shadow: 0 0 0 2px rgba(28, 147, 28, 0.1);
+}

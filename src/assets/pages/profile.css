@@ -100,6 +100,10 @@ header .options{
 }
 .recipe-cards{
     padding: 0;
+    margin-bottom: 20px;
+}
+.card-title-ratio{
+    font-size: 28px;
 }
 
 @media screen and (max-width: 1360px) {
@@ -142,6 +146,56 @@ header .options{
     .info-filter{
         flex-direction: column;
         width: 100%;
+    }
+    
+}
+@media (max-width: 768px) {
+    header {
+        padding-inline: 20px;
+    }
+
+    header .logo {
+        gap: 10px;
+    }
+
+    header .logo span {
+        font-size: 30px;
+    }
+
+    header .logo img {
+        display: block;
+    }
+
+    header .options {
+        width: 100%;
+        margin-right: 0;
+    }
+
+    .options .profile {
+        display: none;
+    }
+
+    .options .search-bar {
+        width: 100%;
+    }
+
+    main {
+        margin-top: 0;
+        padding: 20px;
+    }
+    .recipe-cards{
+        transition: 1s;
+    }
+    .recipe-cards:has(.card:hover){
+        transition: 1s;
+        min-height: 1150px;
+    }
+    .recipe-cards .card:nth-child(n + 3) {
+        display: block;
+    }
+
+    .card {
+        height: 10%;
     }
     
 }

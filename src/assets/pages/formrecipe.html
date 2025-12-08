@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/style.css">
     <link rel="stylesheet" href="./recipe.css">
     <link rel="stylesheet" href="./formrecipe.css">
+    <script src="/src/js/formrecipe.js" type="module" defer></script>
     <title>Toque Gourmet</title>
 </head>
 
@@ -21,20 +22,20 @@
         </div>
     </header>
 
-    <main class="recipe-form">
+    <main class="recipe-form" id="recipe-form">
 
         <section class="top-infos">
             <div class="input-group">
                 <label>Nome da Receita</label>
-                <input type="text" />
+                <input type="text" placeholder="Ex: Lasanha à Bolonhesa"/>
             </div>
 
             <div class="time-group">
                 <label>Tempo de preparo</label>
                 <div class="time-inputs">
-                    <input type="number" placeholder="00" />
-                    <input type="number" placeholder="00" />
-                    <input type="number" placeholder="00" />
+                    <input type="number" placeholder="Horas" value="0" min="0"/>
+                    <input type="number" placeholder="Minutos" value="45" min="0"/>
+                    <input type="number" placeholder="Segundos" value="0" min="0"/>
                 </div>
             </div>
         </section>
@@ -45,26 +46,13 @@
             <div class="steps-list">
 
                 <div class="step-item">
-                    <textarea>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat</textarea>
+                    <textarea placeholder="Descreva o primeiro passo da receita..."></textarea>
 
                     <div class="step-actions">
                         <button class="delete"><img src="../img/remove.png" alt=""></button>
                         <button class="add"><img src="../img/add.png" alt=""></button>
                     </div>
                 </div>
-
-                <div class="step-item">
-                    <textarea>
-Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat
-Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat
-Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat
-                </textarea>
-
-                    <div class="step-actions">
-                        <button class="add"><img src="../img/add.png" alt=""></button>
-                    </div>
-                </div>
-
             </div>
         </section>
 
@@ -73,29 +61,21 @@ Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisque faucibus ex sap
             <div class="ingredients-box">
                 <div class="ingredients-header">
                     <h3>Ingredientes</h3>
-                    <span>Quantidade</span>
-                    <span>Tipo de Unidade</span>
                 </div>
-
-                <div class="ingredient-row">
-                    <input type="text" />
-                    <input type="text" />
-                    <input type="text" />
+                <div class="ingredient-row" data-ingredient-id="1">
+                    <span class="ingredient-number">1</span>
+                    <input type="text" placeholder="Ex: Farinha de trigo"/>
+                    <input type="text" placeholder="Ex: 500"/>
+                    <input type="text" placeholder="Ex: gramas"/>
                     <button class="delete"><img src="../img/remove.png" alt=""></button>
                     <button class="add"><img src="../img/add.png" alt=""></button>
                 </div>
 
-                <div class="ingredient-row">
-                    <input type="text" />
-                    <input type="text" />
-                    <input type="text" />
-                    <button class="add"><img src="../img/add.png" alt=""></button>
-                </div>
             </div>
 
             <div class="photo-upload">
                 <label class="photo-preview">
-                    <input type="file" id="img-input" accept="image/*" />
+                    <input type="file" id="img-input" accept="image/*" onchange="preview(event)" />
                     <img id="preview-img" src="https://via.placeholder.com/500x300?text=Preview" />
                 </label>
             </div>
@@ -104,34 +84,55 @@ Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisque faucibus ex sap
 
         <section class="extra-info">
 
-            <div class="extra-row">
-                <label>Alérgenos</label>
-                <input type="text" />
-                <button class="delete"><img src="../img/remove.png" alt=""></button>
-                <button class="add"><img src="../img/add.png" alt=""></button>
+            <div class="allergens-section">
+                <h3>Alérgenos</h3>
+                <div class="allergens-header">
+                </div>
+
+                <div class="allergen-row">
+                    <input type="text" placeholder="Ex: Glúten"/>
+                    <select class="ingredient-select">
+                        <option value="">Selecione um ingrediente</option>
+                        <option value="1">1 - Farinha de trigo</option>
+                        <option value="2">2 - Ovos</option>
+                    </select>
+                    <button class="delete"><img src="../img/remove.png" alt=""></button>
+                    <button class="add"><img src="../img/add.png" alt=""></button>
+                </div>
+
+                <div class="allergen-row">
+                    <input type="text" placeholder="Ex: Lactose" value=""/>
+                    <select class="ingredient-select">
+                        <option value="">Selecione um ingrediente</option>
+                        <option value="1">1 - Farinha de trigo</option>
+                        <option value="2">2 - Ovos</option>
+                    </select>
+                    <button class="add"><img src="../img/add.png" alt=""></button>
+                </div>
             </div>
 
-            <div class="extra-row">
-                <label>Categoria</label>
-                <input type="text" />
-                <button class="delete"><img src="../img/remove.png" alt=""></button>
-                <button class="add"><img src="../img/add.png" alt=""></button>
+            <div class="other-fields">
+                <div class="extra-row">
+                    <label>Categoria</label>
+                    <input type="text" placeholder="Ex: Massas" value="Massas"/>
+                </div>
+
+                <div class="extra-row">
+                    <label>Nível de Dificuldade</label>
+                    <select>
+                        <option value="">Selecione...</option>
+                        <option value="Fácil">Fácil</option>
+                        <option value="Médio" selected>Médio</option>
+                        <option value="Difícil">Difícil</option>
+                    </select>
+                </div>
             </div>
 
-            <div class="extra-row">
-                <label>Nível de Dificuldade</label>
-                <input type="text" />
-                <button class="delete"><img src="../img/remove.png" alt=""></button>
-                <button class="add"><img src="../img/add.png" alt=""></button>
-            </div>
+        </section>
 
-            <div class="extra-row">
-                <label>Avaliação</label>
-                <input type="text" />
-                <button class="delete"><img src="../img/remove.png" alt=""></button>
-                <button class="add"><img src="../img/add.png" alt=""></button>
-            </div>
-
+        <section class="form-actions">
+            <button type="button" class="btn-clear" id="btn-clear">Limpar Campos</button>
+            <button type="button" class="btn-confirm" id="btn-confirm">Confirmar</button>
         </section>
 
     </main>

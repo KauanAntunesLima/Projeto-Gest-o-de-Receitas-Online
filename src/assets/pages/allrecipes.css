@@ -2,30 +2,38 @@
     --cor-primaria: #1C931C;
     --cor-secundaria: #FF8000;
 }
-header{
+
+header {
     margin-top: 30px;
     padding-inline: 53px;
 
 }
-header .options{
-    
+
+header .options {
+
     margin-right: 63px;
 }
-main{
+
+main {
     margin-top: 100px;
     display: flex;
     gap: 26px;
     flex-direction: column;
     padding-inline: 120px;
-    
+
 }
-.recipe-cards{
+
+.recipe-cards {
     padding: 0;
 }
-.card span{
+.recipe-cards:last-child:has(.card:hover){
+    margin-bottom: 200px;
+}
+.card span {
     font-size: 1.9rem;
 }
-.filter-options{
+
+.filter-options {
     position: relative;
     z-index: 999;
     display: flex;
@@ -37,7 +45,8 @@ main{
     width: 87px;
     height: 46px;
 }
-.filter-choices{
+
+.filter-choices {
     position: absolute;
     top: 50px;
     left: 0;
@@ -47,14 +56,67 @@ main{
     width: 100px;
     transition: 0.8s;
 }
-.filter-options:hover .filter-choices{
-    
+
+.filter-options:hover .filter-choices {
+
     transition: 0.6s;
     width: 400px;
     height: 300px;
 }
-.filter-options span{
+
+.filter-options span {
     color: white;
     font-size: 24px;
     font-weight: 300;
+}
+
+@media (max-width: 768px) {
+    header {
+        padding-inline: 20px;
+    }
+
+    header .logo {
+        gap: 10px;
+    }
+
+    header .logo span {
+        font-size: 30px;
+    }
+
+    header .logo img {
+        display: block;
+    }
+
+    header .options {
+        width: 100%;
+        margin-right: 0;
+    }
+
+    .options .profile {
+        display: none;
+    }
+
+    .options .search-bar {
+        width: 100%;
+    }
+
+    main {
+        margin-top: 0;
+        padding: 20px;
+    }
+    .recipe-cards{
+        transition: 1s;
+    }
+    .recipe-cards:has(.card:hover){
+        transition: 1s;
+        min-height: 1150px;
+    }
+    .recipe-cards .card:nth-child(n + 3) {
+        display: block;
+    }
+
+    .card {
+        height: 10%;
+    }
+    
 }
