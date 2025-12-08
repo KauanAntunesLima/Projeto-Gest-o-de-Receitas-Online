@@ -13,7 +13,7 @@ const prisma = new PrismaClient()
 // Pegar os generos de todos os filmes e generos do banco de dados
 const getSelectAllReceitaCozinha = async function (params) {
     try{
-        let sql = `select * from tbl_receita_cozinha order by desc`
+        let sql = `select * from tbl_receita_cozinha order by id_receita_cozinha desc`
 
         let result = await prisma.$queryRawUnsafe(sql)
 
@@ -69,7 +69,7 @@ const getSelectBYIdReceitaCozinha = async function (id) {
     }
 } 
 
-const getInsertReceitaCozinha = async function (receitaCozinha) {
+const setInsertReceitaCozinha = async function (receitaCozinha) {
     try {
       // Corrigindo o SQL (faltavam vírgulas, aspas e parênteses errados)
       let sql = `
@@ -101,7 +101,7 @@ const getInsertReceitaCozinha = async function (receitaCozinha) {
 
   const getSelectCozinhaByIdReceita = async function (idReceita) {
     try{
-        let sql =   `select tbl_cozinha.id_cozinha, tbl_cozinha.nome
+        let sql =   `select tbl_cozinha.id_cozinha, tbl_cozinha.id_cozinha
                      from tbl_receita
                             inner join tbl_receita_cozinha
                             on tbl_receita.id_receita = tbl_receita_cozinha.id_receita
@@ -124,7 +124,7 @@ const getInsertReceitaCozinha = async function (receitaCozinha) {
 
 const getSelectReceitaByIdCozinha = async function (idCozinha) {
         try{
-            let sql =   `select tbl_receita.id_receita, tbl_receita.nome
+            let sql =   `select tbl_receita.id_receita, tbl_receita.id_receita
                          from tbl_receita
                                 inner join tbl_receita_cozinha
                                 on tbl_receita.id_receita = tbl_receita_cozinha.id_receita
@@ -170,4 +170,49 @@ const setUpdateReceitaCozinha = async function (receitaCozinha) {
     }
 
 }
+const setDeleteReceitaCozinha = async function (id) {
 
+    try{
+        let sql = `DELETE FROM tbl_receita_cozinha WHERE id_filme_genero=${id}`
+
+        let result = await prisma.$executeRawUnsafe(sql)
+
+        if(result){
+            return true
+        }else{
+            return true
+        }
+    }catch (error){
+        return false
+    }
+    
+}
+
+const setDeleteByIdCozinhaAndReceitaId = async function (idReceita){
+    try{
+        let sql = `DELETE FROM tbl_receita_cozinha WHERE id_receita=${idReceita}`
+
+        let result = await prisma.$executeRawUnsafe(sql)
+
+if(result){
+    return true
+}else{
+    return false
+}
+
+    }catch(error){
+        return false 
+    }
+}
+
+module.exports = {
+    getSelectAllReceitaCozinha,
+    getSelectBYIdReceitaCozinha,
+    setInsertReceitaCozinha,
+    getSelectCozinhaByIdReceita,
+    getSelectReceitaByIdCozinha,
+    getSelectLastIdReceitaCozinha,
+    setUpdateReceitaCozinha,
+    setDeleteByIdCozinhaAndReceitaId,
+    setDeleteReceitaCozinha
+}

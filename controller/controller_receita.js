@@ -6,6 +6,7 @@
  * Versão: 2.0
  ****************************************************************************************/
 const receitaDAO = require('../model/DAO/receita.js')
+const controllerReceitaCozinha = require('./controller_receita_cozinha.js')
 
 const MESSAGE_DEFAULT = require('../modulo/config_messages.js')
 
@@ -18,6 +19,14 @@ const listarReceita = async function () {
         let result = await receitaDAO.getSelectAllreceita()
         if (result){
             if (result.length > 0){
+
+                for (let receita of result){
+                    let resultCozinha = await controllerReceitaCozinha.listarCozinhaIdReceita(receita.id_receita)
+                  if (resultCozinha.status_code == 200){
+                    receita.cozinha = resultCozinha.response.cozinha
+                  }  
+                }
+
                 MESSAGE.HEADER.status = MESSAGE.SUCCESS_REQUEST.status
                 MESSAGE.HEADER.status_code = MESSAGE.SUCCESS_REQUEST.status_code
                 MESSAGE.HEADER.response.receita = result
@@ -50,6 +59,13 @@ const pegarIdReceita = async function (id) {
 
             if (result) {
                 if (result.length > 0) {
+
+                    for(let receita of result){
+                        let resultCozinha = await controllerReceitaCozinha.listarCozinhaIdReceita(receita.id_receita
+
+                        )
+                    }
+
                     MESSAGE.HEADER.status = MESSAGE.SUCCESS_REQUEST.status
                     MESSAGE.HEADER.status_code = MESSAGE.SUCCESS_REQUEST.status_code
                     MESSAGE.HEADER.response.receita = result
@@ -147,6 +163,13 @@ const inserirReceita = async function (receita, contentType) {
                 let lastIdReceita = await receitaDAO.getSelectLastIdReceita(receita)
 
                 if (lastIdReceita) {
+
+                    for (cozinha of receita.cozinha){
+                        let receitaCozinha = {
+                            id_receita: lastIdReceita,
+                            id_cozinha: cozinha.id_cozinha
+                        }
+                    }
 
                     //adiciona no Json de filme o ID que foi gerado no BD
                     receita.id = lastIdReceita
