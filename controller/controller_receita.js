@@ -148,6 +148,17 @@ const inserirReceita = async function (receita, contentType) {
 
                 if (lastIdReceita) {
 
+                        for (let ingrediente of receita.Ingredientes) {
+
+                            await ingredienteReceitaDAO.insertIngredienteReceita({
+                                receita_id: lastIdReceita,
+                                ingrediente_id: ingrediente.id,
+                                quantidade: ingrediente.quantidade,
+                                unidade: ingrediente.unidade
+                            })
+                        }
+
+
                     //adiciona no Json de filme o ID que foi gerado no BD
                     receita.id = lastIdReceita
                     MESSAGE.HEADER.status = MESSAGE.SUCCES_CREATED_ITEM.status
