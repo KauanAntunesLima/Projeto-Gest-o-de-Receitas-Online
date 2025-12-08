@@ -26,6 +26,8 @@ const controllerReceita = require('./controller/controller_receita.js')
 const controllerAlergenos = require('./controller/controller_alergenos.js')
 const controllerIngredientes = require('./controller/controller_ingredientes.js')
 const controllerCategoria = require('./controller/controller_categoria.js')
+const controllerCozinha = require('./controller/controller_cozinha.js')
+const controllerModoPreparo = require('./controller/controller_modo_preparo.js')
 
 /***********************
  * EndPoints tbl_receita
@@ -234,6 +236,106 @@ app.post ('/v1/toque_gourmet/categoria', cors(), bodyParserJSON, async function 
     res.status(categoria.status_code)
     res.json(categoria)
     
+})
+
+/***********************
+ * EndPoints tbl_cozinha
+ * **********************/
+
+//Ambiente de GET
+app.get('/v1/toque_gourmet/cozinha', cors(), async function (req, res) {
+
+    let cozinha = await controllerCozinha.listarCozinha()
+    res.status(cozinha.status_code)
+    res.json(cozinha)
+})
+
+app.get('/v1/toque_gourmet/cozinha/:id', cors(), async function (req,res) {
+
+    let idCozinha = req.params.id
+    let cozinha = await controllerCozinha.pegarIdCozinha(idCozinha)
+    res.status(cozinha.status_code)
+    res.json(cozinha)
+})
+
+//Ambiente POST
+app.post ('/v1/toque_gourmet/cozinha', cors(), bodyParserJSON, async function (req, res) {
+
+    let dadosBody = req.body
+    let contentType = req.headers['content-type']
+    let cozinha = await controllerCozinha.inserirCozinha(dadosBody, contentType)
+    res.status(cozinha.status_code)
+    res.json(cozinha)
+    
+})
+
+//ambiente PUT
+
+app.put('/v1/toque_gourmet/cozinha/:id', cors(), bodyParserJSON, async function (req, res) {
+
+    let dadosBody = req.body
+    let idCozinha = req.params.id
+    let contentType = req.headers['content-type']
+
+    let cozinha = await controllerCozinha.atualizarCozinha(dadosBody, idCozinha, contentType)
+    console.log(cozinha)
+    res.status(cozinha.status_code)
+    res.json(cozinha)
+})
+
+// ambiente delete
+
+app.delete('/v1/toque_gourmet/cozinha/:id', cors(), async function(request, response){
+
+    let idCozinha = request.params.id
+    let cozinha = await controllerCozinha.deletarCozinha(idCozinha)
+    response.status(cozinha.status_code)
+    response.json(cozinha)
+})
+
+/***********************
+ * EndPoints tbl_cozinha
+ * **********************/
+
+//Ambiente GET
+
+app.get('/v1/toque_gourmet/modo_preparo', cors(), async function (req, res) {
+
+    let cozinha = await controllerModoPreparo.listarModoPreparo()
+    res.status(cozinha.status_code)
+    res.json(cozinha)
+})
+
+app.get('/v1/toque_gourmet/modo_preparo/:id', cors(), async function (req,res) {
+
+    let idModoPreparo = req.params.id
+    let modoPreparo = await controllerModoPreparo.pegarIdModoPreparo(idModoPreparo)
+    res.status(modoPreparo.status_code)
+    res.json(modoPreparo)
+})
+
+//Ambiente Post
+
+app.post ('/v1/toque_gourmet/toque_gourmet', cors(), bodyParserJSON, async function (req, res) {
+
+    let dadosBody = req.body
+    let contentType = req.headers['content-type']
+    let modoPreparo = await controllerModoPreparo.inserirModoPreparo(dadosBody, contentType)
+    res.status(modoPreparo.status_code)
+    res.json(modoPreparo)
+    
+})
+
+//Ambiente PUT
+
+//Ambiente DELETE
+
+app.delete('/v1/toque_gourmet/modo_preparo/:id', cors(), async function(request, response){
+
+    let idModoPreparo = request.params.id_modo_preparo
+    let modoPreparo = await controllerModoPreparo.deletarModoPreparo(idModoPreparo)
+    response.status(modoPreparo.status_code)
+    response.json(modoPreparo)
 })
 
 //ultima linha do codigo 

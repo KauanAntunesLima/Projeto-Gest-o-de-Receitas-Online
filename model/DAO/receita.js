@@ -68,7 +68,7 @@ const setInsertReceita = async function (receita){
         return false
     }
 }
-setInsertReceita()
+
 const getSelectLastIdReceita = async function (params){
 
     try {
