@@ -98,6 +98,7 @@ const setUpdateModoPreparo = async function (modo_preparo) {
         }
 
     } catch (error) {
+        console.log(error)
         return false
     }
 }
