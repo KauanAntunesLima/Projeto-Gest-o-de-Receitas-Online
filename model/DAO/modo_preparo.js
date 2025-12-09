@@ -11,18 +11,18 @@ const { PrismaClient } = require('../../generated/prisma')
 const prisma = new PrismaClient()
 
 const getSelectAllModoPreparo = async function () {
-    try{
+    try {
 
         let sql = `select * from tbl_modo_preparo order by id_modo_preparo desc`
         let result = await prisma.$queryRawUnsafe(sql)
         console.log(result, "AAAAA")
 
-        if (Array.isArray(result)){
+        if (Array.isArray(result)) {
             return result
         }
-    }catch(error){
+    } catch (error) {
         return false
-    }   
+    }
 }
 
 const getSelectByIdModoPreparo = async function (id) {
@@ -30,75 +30,79 @@ const getSelectByIdModoPreparo = async function (id) {
         const result = await prisma.$queryRaw`
             SELECT * FROM tbl_modo_preparo WHERE id_modo_preparo = ${id}
         `
-        return result 
+        return result
     } catch (error) {
         console.log(error)
         return false
     }
 }
 
-const getSelectLastIdModoPreparo = async function (params){
+const getSelectLastIdModoPreparo = async function (params) {
 
     try {
         let sql = `select id_modo_preparo from tbl_modo_preparo order by id_modo_preparo desc limit 1`
 
         let result = await prisma.$queryRawUnsafe(sql)
 
-        if(Array.isArray(result)){
+        if (Array.isArray(result)) {
             return Number(result[0].id_modo_preparo)
-        }else{
+        } else {
             return false
         }
-    } catch (error){
+    } catch (error) {
         return false
     }
 }
 
-const setInsertModoPreparo = async function (modo_preparo){
+const setInsertModoPreparo = async function (modo_preparo) {
 
-    try{
+    try {
         let sql = `insert into tbl_modo_preparo(
         id_receita,
         numero_passo,
         descricao)
         values(
-        '${modo_preparo.id_receita}',
-        '${modo_preparo.numero_passo}',
-        '${receita.descricao}')`
+        ${modo_preparo.id_receita},
+        ${modo_preparo.numero_passo},
+        '${modo_preparo.descricao}')`
 
         let result = await prisma.$executeRawUnsafe(sql)
-        if (result){
+        if (result) {
             return true
-        }else{
+        } else {
             return false
         }
-    }catch(error){
+    } catch (error) {
         return false
     }
 }
 
-/* const getSelectReceitaByIdModoPreparo = async func */
+
 
 const setUpdateModoPreparo = async function (modo_preparo) {
-    console.log(receita)
-    try{
-        let sql = `update tbl_modo_preparo set
-        numero_passo          = '${modo_preparo.numero_passo}',
-        descricao             = '${modo_preparo.descricao}'
-        where id_modo_preparo = ${modo_preparo.id_modo_preparo}`
+    try {
+        let sql = `
+            UPDATE tbl_modo_preparo SET
+                numero_passo   = ${modo_preparo.numero_passo},
+                descricao      = '${modo_preparo.descricao}',
+                id_receita     = ${modo_preparo.id_receita}
+            WHERE id_modo_preparo = ${modo_preparo.id_modo_preparo};
+        `
 
         let result = await prisma.$executeRawUnsafe(sql)
-        console.log(result)
-        if(result){
+
+        if (result) {
             return true
-        }else{
+        } else {
             return false
         }
-    }catch (error){
+
+    } catch (error) {
         return false
     }
-    
 }
+
+console.log(setUpdateModoPreparo)
 
 const setDeleteModoPreparo = async function (id) {
 

@@ -94,7 +94,7 @@ const setInsertReceitaCozinha = async function (receitaCozinha) {
       }
   
     } catch (error) {
-      console.error("Erro ao inserir gênero:", error);
+  
       return false;
     }
   }

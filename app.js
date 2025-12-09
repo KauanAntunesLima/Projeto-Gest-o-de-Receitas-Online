@@ -294,7 +294,7 @@ app.delete('/v1/toque_gourmet/cozinha/:id', cors(), async function(request, resp
 })
 
 /***********************
- * EndPoints tbl_cozinha
+ * EndPoints tbl_modo_preparo
  * **********************/
 
 //Ambiente GET
@@ -316,7 +316,7 @@ app.get('/v1/toque_gourmet/modo_preparo/:id', cors(), async function (req,res) {
 
 //Ambiente Post
 
-app.post ('/v1/toque_gourmet/toque_gourmet', cors(), bodyParserJSON, async function (req, res) {
+app.post ('/v1/toque_gourmet/modo_preparo', cors(), bodyParserJSON, async function (req, res) {
 
     let dadosBody = req.body
     let contentType = req.headers['content-type']
@@ -328,6 +328,18 @@ app.post ('/v1/toque_gourmet/toque_gourmet', cors(), bodyParserJSON, async funct
 
 //Ambiente PUT
 
+app.put('/v1/toque_gourmet/modo_preparo/:id', cors(), bodyParserJSON, async function (req, res) {
+
+    let dadosBody = req.body
+    let idModoPreparo = req.params.id
+    let contentType = req.headers['content-type']
+
+    let modoPreparo = await controllerModoPreparo.atualizarModoPreparo(dadosBody, idModoPreparo, contentType)
+    console.log(modoPreparo)
+    res.status(modoPreparo.status_code)
+    res.json(modoPreparo)
+})
+
 //Ambiente DELETE
 
 app.delete('/v1/toque_gourmet/modo_preparo/:id', cors(), async function(request, response){
@@ -337,6 +349,7 @@ app.delete('/v1/toque_gourmet/modo_preparo/:id', cors(), async function(request,
     response.status(modoPreparo.status_code)
     response.json(modoPreparo)
 })
+
 
 //ultima linha do codigo 
 app.listen(PORT, function () {
