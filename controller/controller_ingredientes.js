@@ -47,7 +47,6 @@ const pegarIdIngrediente = async function (id) {
 
             //Chama a função para filtrar pelo ID
             let result = await ingredientesDAO.getSelectByIdIngredientes(parseInt(id))
-            console.log(result)
 
             if (result) {
                 if (result.length > 0) {

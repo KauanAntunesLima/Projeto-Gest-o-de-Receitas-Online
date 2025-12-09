@@ -60,7 +60,62 @@ const pegarReceitaIngredientePorId = async function (id) {
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER;
     }
 };
+const pegarReceitaIngredientePorIdReceita = async function (id) {
+    let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT));
 
+    try {
+        if (id != '' && id != null && id != undefined && !isNaN(id) && id > 0) {
+            let result = await receitaIngredientesDAO.getSelectReceitaIngredientesByReceitaId(id);
+
+            if (result) {
+                if (result.length > 0) {
+                    MESSAGE.HEADER.status = MESSAGE.SUCCESS_REQUEST.status;
+                    MESSAGE.HEADER.status_code = MESSAGE.SUCCESS_REQUEST.status_code;
+                    MESSAGE.HEADER.response.receita_ingredientes = result;
+                    return MESSAGE.HEADER;
+                } else {
+                    return MESSAGE.ERROR_NOT_FOUND;
+                }
+            } else {
+                return MESSAGE.ERROR_INTERNAL_SERVER_MODEL;
+            }
+        } else {
+            MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [ID] inválido';
+            return MESSAGE.ERROR_REQUIRED_FIELDS;
+        }
+    } catch (error) {
+        console.log(error);
+        return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER;
+    }
+};
+const pegarReceitaIngredientePorIngredienteId = async function (id) {
+    let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT));
+
+    try {
+        if (id != '' && id != null && id != undefined && !isNaN(id) && id > 0) {
+            let result = await receitaIngredientesDAO.getSelectReceitaIngredientesByIngredienteId(id);
+
+            if (result) {
+                if (result.length > 0) {
+                    MESSAGE.HEADER.status = MESSAGE.SUCCESS_REQUEST.status;
+                    MESSAGE.HEADER.status_code = MESSAGE.SUCCESS_REQUEST.status_code;
+                    MESSAGE.HEADER.response.receita_ingredientes = result;
+                    return MESSAGE.HEADER;
+                } else {
+                    return MESSAGE.ERROR_NOT_FOUND;
+                }
+            } else {
+                return MESSAGE.ERROR_INTERNAL_SERVER_MODEL;
+            }
+        } else {
+            MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [ID] inválido';
+            return MESSAGE.ERROR_REQUIRED_FIELDS;
+        }
+    } catch (error) {
+        console.log(error);
+        return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER;
+    }
+};
 
 const inserirReceitaIngrediente = async function (receitaIngrediente, contentType) {
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT));
@@ -189,6 +244,8 @@ const validarDadosReceitaIngrediente = (receitaIngrediente) => {
 module.exports = {
     listarReceitaIngredientes,
     pegarReceitaIngredientePorId,
+    pegarReceitaIngredientePorIdReceita,
+    pegarReceitaIngredientePorIngredienteId,
     inserirReceitaIngrediente,
     atualizarReceitaIngrediente,
     deletarReceitaIngrediente

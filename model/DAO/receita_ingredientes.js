@@ -37,6 +37,32 @@ const getSelectReceitaIngredientesById = async function (id) {
         return false
     }
 }
+const getSelectReceitaIngredientesByReceitaId = async function (id) {
+    try {
+
+        let sql = `select * from tbl_receita_ingredientes where id_receita=${id} order by id_receita_ingredientes desc`
+        let result = await prisma.$queryRawUnsafe(sql)
+
+        if (Array.isArray(result)) {
+            return result
+        }
+    } catch (error) {
+        return false
+    }
+}
+const getSelectReceitaIngredientesByIngredienteId = async function (id) {
+    try {
+
+        let sql = `select * from tbl_receita_ingredientes where id_receita=${id} order by id_receita_ingredientes desc`
+        let result = await prisma.$queryRawUnsafe(sql)
+
+        if (Array.isArray(result)) {
+            return result
+        }
+    } catch (error) {
+        return false
+    }
+}
 
 const insertReceitaIngredientes = async function (receitaIngrediente) {
     try {
@@ -125,6 +151,8 @@ const setDeleteReceitaIngredientes = async function (id) {
 module.exports = {
     getSelectAllReceitaIngredientes,
     getSelectReceitaIngredientesById,
+    getSelectReceitaIngredientesByIngredienteId,
+    getSelectReceitaIngredientesByReceitaId,
     setUpdateReceitaIngredientes,
     setDeleteReceitaIngredientes,
     getSelectLastIdReceitaIngrediente,
