@@ -31,7 +31,7 @@ const getSelectAllReceitaCozinha = async function (params) {
 
 const getSelectBYIdReceitaCozinha = async function (id) {
     try{
-        let sql = `select * from tbl_receita_cozinha where id_receita_cozinha=${id}`
+        let sql = `select * from tbl_receita_cozinha where id_receita=${id}`
         let result = await prisma.$queryRawUnsafe(sql)
 
         if (Array.isArray(result)) {

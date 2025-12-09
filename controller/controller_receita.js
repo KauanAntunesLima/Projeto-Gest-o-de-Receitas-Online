@@ -7,6 +7,8 @@
  ****************************************************************************************/
 const receitaDAO = require('../model/DAO/receita.js')
 const controllerReceitaCozinha = require('./controller_receita_cozinha.js')
+const controllerCozinha = require('./controller_cozinha.js')
+const controllerReceitaIngrediente = require('./controller_receita_ingredientes.js')
 
 const MESSAGE_DEFAULT = require('../modulo/config_messages.js')
 
@@ -27,11 +29,16 @@ const listarReceita = async function () {
                   }  
                 }
 
+                let cozinhaId = await controllerReceitaCozinha.buscarCozinhaReceitaId(id)
+                let cozinha = await controllerCozinha.pegarIdCozinha(cozinhaId.response.receitaCozinha[0].id_cozinha)
+                result[0].cozinha = cozinha.response.cozinha
+
                 MESSAGE.HEADER.status = MESSAGE.SUCCESS_REQUEST.status
                 MESSAGE.HEADER.status_code = MESSAGE.SUCCESS_REQUEST.status_code
                 MESSAGE.HEADER.response.receita = result
 
-             
+
+
                 return MESSAGE.HEADER
             }else{
                 return MESSAGE.ERROR_NOT_FOUND
@@ -55,16 +62,15 @@ const pegarIdReceita = async function (id) {
 
             //Chama a função para filtrar pelo ID
             let result = await receitaDAO.getSelectByIdReceita(parseInt(id))
-            console.log(result)
-
+            //console.log(result)
             if (result) {
                 if (result.length > 0) {
 
-                    for(let receita of result){
-                        let resultCozinha = await controllerReceitaCozinha.listarCozinhaIdReceita(receita.id_receita
-
-                        )
-                    }
+                    let cozinhaId = await controllerReceitaCozinha.buscarCozinhaReceitaId(id)
+                    let cozinha = await controllerCozinha.pegarIdCozinha(cozinhaId.response.receitaCozinha[0].id_cozinha)
+                    result[0].cozinha = cozinha.response.cozinha
+                    
+                    let Ingredientes = await controllerReceitaIngrediente.pegarReceitaIngredientePorId
 
                     MESSAGE.HEADER.status = MESSAGE.SUCCESS_REQUEST.status
                     MESSAGE.HEADER.status_code = MESSAGE.SUCCESS_REQUEST.status_code
