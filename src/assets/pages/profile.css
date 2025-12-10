@@ -87,11 +87,141 @@ header .options{
     border-radius: 10px;
     width: 100px;
     transition: 0.8s;
+    overflow: hidden;
 }
 .filter-options:hover .filter-choices{
     transition: 0.6s;
-    width: 400px;
-    height: 300px;
+    width: 200px;
+    height: 450px;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.filtro-group {
+    margin-bottom: 15px;
+}
+
+.filtro-group h3 {
+    color: white;
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.filtro-group label {
+    display: block;
+    color: white;
+    font-size: 14px;
+    font-weight: 300;
+    margin-bottom: 5px;
+    cursor: pointer;
+    padding: 3px 0;
+}
+
+.filtro-group label:hover {
+    color: #FF8000;
+}
+
+.filtro-group input[type="checkbox"] {
+    margin-right: 8px;
+    accent-color: #FF8000;
+}
+
+.multi-select-container {
+    width: 100%;
+    position: relative;
+}
+
+.multi-select-display {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: white;
+    color: #333;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 38px;
+    position: relative;
+}
+
+.multi-select-display .arrow {
+    color: #666;
+    transition: transform 0.2s;
+}
+
+.multi-select-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-top: none;
+    border-radius: 0 0 5px 5px;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+.multi-select-option {
+    display: block;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.multi-select-option:hover {
+    background-color: #f0f0f0;
+}
+
+.multi-select-option input {
+    margin-right: 8px;
+    accent-color: #FF8000;
+}
+
+.alergenos-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    flex: 1;
+    margin-right: 20px;
+}
+
+.alergeno-badge {
+    background-color: #FF8000;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 12px;
+    font-size: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.alergeno-badge .remove {
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 50%;
+    width: 14px;
+    height: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.alergeno-badge .remove:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+#alergenos-placeholder {
+    color: #999;
+    flex: 1;
+    margin-right: 20px;
 }
 .filter-options span{
     color: white;

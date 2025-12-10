@@ -114,16 +114,56 @@
             <div class="other-fields">
                 <div class="extra-row">
                     <label>Categoria</label>
-                    <input type="text" placeholder="Ex: Massas" value="Massas"/>
+                    <select name="categoria" id="categoria">
+                        <option value="">Selecione a categoria</option>
+                        <option value="entradas">Entradas</option>
+                        <option value="pratos_principais">Pratos Principais</option>
+                        <option value="acompanhamentos">Acompanhamentos</option>
+                        <option value="saladas">Saladas</option>
+                        <option value="sopas">Sopas</option>
+                        <option value="massas">Massas</option>
+                        <option value="carnes">Carnes</option>
+                        <option value="frango">Frango</option>
+                        <option value="peixes_e_frutos_do_mar">Peixes e Frutos do Mar</option>
+                        <option value="lanches">Lanches</option>
+                        <option value="petiscos">Petiscos</option>
+                        <option value="sobremesas">Sobremesas</option>
+                        <option value="bolos_e_tortas">Bolos e Tortas</option>
+                        <option value="bebidas">Bebidas</option>
+                        <option value="vegano">Vegano</option>
+                        <option value="vegetariano">Vegetariano</option>
+                        <option value="light__fit">Light / Fit</option>
+                        <option value="café_da_manhã">Café da Manhã</option>
+                        <option value="brunch">Brunch</option>
+                    </select>
                 </div>
 
                 <div class="extra-row">
                     <label>Nível de Dificuldade</label>
-                    <select>
+                    <select name="dificuldade" id="dificuldade">
                         <option value="">Selecione...</option>
-                        <option value="Fácil">Fácil</option>
-                        <option value="Médio" selected>Médio</option>
-                        <option value="Difícil">Difícil</option>
+                        <option value="facil">Fácil</option>
+                        <option value="medio" selected>Médio</option>
+                        <option value="dificil">Difícil</option>
+                    </select>
+                </div>
+
+                <div class="extra-row">
+                    <label>Tipo de Cozinha</label>
+                    <select name="tipo_cozinha" id="tipo_cozinha">
+                        <option value="">Selecione o tipo de cozinha</option>
+                        <option value="brasileira">Brasileira</option>
+                        <option value="italiana">Italiana</option>
+                        <option value="japonesa">Japonesa</option>
+                        <option value="chinesa">Chinesa</option>
+                        <option value="árabe">Árabe</option>
+                        <option value="mexicana">Mexicana</option>
+                        <option value="francesa">Francesa</option>
+                        <option value="americana">Americana</option>
+                        <option value="mediterrânea">Mediterrânea</option>
+                        <option value="indiana">Indiana</option>
+                        <option value="coreana">Coreana</option>
+                        <option value="tailandesa">Tailandesa</option>
                     </select>
                 </div>
             </div>
