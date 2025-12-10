@@ -201,8 +201,6 @@ FROM vw_receitas_completas`
 
         sql += `\nORDER BY titulo ASC`
 
-        console.log('SQL com view:', sql)
-
         let result = await prisma.$queryRawUnsafe(sql)
 
         if (Array.isArray(result)) {
