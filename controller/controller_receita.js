@@ -77,6 +77,73 @@ const listarReceita = async function () {
     }
 }
 
+
+const buscarReceitaPorNome = async function (nome) {
+    let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
+
+    try {
+        //Validação do nome
+        if (nome != '' && nome != null && nome != undefined) {
+
+            //Chama a função do DAO para buscar por nome
+            let result = await receitaDAO.getSelectReceitaByNome(nome)
+
+            if (result !== false) {
+                if (result.length > 0) {
+                    MESSAGE.HEADER.status = MESSAGE.SUCCESS_REQUEST.status
+                    MESSAGE.HEADER.status_code = MESSAGE.SUCCESS_REQUEST.status_code
+                    MESSAGE.HEADER.response.receitas = result
+                    return MESSAGE.HEADER
+                } else {
+                    return MESSAGE.ERROR_NOT_FOUND
+                }
+            } else {
+                return MESSAGE.ERROR_INTERNAL_SERVER_MODEL
+            }
+        } else {
+            MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [nome] inválido'
+            return MESSAGE.ERROR_REQUIRED_FIELDS
+        }
+    } catch (error) {
+        console.log(error)
+        return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER
+    }
+}
+
+const filtrarReceitas = async function (filtros) {
+    let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
+
+    try {
+        // Debug: mostra os filtros recebidos
+        console.log('FILTROS RECEBIDOS NA CONTROLLER:', filtros)
+
+        //Chama a função do DAO para filtrar receitas
+        let result = await receitaDAO.getSelectReceitasComFiltrosView(filtros)
+
+        // Debug: mostra o resultado do DAO
+        console.log('RESULTADO DO DAO:', result)
+
+        if (result !== false) {
+            if (result.length > 0) {
+                MESSAGE.HEADER.status = MESSAGE.SUCCESS_REQUEST.status
+                MESSAGE.HEADER.status_code = MESSAGE.SUCCESS_REQUEST.status_code
+                MESSAGE.HEADER.response.receitas = result
+                console.log('RETORNANDO SUCESSO COM', result.length, 'receitas')
+                return MESSAGE.HEADER
+            } else {
+                console.log('NENHUMA RECEITA ENCONTRADA')
+                return MESSAGE.ERROR_NOT_FOUND
+            }
+        } else {
+            console.log('ERRO NO DAO')
+            return MESSAGE.ERROR_INTERNAL_SERVER_MODEL
+        }
+    } catch (error) {
+        console.log('ERRO NA CONTROLLER:', error)
+        return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER
+    }
+}
+
 const pegarIdReceita = async function (id) {
 
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
@@ -349,5 +416,7 @@ module.exports = {
     pegarIdReceita,
     inserirReceita,
     atualizarReceita,
-    deletarReceita
+    deletarReceita,
+    filtrarReceitas,
+    buscarReceitaPorNome
 }
