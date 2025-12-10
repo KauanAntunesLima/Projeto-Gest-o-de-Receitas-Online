@@ -69,11 +69,11 @@ const insertReceitaIngredientes = async function (receitaIngrediente) {
         const sql = `
         INSERT INTO tbl_receita_ingredientes
                     (id_receita,
-                     id_ingrediente,
+                     id_ingredientes,
                      quantidade,
                      unidade)
-                VALUES (${receitaIngrediente.receita_id},
-                        ${receitaIngrediente.ingrediente_id},
+                VALUES (${receitaIngrediente.id_receita},
+                        ${receitaIngrediente.id_ingrediente},
                         "${receitaIngrediente.quantidade}",
                         "${receitaIngrediente.unidade}")
     `
@@ -85,6 +85,7 @@ const insertReceitaIngredientes = async function (receitaIngrediente) {
         else
             return false
     } catch (error) {
+        console.log(error)
         return false
     }
 }

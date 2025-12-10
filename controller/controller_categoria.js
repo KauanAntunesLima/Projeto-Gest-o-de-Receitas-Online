@@ -128,28 +128,26 @@ const atualizarCategoria = async function (categoria, id, contentType) {
 
             //chama a função de validação dos dados de cadastro
             let validarDados = await validarDadosCategoria(categoria)
+            
 
             if (!validarDados) {
 
                 //chama a função para validar a consistencia do id e verificar se existe no banco de dados
                 let validarId = await pegarIdCategoria(id)
-                console.log(validarId)
+
 
                 //verifica se o id existe no BD, caso exista teremos o status 200
                 if (validarId.status_code == 200) {
                     categoria.id_categoria = parseInt(id)
-                    console.log(categoria)
+
                     //Chama a função do DAO para atualizar um novo filme
                     let result = await categoriaDAO.setUpdateCategoria(categoria)
-                    console.log(result)
+
                     if (result) {
 
                         MESSAGE.HEADER.status = MESSAGE.SUCCES_UPDATE_ITEM.status
-
-                        MESSAGE.HEADER.status_code = MESSAGE.SUCCESS_UPDATE_ITEM.status_code
-
-                        MESSAGE.HEADER.message = MESSAGE.SUCCESS_UPDATE_ITEM.message
-
+                        MESSAGE.HEADER.status_code = MESSAGE.SUCCES_UPDATE_ITEM.status_code
+                        MESSAGE.HEADER.message = MESSAGE.SUCCES_UPDATE_ITEM.message
                         MESSAGE.HEADER.response = categoria
 
                         return MESSAGE.HEADER

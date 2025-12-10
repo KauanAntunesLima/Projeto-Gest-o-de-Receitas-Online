@@ -9,10 +9,10 @@ const receitaCozinhaDAO = require('../model/DAO/receita_cozinha.js')
 
 const MESSAGE_DEFAULT = require('../modulo/config_messages.js')
 
-const listarReceitaCozinha = async function() {
+const listarReceitaCozinha = async function () {
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
 
-        try {
+    try {
 
         //Chama a função do DAO para retornar a lista de filmes  gêneros
         let result = await receitaCozinhaDAO.getSelectAllReceitaCozinha()
@@ -37,9 +37,9 @@ const listarReceitaCozinha = async function() {
 
 const buscarCozinhaReceitaId = async function (id) {
 
-     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
+    let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
 
-        try {
+    try {
         //Validação de campo obrigatório
         if (id != '' && id != null && id != undefined && !isNaN(id) && id > 0) {
             //Chama a função para filtrar pelo ID
@@ -64,7 +64,7 @@ const buscarCozinhaReceitaId = async function (id) {
     } catch (error) {
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
-    
+
 }
 
 const listarCozinhaIdReceita = async function (idReceita) {
@@ -133,7 +133,9 @@ const listarReceitaIdCozinha = async function (idCozinha) {
 
 const inserirReceitaCozinha = async function (receitaCozinha, contentType) {
 
-        try {
+    let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
+
+    try {
         if (String(contentType).toUpperCase() == 'APPLICATION/JSON') {
 
             let validarDados = await validarDadosReceitaCozinha(receitaCozinha)
@@ -173,7 +175,7 @@ const inserirReceitaCozinha = async function (receitaCozinha, contentType) {
     } catch (error) {
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER
     }
-    
+
 }
 
 const atualizarReceitaCozinha = async function (receitaCozinha, id, contentType) {
@@ -314,7 +316,7 @@ const excluirCozinhaPorReceita = async function (id) {
 
 const validarDadosReceitaCozinha = async function (receitaCozinha) {
 
-   let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
+    let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
 
     if (receitaCozinha.id_receita == '' || receitaCozinha.id_receita == null || receitaCozinha.id_receita == undefined || isNaN(receitaCozinha.id_receita) || receitaCozinha.id_receita <= 0) {
         MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [ID_RECEITA] invalido!!!'

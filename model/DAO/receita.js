@@ -42,6 +42,7 @@ const setInsertReceita = async function (receita){
 
     try{
         let sql = `insert into tbl_receita (
+        id_usuario,
         titulo,
         descricao,
         tempo_preparo,
@@ -50,6 +51,7 @@ const setInsertReceita = async function (receita){
         data_edicao,
         imagem)
         values(
+        ${receita.id_usuario},
         '${receita.titulo}',
         '${receita.descricao}',
         ${receita.tempo_preparo},
@@ -90,6 +92,7 @@ const setUpdateReceita = async function (receita) {
     console.log(receita)
     try{
         let sql = `update tbl_receita set
+        id_usuario      =  ${receita.id_usuario},
         titulo          = '${receita.titulo}',
         descricao       = '${receita.descricao}',
         tempo_preparo   =  ${receita.tempo_preparo},

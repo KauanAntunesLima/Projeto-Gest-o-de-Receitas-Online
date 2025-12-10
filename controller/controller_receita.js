@@ -12,7 +12,8 @@ const controllerReceitaIngrediente = require('./controller_receita_ingredientes.
 const controllerIngrediente = require('./controller_ingredientes.js')
 const controllerIngredienteAlergenos = require('./controller_ingrediente_alergenos.js')
 const controllerAlergenos = require('./controller_alergenos.js')
-const controllerUsuarioNotasReceita = require('./controller_usuario_notas_receita.js')
+const controllerReceitaCategoria = require('./controller_receita_categoria.js')
+const controllerModoPreparo = require('./controller_modo_preparo.js')
 
 const MESSAGE_DEFAULT = require('../modulo/config_messages.js')
 
@@ -33,8 +34,7 @@ const listarReceita = async function () {
                     receita.cozinha = cozinha.response.cozinha
                 }
 
-                let usuarioDonoDaReceita = await controllerUsuarioNotasReceita.buscarUsuarioNotasReceitaId()
-                
+
                 let receitaIngrediente = await controllerReceitaIngrediente.pegarReceitaIngredientePorIdReceita(receita.id_receita)
 
                 receita.ingrediente = []
@@ -317,26 +317,40 @@ const inserirReceita = async function (receita, contentType) {
                     let lastIdReceita = await receitaDAO.getSelectLastIdReceita(receita)
 
                     if (lastIdReceita) {
+                        
 
-
-                        for (cozinha of receita.cozinha) {
-                            let receitaCozinha = {
+                            await controllerReceitaCozinha.inserirReceitaCozinha({
                                 id_receita: lastIdReceita,
-                                id_cozinha: cozinha.id_cozinha
-                            }
-                        }
+                                id_cozinha: receita.id_cozinha
+                            })  
 
-                        for (let ingrediente of receita.Ingredientes) {
+                            let batata = await controllerReceitaCategoria.inserirReceitaCategoria({
+                                id_receita: lastIdReceita,
+                                id_categoria: receita.id_categoria
+                            }, 'application/json')
+                            console.log(batata)
 
-                            await ingredienteReceitaDAO.insertIngredienteReceita({
-                                receita_id: lastIdReceita,
-                                ingrediente_id: ingrediente.id,
+                        for (let ingrediente of receita.ingredientes) {
+
+                            let receitaIngredienteList = {
+                                id_receita: lastIdReceita,
+                                id_ingrediente: ingrediente.id_ingredientes,
                                 quantidade: ingrediente.quantidade,
                                 unidade: ingrediente.unidade
-                            })
+                            }
+
+                            await controllerReceitaIngrediente.inserirReceitaIngredienteControllerReceita(receitaIngredienteList)
                         }
+                        for (let modoPreparo of receita.modo_preparo) {
 
+                            let modoPreparoList = {
+                                id_receita: lastIdReceita,
+                                numero_passo: modoPreparo.numero_passo,
+                                descricao: modoPreparo.descricao
+                            }
 
+                            await controllerModoPreparo.inserirModoPreparo(modoPreparoList, 'application/json')
+                        }
 
                         //adiciona no Json de filme o ID que foi gerado no BD
                         receita.id = lastIdReceita
@@ -404,7 +418,11 @@ const deletarReceita = async function (id) {
 const validarDadosReceita = async function (receita) {
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
 
-    if (receita.titulo == '' || receita.titulo == null || receita.titulo == undefined || receita.titulo.length > 100) {
+    if (receita.id_usuario == '' || receita.id_usuario == null || receita.id_usuario == undefined || isNaN(receita.id_usuario) || receita.id_usuario <= 0) {
+        MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [ID_USUARIO] invalido!!!'
+        return MESSAGE.ERROR_REQUIRED_FIELDS //400
+
+    } else if (receita.titulo == '' || receita.titulo == null || receita.titulo == undefined || receita.titulo.length > 100) {
         MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [Receita] invalido!!!'
         return MESSAGE.ERROR_REQUIRED_FIELDS
 

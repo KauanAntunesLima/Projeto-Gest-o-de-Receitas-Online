@@ -1,24 +1,24 @@
 /****************************************************************************************
  * Objetivo: Arquivo responsável pela manipulação de dados entre o App e a Model
  *           (validações, tratamento de dados, tratamento de erros, etc)
- * Data: 08/12/2025
- * Autor: Roge Ribeiro
- * Versão: 1.1
+ * Data: 10/12/2025
+ * Autor: Kauan Antunes
+ * Versão: 1.0
  ****************************************************************************************/
 
-const receitaIngredientesDAO = require('../model/DAO/receita_ingredientes.js');
+const receitaCategoriaDAO = require('../model/DAO/receita_categoria.js');
 const MESSAGE_DEFAULT = require('../modulo/config_messages.js');
 
-const listarReceitaIngredientes = async function () {
+const listarReceitaCategoria = async function () {
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT));
 
     try {
-        let result = await receitaIngredientesDAO.getSelectAllReceitaIngredientes();
+        let result = await receitaCategoriaDAO.getSelectAllReceitaCategoria();
         if (result) {
             if (result.length > 0) {
                 MESSAGE.HEADER.status = MESSAGE.SUCCESS_REQUEST.status;
                 MESSAGE.HEADER.status_code = MESSAGE.SUCCESS_REQUEST.status_code;
-                MESSAGE.HEADER.response.receita_ingredientes = result;
+                MESSAGE.HEADER.response.receita_categoria = result;
                 return MESSAGE.HEADER;
             } else {
                 return MESSAGE.ERROR_NOT_FOUND;
@@ -32,74 +32,18 @@ const listarReceitaIngredientes = async function () {
     }
 };
 
-const pegarReceitaIngredientePorId = async function (id) {
+const pegarReceitaCategoriaPorId = async function (id) {
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT));
 
     try {
         if (id != '' && id != null && id != undefined && !isNaN(id) && id > 0) {
-            let result = await receitaIngredientesDAO.getSelectReceitaIngredientesById(id);
+            let result = await receitaCategoriaDAO.getSelectReceitaCategoriaById(id);
 
             if (result) {
                 if (result.length > 0) {
                     MESSAGE.HEADER.status = MESSAGE.SUCCESS_REQUEST.status;
                     MESSAGE.HEADER.status_code = MESSAGE.SUCCESS_REQUEST.status_code;
-                    MESSAGE.HEADER.response.receita_ingredientes = result;
-                    return MESSAGE.HEADER;
-                } else {
-                    return MESSAGE.ERROR_NOT_FOUND;
-                }
-            } else {
-                return MESSAGE.ERROR_INTERNAL_SERVER_MODEL;
-            }
-        } else {
-            MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [ID] inválido';
-            return MESSAGE.ERROR_REQUIRED_FIELDS;
-        }
-    } catch (error) {
-        console.log(error);
-        return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER;
-    }
-};
-const pegarReceitaIngredientePorIdReceita = async function (id) {
-    let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT));
-
-    try {
-        if (id != '' && id != null && id != undefined && !isNaN(id) && id > 0) {
-            let result = await receitaIngredientesDAO.getSelectReceitaIngredientesByReceitaId(id);
-
-            if (result) {
-                if (result.length > 0) {
-                    MESSAGE.HEADER.status = MESSAGE.SUCCESS_REQUEST.status;
-                    MESSAGE.HEADER.status_code = MESSAGE.SUCCESS_REQUEST.status_code;
-                    MESSAGE.HEADER.response.receita_ingredientes = result;
-                    return MESSAGE.HEADER;
-                } else {
-                    return MESSAGE.ERROR_NOT_FOUND;
-                }
-            } else {
-                return MESSAGE.ERROR_INTERNAL_SERVER_MODEL;
-            }
-        } else {
-            MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [ID] inválido';
-            return MESSAGE.ERROR_REQUIRED_FIELDS;
-        }
-    } catch (error) {
-        console.log(error);
-        return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER;
-    }
-};
-const pegarReceitaIngredientePorIngredienteId = async function (id) {
-    let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT));
-
-    try {
-        if (id != '' && id != null && id != undefined && !isNaN(id) && id > 0) {
-            let result = await receitaIngredientesDAO.getSelectReceitaIngredientesByIngredienteId(id);
-
-            if (result) {
-                if (result.length > 0) {
-                    MESSAGE.HEADER.status = MESSAGE.SUCCESS_REQUEST.status;
-                    MESSAGE.HEADER.status_code = MESSAGE.SUCCESS_REQUEST.status_code;
-                    MESSAGE.HEADER.response.receita_ingredientes = result;
+                    MESSAGE.HEADER.response.receita_categoria = result;
                     return MESSAGE.HEADER;
                 } else {
                     return MESSAGE.ERROR_NOT_FOUND;
@@ -117,22 +61,80 @@ const pegarReceitaIngredientePorIngredienteId = async function (id) {
     }
 };
 
-const inserirReceitaIngrediente = async function (receitaIngrediente, contentType) {
+const pegarReceitaCategoriaPorIdReceita = async function (id) {
+    let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT));
+
+    try {
+        if (id != '' && id != null && id != undefined && !isNaN(id) && id > 0) {
+            let result = await receitaCategoriaDAO.getSelectReceitaCategoriaByReceitaId(id);
+
+            if (result) {
+                if (result.length > 0) {
+                    MESSAGE.HEADER.status = MESSAGE.SUCCESS_REQUEST.status;
+                    MESSAGE.HEADER.status_code = MESSAGE.SUCCESS_REQUEST.status_code;
+                    MESSAGE.HEADER.response.receita_categoria = result;
+                    return MESSAGE.HEADER;
+                } else {
+                    return MESSAGE.ERROR_NOT_FOUND;
+                }
+            } else {
+                return MESSAGE.ERROR_INTERNAL_SERVER_MODEL;
+            }
+        } else {
+            MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [ID] inválido';
+            return MESSAGE.ERROR_REQUIRED_FIELDS;
+        }
+    } catch (error) {
+        console.log(error);
+        return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER;
+    }
+};
+
+const pegarReceitaCategoriaPorCategoriaId = async function (id) {
+    let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT));
+
+    try {
+        if (id != '' && id != null && id != undefined && !isNaN(id) && id > 0) {
+            let result = await receitaCategoriaDAO.getSelectReceitaCategoriaByCategoriaId(id);
+
+            if (result) {
+                if (result.length > 0) {
+                    MESSAGE.HEADER.status = MESSAGE.SUCCESS_REQUEST.status;
+                    MESSAGE.HEADER.status_code = MESSAGE.SUCCESS_REQUEST.status_code;
+                    MESSAGE.HEADER.response.receita_categoria = result;
+                    return MESSAGE.HEADER;
+                } else {
+                    return MESSAGE.ERROR_NOT_FOUND;
+                }
+            } else {
+                return MESSAGE.ERROR_INTERNAL_SERVER_MODEL;
+            }
+        } else {
+            MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [ID] inválido';
+            return MESSAGE.ERROR_REQUIRED_FIELDS;
+        }
+    } catch (error) {
+        console.log(error);
+        return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER;
+    }
+};
+
+const inserirReceitaCategoria = async function (receitaCategoria, contentType) {
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT));
 
     try {
         if (String(contentType).toUpperCase() === 'APPLICATION/JSON') {
-            let dadosInvalidos = validarDadosReceitaIngrediente(receitaIngrediente);
+            let dadosInvalidos = validarDadosReceitaCategoria(receitaCategoria);
             if (!dadosInvalidos) {
-                let result = await receitaIngredientesDAO.insertReceitaIngredientes(receitaIngrediente);
+                let result = await receitaCategoriaDAO.insertReceitaCategoria(receitaCategoria);
                 if (result) {
-                    let lastId = await receitaIngredientesDAO.getSelectLastIdReceitaIngrediente();
+                    let lastId = await receitaCategoriaDAO.getSelectLastIdReceitaCategoria();
                     if (lastId) {
-                        receitaIngrediente.id_receita_ingredientes = lastId;
+                        receitaCategoria.id_receita_categoria = lastId;
                         MESSAGE.HEADER.status = MESSAGE.SUCCES_CREATED_ITEM.status;
                         MESSAGE.HEADER.status_code = MESSAGE.SUCCES_CREATED_ITEM.status_code;
                         MESSAGE.HEADER.message = MESSAGE.SUCCES_CREATED_ITEM.message;
-                        MESSAGE.HEADER.response = receitaIngrediente;
+                        MESSAGE.HEADER.response = receitaCategoria;
                         return MESSAGE.HEADER;
                     } else {
                         return MESSAGE.ERROR_INTERNAL_SERVER_MODEL;
@@ -152,55 +154,22 @@ const inserirReceitaIngrediente = async function (receitaIngrediente, contentTyp
     }
 };
 
-const inserirReceitaIngredienteControllerReceita = async function (receitaIngrediente) {
-    let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT));
-
-    try {
-
-            let dadosInvalidos = validarDadosReceitaIngrediente(receitaIngrediente);
-            if (!dadosInvalidos) {
-                let result = await receitaIngredientesDAO.insertReceitaIngredientes(receitaIngrediente);
-                if (result) {
-                    let lastId = await receitaIngredientesDAO.getSelectLastIdReceitaIngrediente();
-                    if (lastId) {
-                        receitaIngrediente.id_receita_ingredientes = lastId;
-                        MESSAGE.HEADER.status = MESSAGE.SUCCES_CREATED_ITEM.status;
-                        MESSAGE.HEADER.status_code = MESSAGE.SUCCES_CREATED_ITEM.status_code;
-                        MESSAGE.HEADER.message = MESSAGE.SUCCES_CREATED_ITEM.message;
-                        MESSAGE.HEADER.response = receitaIngrediente;
-                        return MESSAGE.HEADER;
-                    } else {
-                        return MESSAGE.ERROR_INTERNAL_SERVER_MODEL;
-                    }
-                } else {
-                    return MESSAGE.ERROR_INTERNAL_SERVER_MODEL;
-                }
-            } else {
-                return dadosInvalidos;
-            }
-        
-    } catch (error) {
-        console.log(error);
-        return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER;
-    }
-};
-
-const atualizarReceitaIngrediente = async function (receitaIngrediente, id, contentType) {
+const atualizarReceitaCategoria = async function (receitaCategoria, id, contentType) {
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT));
 
     try {
         if (String(contentType).toUpperCase() === 'APPLICATION/JSON') {
-            let dadosInvalidos = validarDadosReceitaIngrediente(receitaIngrediente);
+            let dadosInvalidos = validarDadosReceitaCategoria(receitaCategoria);
             if (!dadosInvalidos) {
-                let registroExistente = await pegarReceitaIngredientePorId(id);
+                let registroExistente = await pegarReceitaCategoriaPorId(id);
                 if (registroExistente.status_code === 200) {
-                    receitaIngrediente.id_receita_ingredientes = parseInt(id);
-                    let result = await receitaIngredientesDAO.setUpdateReceitaIngredientes(receitaIngrediente);
+                    receitaCategoria.id_receita_categoria = parseInt(id);
+                    let result = await receitaCategoriaDAO.setUpdateReceitaCategoria(receitaCategoria);
                     if (result) {
                         MESSAGE.HEADER.status = MESSAGE.SUCCES_UPDATE_ITEM.status;
                         MESSAGE.HEADER.status_code = MESSAGE.SUCCES_UPDATE_ITEM.status_code;
                         MESSAGE.HEADER.message = MESSAGE.SUCCES_UPDATE_ITEM.message;
-                        MESSAGE.HEADER.response = receitaIngrediente;
+                        MESSAGE.HEADER.response = receitaCategoria;
                         return MESSAGE.HEADER;
                     } else {
                         return MESSAGE.ERROR_INTERNAL_SERVER_MODEL;
@@ -220,15 +189,14 @@ const atualizarReceitaIngrediente = async function (receitaIngrediente, id, cont
     }
 };
 
-
-const deletarReceitaIngrediente = async function (id) {
+const deletarReceitaCategoria = async function (id) {
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT));
 
     try {
         if (id != '' && id != null && id != undefined && !isNaN(id) && id > 0) {
-            let registroExistente = await pegarReceitaIngredientePorId(id);
+            let registroExistente = await pegarReceitaCategoriaPorId(id);
             if (registroExistente.status_code === 200) {
-                let result = await receitaIngredientesDAO.setDeleteReceitaIngredientes(parseInt(id));
+                let result = await receitaCategoriaDAO.setDeleteReceitaCategoria(parseInt(id));
                 if (result) {
                     MESSAGE.HEADER.status = MESSAGE.SUCCESS_DELETE_ITEM.status;
                     MESSAGE.HEADER.status_code = MESSAGE.SUCCESS_DELETE_ITEM.status_code;
@@ -250,21 +218,14 @@ const deletarReceitaIngrediente = async function (id) {
     }
 };
 
-
-const validarDadosReceitaIngrediente = (receitaIngrediente) => {
+const validarDadosReceitaCategoria = (receitaCategoria) => {
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT));
-    console.log(receitaIngrediente)
-    if (!receitaIngrediente.id_receita || isNaN(receitaIngrediente.id_receita) || receitaIngrediente.id_receita <= 0) {
+
+    if (!receitaCategoria.id_receita || isNaN(receitaCategoria.id_receita) || receitaCategoria.id_receita <= 0) {
         MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = "Atributo [id_receita] inválido";
         return MESSAGE.ERROR_REQUIRED_FIELDS; // 400
-    } else if (!receitaIngrediente.id_ingrediente || isNaN(receitaIngrediente.id_ingrediente) || receitaIngrediente.id_ingrediente < 0) {
-        MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = "Atributo [id_ingredientes] inválido";
-        return MESSAGE.ERROR_REQUIRED_FIELDS; // 400
-    } else if (receitaIngrediente.quantidade == null || isNaN(receitaIngrediente.quantidade) || receitaIngrediente.quantidade <= 0) {
-        MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = "Atributo [quantidade] inválido";
-        return MESSAGE.ERROR_REQUIRED_FIELDS; // 400
-    } else if (!receitaIngrediente.unidade || receitaIngrediente.unidade.trim() === '' || receitaIngrediente.unidade.length > 20) {
-        MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = "Atributo [unidade] inválido";
+    } else if (!receitaCategoria.id_receita || isNaN(receitaCategoria.id_categoria) || receitaCategoria.id_categoria <= 0) {
+        MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = "Atributo [id_categoria] inválido";
         return MESSAGE.ERROR_REQUIRED_FIELDS; // 400
     } else {
         return false; // Dados válidos
@@ -272,14 +233,14 @@ const validarDadosReceitaIngrediente = (receitaIngrediente) => {
 };
 
 
-
 module.exports = {
-    listarReceitaIngredientes,
-    pegarReceitaIngredientePorId,
-    pegarReceitaIngredientePorIdReceita,
-    pegarReceitaIngredientePorIngredienteId,
-    inserirReceitaIngrediente,
-    inserirReceitaIngredienteControllerReceita,
-    atualizarReceitaIngrediente,
-    deletarReceitaIngrediente
-};
+    listarReceitaCategoria,
+    pegarReceitaCategoriaPorId,
+    pegarReceitaCategoriaPorIdReceita,
+    pegarReceitaCategoriaPorCategoriaId,
+    inserirReceitaCategoria,
+    atualizarReceitaCategoria,
+    deletarReceitaCategoria,
+    
+
+}
