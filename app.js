@@ -269,7 +269,7 @@ app.put('/v1/toque_gourmet/categoria/:id', cors(), bodyParserJSON, async functio
     let contentType = req.headers['content-type']
 
     let categoria = await controllerCategoria.atualizarCategoria(dadosBody, idCategoria, contentType)
-    console.log(categoria)
+
     res.status(categoria.status_code)
     res.json(categoria)
 })

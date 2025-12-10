@@ -77,6 +77,7 @@ const getSelectLastIdCategoria = async function (params){
 }
 
 const setUpdateCategoria = async function (categoria) {
+    console.log(categoria)
     try{
         let sql = `update tbl_categoria set
         nome             = '${categoria.nome}',

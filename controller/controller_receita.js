@@ -12,6 +12,7 @@ const controllerReceitaIngrediente = require('./controller_receita_ingredientes.
 const controllerIngrediente = require('./controller_ingredientes.js')
 const controllerIngredienteAlergenos = require('./controller_ingrediente_alergenos.js')
 const controllerAlergenos = require('./controller_alergenos.js')
+const controllerUsuarioNotasReceita = require('./controller_usuario_notas_receita.js')
 
 const MESSAGE_DEFAULT = require('../modulo/config_messages.js')
 
@@ -32,7 +33,8 @@ const listarReceita = async function () {
                     receita.cozinha = cozinha.response.cozinha
                 }
 
-
+                let usuarioDonoDaReceita = await controllerUsuarioNotasReceita.buscarUsuarioNotasReceitaId()
+                
                 let receitaIngrediente = await controllerReceitaIngrediente.pegarReceitaIngredientePorIdReceita(receita.id_receita)
 
                 receita.ingrediente = []

@@ -67,6 +67,38 @@ const buscarUsuarioNotasReceitaId = async function (id) {
     
 }
 
+const buscarUsuarioNotasReceitaByReceitaId = async function (id) {
+
+    let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
+
+       try {
+       //Validação de campo obrigatório
+       if (id != '' && id != null && id != undefined && !isNaN(id) && id > 0) {
+           //Chama a função para filtrar pelo ID
+           let result = await usuarioNotasReceitaDAO.getUsuario(parseInt(id))
+           if (result) {
+               if (result.length > 0) {
+                   MESSAGE.HEADER.status = MESSAGE.SUCCESS_REQUEST.status
+                   MESSAGE.HEADER.status_code = MESSAGE.SUCCESS_REQUEST.status_code
+                   MESSAGE.HEADER.response.usuarioNotasReceita = result
+
+                   return MESSAGE.HEADER //200
+               } else {
+                   return MESSAGE.ERROR_NOT_FOUND //404
+               }
+           } else {
+               return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
+           }
+       } else {
+           MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [ID] invalido!!'
+           return MESSAGE.ERROR_REQUIRED_FIELDS //400
+       }
+   } catch (error) {
+       return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER //500
+   }
+   
+}
+
 const listarReceitaIdUsuario = async function (idUsuario) {
     //Realizando uma cópia do objeto MESSAGE_DEFAULT, permitindo que as alterações desta função
     //não interfiram em outras funções

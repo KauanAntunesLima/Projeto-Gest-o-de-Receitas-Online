@@ -4,6 +4,7 @@ USE db_gestao_receita_ds2t;
 
 CREATE TABLE tbl_receita(
     id_receita      INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    id_usuario		INT NOT NULL,
     titulo          VARCHAR(100) NOT NULL,
     descricao       TEXT NOT NULL,
     tempo_preparo   INT NOT NULL,
@@ -470,6 +471,8 @@ BEGIN
 END $$
 
 DELIMITER ;
+
+
 
 
 
