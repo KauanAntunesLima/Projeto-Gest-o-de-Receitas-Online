@@ -21,21 +21,22 @@ const listarReceita = async function () {
 
     try {
         let result = await receitaDAO.getSelectAllreceita()
-        
+
         if (result && result.length > 0) {
 
             for (let receita of result) {
-                
+
                 let cozinhaId = await controllerReceitaCozinha.buscarCozinhaReceitaId(receita.id_receita)
-                if (cozinhaId?.response?.receitaCozinha?.length > 0) { 
+                if (cozinhaId?.response?.receitaCozinha?.length > 0) {
                     let cozinha = await controllerCozinha.pegarIdCozinha(cozinhaId.response.receitaCozinha[0].id_cozinha)
-                    receita.cozinha = cozinha
+                    receita.cozinha = cozinha.response.cozinha
                 }
+
 
                 let receitaIngrediente = await controllerReceitaIngrediente.pegarReceitaIngredientePorIdReceita(receita.id_receita)
 
                 receita.ingrediente = []
-                receita.alergenos = [] // <-- FALTAVA ISSO
+                receita.alergenos = []
 
                 if (receitaIngrediente &&
                     receitaIngrediente.response &&
@@ -86,7 +87,7 @@ const listarReceita = async function () {
             MESSAGE.HEADER.status = MESSAGE.SUCCESS_REQUEST.status
             MESSAGE.HEADER.status_code = MESSAGE.SUCCESS_REQUEST.status_code
             MESSAGE.HEADER.response.receita = result
-            
+
             return MESSAGE.HEADER
 
         } else {
@@ -97,7 +98,7 @@ const listarReceita = async function () {
         console.error(error)
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER
     }
-} 
+}
 
 
 
@@ -372,7 +373,7 @@ const deletarReceita = async function (id) {
             let excluirReceita = await pegarIdReceita(id)
 
             if (excluirReceita.status_code == 200) {
-              
+
 
                 let result = await receitaDAO.setDeleteReceita(parseInt(id))
                 if (result) {
