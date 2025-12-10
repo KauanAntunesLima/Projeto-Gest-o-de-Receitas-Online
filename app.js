@@ -88,21 +88,10 @@ app.get('/v1/toque_gourmet/receita/nome/:nome', cors(), async function(request, 
 //Filtrar receitas com múltiplos parâmetros
 app.post('/v1/toque_gourmet/receita/filtro', cors(), bodyParserJSON, async function(request, response){
 
-    console.log('=== DADOS RECEBIDOS NA ROTA ===')
-    console.log('Body completo:', request.body)
-    console.log('Content-Type:', request.headers['content-type'])
-
     let filtros = request.body
 
-    // Adiciona mais logs específicos
-    if (filtros.dificuldade) {
-        console.log('Dificuldade recebida:', filtros.dificuldade)
-    }
-
-    console.log('Enviando para controller...')
     let receitas = await controllerReceita.filtrarReceitas(filtros)
 
-    console.log('Resposta final:', receitas.status_code)
     response.status(receitas.status_code)
     response.json(receitas)
 })
