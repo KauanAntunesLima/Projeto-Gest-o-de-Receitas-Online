@@ -238,29 +238,22 @@ SELECT
     r.data_criacao,
     r.data_edicao,
     r.imagem,
-
-    GROUP_CONCAT(DISTINCT i.nome SEPARATOR ', ') AS ingredientes,
-    GROUP_CONCAT(DISTINCT cz.nome SEPARATOR ', ') AS cozinhas,
-    GROUP_CONCAT(DISTINCT cat.nome SEPARATOR ', ') AS categorias
-
+    i.nome AS ingrediente,
+    cz.nome AS cozinha,
+    cat.nome AS categoria
 FROM tbl_receita r
-
 LEFT JOIN tbl_receita_ingredientes ri 
        ON ri.id_receita = r.id_receita
 LEFT JOIN tbl_ingredientes i 
        ON i.id_ingredientes = ri.id_ingredientes
-
 LEFT JOIN tbl_receita_cozinha rc 
        ON rc.id_receita = r.id_receita
 LEFT JOIN tbl_cozinha cz 
        ON cz.id_cozinha = rc.id_cozinha
-
 LEFT JOIN tbl_receita_categoria rcat
        ON rcat.id_receita = r.id_receita
 LEFT JOIN tbl_categoria cat
-       ON cat.id_categoria = rcat.id_categoria
-GROUP BY r.id_receita;
-
+       ON cat.id_categoria = rcat.id_categoria;
 
 CREATE VIEW vw_receita_ingredientes AS
 SELECT
@@ -272,7 +265,6 @@ SELECT
 FROM tbl_receita r
 JOIN tbl_receita_ingredientes ri ON ri.id_receita = r.id_receita
 JOIN tbl_ingredientes i ON i.id_ingredientes = ri.id_ingredientes;
-
 
 CREATE VIEW vw_modo_preparo AS
 SELECT
@@ -287,13 +279,14 @@ ORDER BY m.id_receita, m.numero_passo;
 
 CREATE VIEW vw_alergenos_por_ingredientes AS
 SELECT 
-	i.nome as ingrediente,
-    GROUP_CONCAT(a.nome SEPARATOR ', ') AS alergenos
-FROM tbl_ingredientes i 
-LEFT JOIN  tbl_ingredientes_alergenos ia ON ia.id_ingredientes = i.id_ingredientes 
-LEFT JOIN  tbl_alergenos a ON a.id_alergenos = ia.id_alergenos
-GROUP BY i.id_ingredientes;
-
+    i.id_ingredientes,
+    i.nome AS ingrediente,
+    a.nome AS alergeno
+FROM tbl_ingredientes i
+LEFT JOIN tbl_ingredientes_alergenos ia 
+       ON ia.id_ingredientes = i.id_ingredientes
+LEFT JOIN tbl_alergenos a 
+       ON a.id_alergenos = ia.id_alergenos;
 
 CREATE VIEW vw_notas_receitas AS
 SELECT
@@ -410,7 +403,7 @@ DELIMITER $$
 
 CREATE PROCEDURE filtrar_excluir_alergeno(IN p_alergeno VARCHAR(100))
 BEGIN
-    SELECT r.id_receita, r.titulo, r.descricao 
+    SELECT r.id_receita, r.titulo, r.descricao  
     FROM tbl_receita r
     WHERE r.id_receita NOT IN (
         SELECT ri.id_receita
@@ -476,24 +469,12 @@ BEGIN
     DELETE FROM tbl_receita_cozinha WHERE id_cozinha = OLD.id_cozinha;
 END $$
 
-DELIMITER ;tbl_receita_categoria
-
-select * from tbl_receita_ingredientes;
-select * from tbl_receita_cozinha;
-select * from tbl_cozinha;
-
-select * from tbl_receita;
-
-select * from tbl_receita_categoria;
+DELIMITER ;
 
 
 
-CREATE VIEW view_receita_categoria AS
-SELECT c.id_categoria, rc.id_receita, c.descricao, c.nome
-FROM tbl_categoria c
-JOIN tbl_receita_categoria rc
-ON rc.id_categoria=c.id_categoria
-JOIN tbl_receita r
-ON r.id_receita = rc.id_receita 
-WHERE r.id_receita=1;
+
+
+
+
 

@@ -55,7 +55,7 @@ app.post ('/v1/toque_gourmet/receita', cors(), bodyParserJSON, async function (r
 
     let dadosBody = req.body
     let contentType = req.headers['content-type']
-    console.log(req.body)
+
     let receita = await controllerReceita.inserirReceita(dadosBody, contentType)
     res.status(receita.status_code)
     res.json(receita)

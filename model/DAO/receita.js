@@ -129,11 +129,94 @@ const setDeleteReceita = async function (id) {
     }
 }
 
+// Buscar receitas por nome usando LIKE
+const getSelectReceitaByNome = async function (nome) {
+    try {
+        let sql = `
+            SELECT DISTINCT r.*
+            FROM tbl_receita r
+            WHERE r.titulo LIKE '%${nome}%'
+            ORDER BY r.titulo ASC
+        `
+
+        let result = await prisma.$queryRawUnsafe(sql)
+
+        if (Array.isArray(result) && result.length > 0) {
+            return result
+        } else {
+            return []
+        }
+    } catch (error) {
+        console.log('Erro ao buscar receita por nome:', error)
+        return false
+    }
+}
+
+
+const getSelectReceitasComFiltrosView = async function (filtros) {
+    try {
+        let sql = `SELECT DISTINCT * FROM vw_receitas_completas WHERE 1=1`
+
+        if (filtros.tempo_max) {
+            sql += ` AND tempo_preparo <= ${filtros.tempo_max}`
+        }
+
+        if (filtros.dificuldade) {
+            sql += ` AND dificuldade = '${filtros.dificuldade}'`
+        }
+
+        if (filtros.tipo && filtros.tipo.length > 0) {
+            let tiposString = filtros.tipo.map(t => `'${t}'`).join(',')
+            sql += ` AND tipo_cozinha IN (${tiposString})`
+        }
+
+        if (filtros.categoria && filtros.categoria.length > 0) {
+            let categoriasString = filtros.categoria.map(cat => {
+                return `'${cat.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}'`
+            }).join(',')
+            sql += ` AND categoria IN (${categoriasString})`
+        }
+
+        if (filtros.nome) {
+            sql += ` AND titulo LIKE '%${filtros.nome}%'`
+        }
+
+        if (filtros.alergenos && filtros.alergenos.length > 0) {
+            let alergenosString = filtros.alergenos.map(alergeno => {
+                return `'${alergeno}'`
+            }).join(',')
+
+            sql += ` AND id_receita NOT IN (
+                SELECT DISTINCT id_receita
+                FROM vw_alergenos_por_ingredientes
+                WHERE nome_alergeno IN (${alergenosString})
+            )`
+        }
+
+        sql += ` ORDER BY titulo ASC`
+
+        console.log('SQL com view:', sql)
+
+        let result = await prisma.$queryRawUnsafe(sql)
+
+        if (Array.isArray(result)) {
+            return result
+        } else {
+            return []
+        }
+    } catch (error) {
+        console.log('Erro ao filtrar receitas com view:', error)
+        return false
+    }
+}
+
 module.exports = {
     getSelectAllreceita,
     getSelectByIdReceita,
     getSelectLastIdReceita,
     setInsertReceita,
     setUpdateReceita,
-    setDeleteReceita
+    setDeleteReceita,
+    getSelectReceitaByNome,
+    getSelectReceitasComFiltrosView
 }

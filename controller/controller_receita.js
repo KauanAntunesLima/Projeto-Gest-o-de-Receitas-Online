@@ -349,5 +349,5 @@ module.exports = {
     pegarIdReceita,
     inserirReceita,
     atualizarReceita,
-    deletarReceita,
+    deletarReceita
 }
