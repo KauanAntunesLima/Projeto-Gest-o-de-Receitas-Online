@@ -14,12 +14,12 @@ CREATE TABLE tbl_receita(
     imagem          VARCHAR(255) NOT NULL
 );
 
-INSERT INTO tbl_receita (titulo, descricao, tempo_preparo, dificuldade, data_criacao, data_edicao, imagem) VALUES
-('Bolo de Cenoura', 'Bolo simples com cobertura de chocolate.', 40, 'facil', '2025-01-01', NULL, 'bolo.jpg'),
-('Lasanha Tradicional', 'Receita italiana clássica.', 90, 'medio', '2025-01-02', NULL, 'lasanha.jpg'),
-('Sushi', 'Prato japonês com arroz e peixe.', 60, 'dificil', '2025-01-03', NULL, 'sushi.jpg'),
-('Torta de Limão', 'Sobremesa gelada com creme de limão.', 50, 'medio', '2025-01-04', NULL, 'torta.jpg'),
-('Strogonoff de Frango', 'Clássico brasileiro de frango com creme.', 35, 'facil', '2025-01-05', NULL, 'strogonoff.jpg');
+INSERT INTO tbl_receita (id_usuario, titulo, descricao, tempo_preparo, dificuldade, data_criacao, data_edicao, imagem) VALUES
+(1, 'Bolo de Cenoura', 'Bolo simples com cobertura de chocolate.', 40, 'facil', '2025-01-01', NULL, 'bolo.jpg'),
+(2, 'Lasanha Tradicional', 'Receita italiana clássica.', 90, 'medio', '2025-01-02', NULL, 'lasanha.jpg'),
+(3, 'Sushi', 'Prato japonês com arroz e peixe.', 60, 'dificil', '2025-01-03', NULL, 'sushi.jpg'),
+(4, 'Torta de Limão', 'Sobremesa gelada com creme de limão.', 50, 'medio', '2025-01-04', NULL, 'torta.jpg'),
+(5, 'Strogonoff de Frango', 'Clássico brasileiro de frango com creme.', 35, 'facil', '2025-01-05', NULL, 'strogonoff.jpg');
 
 CREATE TABLE tbl_ingredientes(
     id_ingredientes INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
