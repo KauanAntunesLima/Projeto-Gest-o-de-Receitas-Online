@@ -28,6 +28,7 @@ const controllerIngredientes = require('./controller/controller_ingredientes.js'
 const controllerCategoria = require('./controller/controller_categoria.js')
 const controllerCozinha = require('./controller/controller_cozinha.js')
 const controllerModoPreparo = require('./controller/controller_modo_preparo.js')
+const controllerUsuario = require('./controller/controller_usuario.js')
 
 /***********************
  * EndPoints tbl_receita
@@ -350,6 +351,63 @@ app.delete('/v1/toque_gourmet/modo_preparo/:id', cors(), async function(request,
     response.json(modoPreparo)
 })
 
+/***********************
+ * EndPoints tbl_usuario
+ * **********************/
+
+
+//Ambiente get
+
+app.get('/v1/toque_gourmet/usuario', cors(), async function (req, res) {
+
+    let usuario = await controllerUsuario.listarUsuario()
+    res.status(usuario.status_code)
+    res.json(usuario)
+})
+
+app.get('/v1/toque_gourmet/usuario/:id', cors(), async function (req,res) {
+
+    let idUsuario = req.params.id
+    let usuario = await controllerUsuario.pegarIdUsuario(idUsuario)
+    res.status(usuario.status_code)
+    res.json(usuario)
+})
+
+//Ambiente POST
+
+app.post ('/v1/toque_gourmet/usuario', cors(), bodyParserJSON, async function (req, res) {
+
+    let dadosBody = req.body
+    let contentType = req.headers['content-type']
+    let usuario = await controllerUsuario.inserirUsuario(dadosBody, contentType)
+    res.status(usuario.status_code)
+    res.json(usuario)
+    
+})
+
+//Ambiente PUT
+
+app.put('/v1/toque_gourmet/usuario/:id', cors(), bodyParserJSON, async function (req, res) {
+
+    let dadosBody = req.body
+    let idUsuario = req.params.id
+    let contentType = req.headers['content-type']
+
+    let usuario = await controllerUsuario.atualizarUsuario(dadosBody, idUsuario, contentType)
+    console.log(usuario)
+    res.status(usuario.status_code)
+    res.json(usuario)
+})
+
+//Ambiente DELETE
+
+app.delete('/v1/toque_gourmet/usuario/:id', cors(), async function(request, response){
+
+    let idUsuario = request.params.id_usuario
+    let usuario = await controllerUsuario.deletarUsuario(idUsuario)
+    response.status(usuario.status_code)
+    response.json(usuario)
+})
 
 //ultima linha do codigo 
 app.listen(PORT, function () {

@@ -286,7 +286,7 @@ const deletarReceita = async function (id) {
             let excluirReceita = await pegarIdReceita(id)
 
             if (excluirReceita.status_code == 200) {
-                /*     console.log(excluirEmpresa, "AAAAAAAS") */
+              
 
                 let result = await receitaDAO.setDeleteReceita(parseInt(id))
                 if (result) {

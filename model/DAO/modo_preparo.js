@@ -103,7 +103,6 @@ const setUpdateModoPreparo = async function (modo_preparo) {
     }
 }
 
-console.log(setUpdateModoPreparo)
 
 const setDeleteModoPreparo = async function (id) {
 
