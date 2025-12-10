@@ -136,14 +136,21 @@ const buscarReceitaPorNome = async function (nome) {
     }
 }
 
-const filtrarReceitas = async function (filtros) {
+const filtrarReceitas = async function (filtrosRequest) {
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
 
     try {
-
+        // Tratar os filtros da requisição
+        const filtros = {
+            tempo_max: filtrosRequest.tempo_max ? Number(filtrosRequest.tempo_max) : undefined,
+            dificuldade: filtrosRequest.dificuldade || undefined,
+            tipo: filtrosRequest.tipo ? [].concat(filtrosRequest.tipo) : undefined,
+            categoria: filtrosRequest.categoria ? [].concat(filtrosRequest.categoria) : undefined,
+            nome: filtrosRequest.nome || undefined,
+            alergenos: filtrosRequest.alergenos ? [].concat(filtrosRequest.alergenos) : undefined
+        }
 
         let result = await receitaDAO.getSelectReceitasComFiltrosView(filtros)
-
 
         if (result !== false) {
             if (result.length > 0) {
@@ -153,15 +160,12 @@ const filtrarReceitas = async function (filtros) {
 
                 return MESSAGE.HEADER
             } else {
-
                 return MESSAGE.ERROR_NOT_FOUND
             }
         } else {
-
             return MESSAGE.ERROR_INTERNAL_SERVER_MODEL
         }
     } catch (error) {
-
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER
     }
 }

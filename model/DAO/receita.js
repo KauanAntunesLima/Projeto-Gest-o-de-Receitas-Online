@@ -15,7 +15,6 @@ const getSelectAllreceita = async function () {
 
         let sql = `select * from tbl_receita order by id_receita desc`
         let result = await prisma.$queryRawUnsafe(sql)
-        console.log(result, "AAAAA")
 
         if (Array.isArray(result)){
             return result
@@ -89,7 +88,7 @@ const getSelectLastIdReceita = async function (params){
 }
 
 const setUpdateReceita = async function (receita) {
-    console.log(receita)
+
     try{
         let sql = `update tbl_receita set
         id_usuario      =  ${receita.id_usuario},
@@ -158,45 +157,49 @@ const getSelectReceitaByNome = async function (nome) {
 
 const getSelectReceitasComFiltrosView = async function (filtros) {
     try {
-        let sql = `SELECT DISTINCT * FROM vw_receitas_completas WHERE 1=1`
+        const where = []
 
         if (filtros.tempo_max) {
-            sql += ` AND tempo_preparo <= ${filtros.tempo_max}`
+            where.push(`tempo_preparo <= ${filtros.tempo_max}`)
         }
 
         if (filtros.dificuldade) {
-            sql += ` AND dificuldade = '${filtros.dificuldade}'`
+            where.push(`dificuldade = '${filtros.dificuldade}'`)
         }
 
         if (filtros.tipo && filtros.tipo.length > 0) {
-            let tiposString = filtros.tipo.map(t => `'${t}'`).join(',')
-            sql += ` AND tipo_cozinha IN (${tiposString})`
+            const tiposString = filtros.tipo.map(t => `'${t}'`).join(',')
+            where.push(`tipo_cozinha IN (${tiposString})`)
         }
 
         if (filtros.categoria && filtros.categoria.length > 0) {
-            let categoriasString = filtros.categoria.map(cat => {
+            const categoriasString = filtros.categoria.map(cat => {
                 return `'${cat.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}'`
             }).join(',')
-            sql += ` AND categoria IN (${categoriasString})`
+            where.push(`categoria IN (${categoriasString})`)
         }
 
         if (filtros.nome) {
-            sql += ` AND titulo LIKE '%${filtros.nome}%'`
+            where.push(`titulo LIKE '%${filtros.nome}%'`)
         }
 
         if (filtros.alergenos && filtros.alergenos.length > 0) {
-            let alergenosString = filtros.alergenos.map(alergeno => {
-                return `'${alergeno}'`
-            }).join(',')
-
-            sql += ` AND id_receita NOT IN (
+            const alergenosString = filtros.alergenos.map(alergeno => `'${alergeno}'`).join(',')
+            where.push(`id_receita NOT IN (
                 SELECT DISTINCT id_receita
                 FROM vw_alergenos_por_ingredientes
                 WHERE nome_alergeno IN (${alergenosString})
-            )`
+            )`)
         }
 
-        sql += ` ORDER BY titulo ASC`
+        let sql = `SELECT DISTINCT *
+FROM vw_receitas_completas`
+
+        if (where.length > 0) {
+            sql += `\nWHERE ${where.join('\n  AND ')}`
+        }
+
+        sql += `\nORDER BY titulo ASC`
 
         console.log('SQL com view:', sql)
 
@@ -208,7 +211,7 @@ const getSelectReceitasComFiltrosView = async function (filtros) {
             return []
         }
     } catch (error) {
-        console.log('Erro ao filtrar receitas com view:', error)
+
         return false
     }
 }
