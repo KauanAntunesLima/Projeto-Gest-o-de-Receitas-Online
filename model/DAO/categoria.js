@@ -81,9 +81,10 @@ const setUpdateCategoria = async function (categoria) {
         let sql = `update tbl_categoria set
         nome             = '${categoria.nome}',
         descricao        = '${categoria.descricao}'
-        where id_categoria = ${categoria.id_cozinha}`
+        where id_categoria = ${categoria.id_categoria}`
 
         let result = await prisma.$executeRawUnsafe(sql)
+
         if(result){
             return true
         }else{
@@ -92,12 +93,31 @@ const setUpdateCategoria = async function (categoria) {
     }catch (error){
         return false
     }
-    
+}
+
+const setDeleteCategoria = async function (id) {
+
+    try {
+        let sql = `DELETE FROM tbl_categoria where id_categoria = ${id}`
+
+        //$executeRawUnsafe()  -> permite apenas executar scripts sql que não tem retorno de dados (INSERT, UPDATE, DELETE)
+        let result = await prisma.$executeRawUnsafe(sql)
+
+        if (result) {
+            return true
+        } else {
+            return false
+        }
+    } catch (error) {
+        return false
+    }
 }
 
 module.exports = {
     getSelectAllCategoria,
     getSelectByIdCategoria,
     setInsertCategoria,
-    getSelectLastIdCategoria
+    getSelectLastIdCategoria,
+    setUpdateCategoria,
+    setDeleteCategoria
 }

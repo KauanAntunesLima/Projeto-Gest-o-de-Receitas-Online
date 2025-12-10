@@ -260,6 +260,30 @@ app.post ('/v1/toque_gourmet/categoria', cors(), bodyParserJSON, async function 
     
 })
 
+//Ambiente PUT
+
+app.put('/v1/toque_gourmet/categoria/:id', cors(), bodyParserJSON, async function (req, res) {
+
+    let dadosBody = req.body
+    let idCategoria = req.params.id
+    let contentType = req.headers['content-type']
+
+    let categoria = await controllerCategoria.atualizarCategoria(dadosBody, idCategoria, contentType)
+    console.log(categoria)
+    res.status(categoria.status_code)
+    res.json(categoria)
+})
+
+// ambiente delete
+
+app.delete('/v1/toque_gourmet/categoria/:id', cors(), async function(request, response){
+
+    let idCategoria = request.params.id
+    let categoria = await controllerCategoria.deletarCategoria(idCategoria)
+    response.status(categoria.status_code)
+    response.json(categoria)
+})
+
 /***********************
  * EndPoints tbl_cozinha
  * **********************/
