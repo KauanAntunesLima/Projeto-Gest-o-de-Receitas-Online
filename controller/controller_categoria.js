@@ -117,6 +117,62 @@ const inserirCategoria = async function (categoria, contentType) {
 
 }
 
+const atualizarCategoria = async function (categoria, id, contentType) {
+
+    let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
+
+    try {
+
+        //validção do content-type
+        if (String(contentType).toUpperCase() == 'APPLICATION/JSON') {
+
+            //chama a função de validação dos dados de cadastro
+            let validarDados = await validarDadosCategoria(categoria)
+            
+
+            if (!validarDados) {
+
+                //chama a função para validar a consistencia do id e verificar se existe no banco de dados
+                let validarId = await pegarIdCategoria(id)
+
+
+                //verifica se o id existe no BD, caso exista teremos o status 200
+                if (validarId.status_code == 200) {
+                    categoria.id_categoria = parseInt(id)
+
+                    //Chama a função do DAO para atualizar um novo filme
+                    let result = await cozinhaDAO.setUpdateCozinha(cozinha)
+
+                    if (result) {
+
+
+                        MESSAGE.HEADER.status = MESSAGE.SUCCESS_UPDATE_ITEM.status
+                        MESSAGE.HEADER.status_code = MESSAGE.SUCCESS_UPDATE_ITEM.status_code
+                        MESSAGE.HEADER.message = MESSAGE.SUCCESS_UPDATE_ITEM.message
+                        MESSAGE.HEADER.response = cozinha
+
+                        return MESSAGE.HEADER
+                    } else {
+
+                        return MESSAGE.ERROR_INTERNAL_SERVER_MODEL//500
+                    }
+                } else {
+
+                    return validarId // retorno da funçaõ de buscarFilmeId (400 ou 404 ou 500)
+                }
+
+            } else {
+                return validarDados //retorno da funçaõ de valodar dados do filme 400
+            }
+        } else {
+            return MESSAGE.ERROR_CONTENT_TYPE //415
+        }
+    } catch (error) {
+        console.log(error)
+        return MESSAGE_DEFAULT.ERROR_INTERNAL_SERVER_CONTROLLER //500
+    }
+}
+
 const validarDadosCategoria = async function (categoria) {
 
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))

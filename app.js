@@ -424,7 +424,7 @@ app.put('/v1/toque_gourmet/usuario/:id', cors(), bodyParserJSON, async function 
 
 app.delete('/v1/toque_gourmet/usuario/:id', cors(), async function(request, response){
 
-    let idUsuario = request.params.id_usuario
+    let idUsuario = request.params.id
     let usuario = await controllerUsuario.deletarUsuario(idUsuario)
     response.status(usuario.status_code)
     response.json(usuario)

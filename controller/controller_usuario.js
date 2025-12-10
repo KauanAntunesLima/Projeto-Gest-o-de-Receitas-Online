@@ -165,7 +165,7 @@ const inserirUsuario = async function (usuario, contentType) {
 }
 
 const deletarUsuario = async function (id) {
-   
+    console.log(id)
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
 
     try {
@@ -174,12 +174,12 @@ const deletarUsuario = async function (id) {
 
             let excluirUsuario = await pegarIdUsuario(id)
 
-            console.log(excluirUsuario)
+            
             if (excluirUsuario.status_code == 200) {
                
-                usuario.id_usuario = parseInt(id)
-
-                let result = await usuarioDAO.setDeleteUsuario(parseInt(id))
+                let idUser = parseInt(id)
+                console.log(idUser)
+                let result = await usuarioDAO.setDeleteUsuario(idUser)
 
                 if (result) {
                     MESSAGE.HEADER.status = MESSAGE.SUCCESS_DELETE_ITEM.status

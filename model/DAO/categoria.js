@@ -76,6 +76,25 @@ const getSelectLastIdCategoria = async function (params){
     }
 }
 
+const setUpdateCategoria = async function (categoria) {
+    try{
+        let sql = `update tbl_categoria set
+        nome             = '${categoria.nome}',
+        descricao        = '${categoria.descricao}'
+        where id_categoria = ${categoria.id_cozinha}`
+
+        let result = await prisma.$executeRawUnsafe(sql)
+        if(result){
+            return true
+        }else{
+            return false
+        }
+    }catch (error){
+        return false
+    }
+    
+}
+
 module.exports = {
     getSelectAllCategoria,
     getSelectByIdCategoria,

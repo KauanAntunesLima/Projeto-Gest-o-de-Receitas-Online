@@ -67,9 +67,9 @@ const getSelectReceitaIngredientesByIngredienteId = async function (id) {
 const insertReceitaIngredientes = async function (receitaIngrediente) {
     try {
         const sql = `
-        INSERT INTO ingrediente_receita
-                    (receita_id,
-                     ingrediente_id,
+        INSERT INTO tbl_receita_ingredientes
+                    (id_receita,
+                     id_ingrediente,
                      quantidade,
                      unidade)
                 VALUES (${receitaIngrediente.receita_id},

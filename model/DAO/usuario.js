@@ -110,7 +110,7 @@ const setUpdateUsuario = async function (usuario) {
 const setDeleteUsuario = async function (id) {
 
     try {
-        let sql = `DELETE FROM tbl_usuario where id_usuario = ${id}`
+        let sql = `DELETE FROM tbl_usuario where id_usuario=${id}`
 
         //$executeRawUnsafe()  -> permite apenas executar scripts sql que não tem retorno de dados (INSERT, UPDATE, DELETE)
         let result = await prisma.$executeRawUnsafe(sql)
@@ -121,6 +121,7 @@ const setDeleteUsuario = async function (id) {
             return false
         }
     } catch (error) {
+
         return false
     }
 }
