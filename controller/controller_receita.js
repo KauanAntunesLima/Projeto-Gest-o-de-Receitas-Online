@@ -10,6 +10,8 @@ const controllerReceitaCozinha = require('./controller_receita_cozinha.js')
 const controllerCozinha = require('./controller_cozinha.js')
 const controllerReceitaIngrediente = require('./controller_receita_ingredientes.js')
 const controllerIngrediente = require('./controller_ingredientes.js')
+const controllerIngredienteAlergenos = require('./controller_ingrediente_alergenos.js')
+const controllerAlergenos = require('./controller_alergenos.js')
 
 const MESSAGE_DEFAULT = require('../modulo/config_messages.js')
 
@@ -19,31 +21,35 @@ const listarReceita = async function () {
 
     try {
         let result = await receitaDAO.getSelectAllreceita()
-        
+
         if (result && result.length > 0) {
 
             for (let receita of result) {
-                
+
                 let cozinhaId = await controllerReceitaCozinha.buscarCozinhaReceitaId(receita.id_receita)
-                if (cozinhaId?.response?.receitaCozinha?.length > 0) { 
+                if (cozinhaId?.response?.receitaCozinha?.length > 0) {
                     let cozinha = await controllerCozinha.pegarIdCozinha(cozinhaId.response.receitaCozinha[0].id_cozinha)
-                    receita.cozinha = cozinha
+                    receita.cozinha = cozinha.response.cozinha
                 }
 
-                let data = await controllerReceitaIngrediente.pegarReceitaIngredientePorIdReceita(receita.id_receita)
 
-                receita.ingrediente = [] 
+                let receitaIngrediente = await controllerReceitaIngrediente.pegarReceitaIngredientePorIdReceita(receita.id_receita)
 
-                if (data && data.response && data.response.receita_ingredientes) {
+                receita.ingrediente = []
+                receita.alergenos = []
 
-                    for (let id of data.response.receita_ingredientes) { 
+                if (receitaIngrediente &&
+                    receitaIngrediente.response &&
+                    receitaIngrediente.response.receita_ingredientes) {
+
+                    for (let id of receitaIngrediente.response.receita_ingredientes) {
 
                         let ingredienteAchado = await controllerIngrediente.pegarIdIngrediente(id.id_ingredientes)
-                        
 
-                        if (ingredienteAchado && ingredienteAchado.response && ingredienteAchado.response.ingrediente) {
+                        if (ingredienteAchado?.response?.ingrediente) {
 
                             for (let ingrediente of ingredienteAchado.response.ingrediente) {
+
                                 let novoIngrediente = {
                                     id_ingrediente: ingrediente.id_ingredientes,
                                     nome: ingrediente.nome,
@@ -53,18 +59,35 @@ const listarReceita = async function () {
                                 }
 
                                 receita.ingrediente.push(novoIngrediente)
+
+                                let ingredientesAlergenosDaReceita =
+                                    await controllerIngredienteAlergenos.pegarIngredientesAlergenosPorIngredientesId(ingrediente.id_ingredientes)
+
+                                for (let alergeno of ingredientesAlergenosDaReceita.response.alergenos) {
+
+                                    let alergenos = await controllerAlergenos.pegarIdAlergenos(alergeno.id_alergenos)
+
+                                    for (let alergenoNome of alergenos.response.alergenos) {
+
+                                        let alergenosAchado = {
+                                            id_ingrediente: alergeno.id_ingredientes,
+                                            ingrediente_nome: ingrediente.nome,
+                                            alergeno: alergenoNome.nome
+                                        }
+
+                                        receita.alergenos.push(alergenosAchado)
+                                    }
+                                }
                             }
-                        } 
-
+                        }
                     }
-                } 
-
-            } 
+                }
+            }
 
             MESSAGE.HEADER.status = MESSAGE.SUCCESS_REQUEST.status
             MESSAGE.HEADER.status_code = MESSAGE.SUCCESS_REQUEST.status_code
             MESSAGE.HEADER.response.receita = result
-            
+
             return MESSAGE.HEADER
 
         } else {
@@ -76,6 +99,7 @@ const listarReceita = async function () {
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER
     }
 }
+
 
 
 const buscarReceitaPorNome = async function (nome) {
@@ -114,32 +138,28 @@ const filtrarReceitas = async function (filtros) {
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
 
     try {
-        // Debug: mostra os filtros recebidos
-        console.log('FILTROS RECEBIDOS NA CONTROLLER:', filtros)
 
-        //Chama a função do DAO para filtrar receitas
+
         let result = await receitaDAO.getSelectReceitasComFiltrosView(filtros)
 
-        // Debug: mostra o resultado do DAO
-        console.log('RESULTADO DO DAO:', result)
 
         if (result !== false) {
             if (result.length > 0) {
                 MESSAGE.HEADER.status = MESSAGE.SUCCESS_REQUEST.status
                 MESSAGE.HEADER.status_code = MESSAGE.SUCCESS_REQUEST.status_code
                 MESSAGE.HEADER.response.receitas = result
-                console.log('RETORNANDO SUCESSO COM', result.length, 'receitas')
+
                 return MESSAGE.HEADER
             } else {
-                console.log('NENHUMA RECEITA ENCONTRADA')
+
                 return MESSAGE.ERROR_NOT_FOUND
             }
         } else {
-            console.log('ERRO NO DAO')
+
             return MESSAGE.ERROR_INTERNAL_SERVER_MODEL
         }
     } catch (error) {
-        console.log('ERRO NA CONTROLLER:', error)
+
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER
     }
 }
@@ -149,7 +169,7 @@ const pegarIdReceita = async function (id) {
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
 
     try {
-        //Validaçaõ de campo obrigatório
+        //Validação de campo obrigatório
         if (id != '' && id != null && id != undefined && !isNaN(id) && id > 0) {
 
             //Chama a função para filtrar pelo ID
@@ -353,7 +373,7 @@ const deletarReceita = async function (id) {
             let excluirReceita = await pegarIdReceita(id)
 
             if (excluirReceita.status_code == 200) {
-              
+
 
                 let result = await receitaDAO.setDeleteReceita(parseInt(id))
                 if (result) {
