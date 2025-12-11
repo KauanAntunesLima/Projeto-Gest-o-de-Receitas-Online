@@ -11,7 +11,7 @@ CREATE TABLE tbl_usuario(
     nome        VARCHAR(100) NOT NULL,
     email       VARCHAR(100) NOT NULL UNIQUE,
     senha       VARCHAR(255) NOT NULL,
-    imagem      VARCHAR(255) NOT NULL
+    imagem      VARCHAR(255) NULL
 );
 
 CREATE TABLE tbl_receita(
