@@ -106,7 +106,6 @@ app.delete('/v1/toque_gourmet/receita/:id', cors(), async function(request, resp
     response.json(receita)
 })
 
-
 /***********************
  * EndPoints tbl_alergenos
  * **********************/

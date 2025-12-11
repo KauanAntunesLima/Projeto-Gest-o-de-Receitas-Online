@@ -3,6 +3,9 @@
     "@prisma/client": "^6.16.3",
     "cors": "^2.8.5",
     "express": "^5.2.1",
+    "form-data": "^4.0.5",
+    "multer": "^2.0.2",
+    "node-fetch": "^3.3.2",
     "prisma": "6.16.3"
   },
   "name": "gestao-de-receita",
