@@ -353,7 +353,7 @@ const inserirReceita = async function (receita, contentType) {
                                 unidade: ingrediente.unidade
                             }
 
-                            await controllerReceitaIngrediente.inserirReceitaIngredienteControllerReceita(receitaIngredienteList)
+                            await controllerReceitaIngrediente.inserirReceitaIngrediente(receitaIngredienteList, 'application/json')
                         }
                         for (let modoPreparo of receita.modo_preparo) {
 

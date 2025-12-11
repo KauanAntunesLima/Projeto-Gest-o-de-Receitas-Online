@@ -152,39 +152,6 @@ const inserirReceitaIngrediente = async function (receitaIngrediente, contentTyp
     }
 };
 
-const inserirReceitaIngredienteControllerReceita = async function (receitaIngrediente) {
-    let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT));
-
-    try {
-
-            let dadosInvalidos = validarDadosReceitaIngrediente(receitaIngrediente);
-            if (!dadosInvalidos) {
-                let result = await receitaIngredientesDAO.insertReceitaIngredientes(receitaIngrediente);
-                if (result) {
-                    let lastId = await receitaIngredientesDAO.getSelectLastIdReceitaIngrediente();
-                    if (lastId) {
-                        receitaIngrediente.id_receita_ingredientes = lastId;
-                        MESSAGE.HEADER.status = MESSAGE.SUCCES_CREATED_ITEM.status;
-                        MESSAGE.HEADER.status_code = MESSAGE.SUCCES_CREATED_ITEM.status_code;
-                        MESSAGE.HEADER.message = MESSAGE.SUCCES_CREATED_ITEM.message;
-                        MESSAGE.HEADER.response = receitaIngrediente;
-                        return MESSAGE.HEADER;
-                    } else {
-                        return MESSAGE.ERROR_INTERNAL_SERVER_MODEL;
-                    }
-                } else {
-                    return MESSAGE.ERROR_INTERNAL_SERVER_MODEL;
-                }
-            } else {
-                return dadosInvalidos;
-            }
-        
-    } catch (error) {
-        console.log(error);
-        return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER;
-    }
-};
-
 const atualizarReceitaIngrediente = async function (receitaIngrediente, id, contentType) {
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT));
 
@@ -279,7 +246,6 @@ module.exports = {
     pegarReceitaIngredientePorIdReceita,
     pegarReceitaIngredientePorIngredienteId,
     inserirReceitaIngrediente,
-    inserirReceitaIngredienteControllerReceita,
     atualizarReceitaIngrediente,
     deletarReceitaIngrediente
 };
