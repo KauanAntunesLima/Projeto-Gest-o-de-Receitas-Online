@@ -436,76 +436,104 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function coletarDadosFormulario() {
+        const formData = new FormData();
+
         const dados = {
-            titulo: document.querySelector('.top-infos input[type="text"]').value,
-            tempoPreparo: {
-                horas: document.querySelector('.time-inputs input:nth-child(1)').value,
-                minutos: document.querySelector('.time-inputs input:nth-child(2)').value,
-                segundos: document.querySelector('.time-inputs input:nth-child(3)').value
-            },
-            passos: [],
+            id_usuario: 1,
+            titulo: document.querySelector('.top-infos input[type="text"]').value.trim(),
+            descricao: document.querySelector('.top-infos input[type="text"]').value.trim(),
+            tempo_preparo: 0,
+            dificuldade: '',
+            data_criacao: new Date().toISOString().slice(0, 10),
+            data_edicao: null,
+            id_cozinha: 1,
+            id_categoria: 1,
             ingredientes: [],
-            alergenos: [],
-            categorias: [],
-            dificuldade: ''
+            modo_preparo: []
         };
 
+        const horas = document.querySelector('.time-inputs input:nth-child(1)').value || 0;
+        const minutos = document.querySelector('.time-inputs input:nth-child(2)').value || 0;
+        const segundos = document.querySelector('.time-inputs input:nth-child(3)').value || 0;
+        dados.tempo_preparo = (parseInt(horas) * 60) + parseInt(minutos) + Math.ceil(parseInt(segundos) / 60);
+
+        const categoria = document.getElementById('categoria').value;
+        const dificuldade = document.getElementById('dificuldade').value;
+        const tipoCozinha = document.getElementById('tipo_cozinha').value;
+
+        const categoriaMap = {
+            'entradas': 1, 'pratos_principais': 2, 'acompanhamentos': 3, 'saladas': 4,
+            'sopas': 5, 'massas': 6, 'carnes': 7, 'frango': 8, 'peixes_e_frutos_do_mar': 9,
+            'lanches': 10, 'petiscos': 11, 'sobremesas': 12, 'bolos_e_tortas': 13,
+            'bebidas': 14, 'vegano': 15, 'vegetariano': 16, 'light__fit': 17,
+            'café_da_manhã': 18, 'brunch': 19
+        };
+
+        const cozinhaMap = {
+            'brasileira': 1, 'japonesa': 3, 'italiana': 2,
+            'mexicana': 4, 'francesa': 5, 'Outra': 6,
+        };
+
+        const dificuldadeMap = {
+            'facil': 'facil', 'medio': 'medio', 'dificil': 'dificil'
+        };
+
+        if (categoriaMap[categoria]) {
+            dados.id_categoria = categoriaMap[categoria];
+        }
+
+        if (cozinhaMap[tipoCozinha]) {
+            dados.id_cozinha = cozinhaMap[tipoCozinha];
+        }
+
+        if (dificuldadeMap[dificuldade]) {
+            dados.dificuldade = dificuldadeMap[dificuldade];
+        }
+
+        let passoNumero = 1;
         document.querySelectorAll('.step-item textarea').forEach(textarea => {
             if (textarea.value.trim()) {
-                dados.passos.push(textarea.value.trim());
+                dados.modo_preparo.push({
+                    numero_passo: passoNumero++,
+                    descricao: textarea.value.trim()
+                });
             }
         });
 
-        document.querySelectorAll('.ingredient-row').forEach(row => {
-            const inputs = row.querySelectorAll('input');
-            const nome = inputs[1].value.trim();
-            const quantidade = inputs[2].value.trim();
-            const unidade = inputs[3].value.trim();
+        document.querySelectorAll('.ingredient-row').forEach((row, index) => {
+            const inputs = row.querySelectorAll('input[type="text"]');
+            const nome = inputs[0] ? inputs[0].value.trim() : '';
+            const quantidade = inputs[1] ? inputs[1].value.trim() : '';
+            const unidade = inputs[2] ? inputs[2].value.trim() : '';
 
             if (nome) {
                 dados.ingredientes.push({
-                    nome,
-                    quantidade,
-                    unidade
+                    id_ingredientes: index + 1,
+                    quantidade: quantidade || 'a gosto',
+                    unidade: unidade || 'unidade'
                 });
             }
         });
 
-        document.querySelectorAll('.allergen-row').forEach(row => {
-            const allergenInput = row.querySelector('input[type="text"]');
-            const select = row.querySelector('.ingredient-select');
-            const allergen = allergenInput.value.trim();
-            const ingredientId = select.value;
+        formData.append('dados', JSON.stringify(dados));
 
-            if (allergen) {
-                dados.alergenos.push({
-                    nome: allergen,
-                    ingredienteId: ingredientId || null
-                });
-            }
-        });
+        const fileInput = document.getElementById('img-input');
+        if (fileInput && fileInput.files.length > 0) {
+            formData.append('imagem', fileInput.files[0]);
+        }
 
-        document.querySelectorAll('.other-fields .extra-row').forEach(row => {
-            const label = row.querySelector('label').textContent;
-            const input = row.querySelector('input, select');
-            const value = input.value.trim();
-
-            if (value) {
-                switch(label) {
-                    case 'Categoria':
-                        dados.categorias.push(value);
-                        break;
-                    case 'Nível de Dificuldade':
-                        dados.dificuldade = value;
-                        break;
-                }
-            }
-        });
-
-        console.log('Dados do formulário:', dados);
-        alert('Receita cadastrada com sucesso! Verifique o console para ver os dados.');
-
-        return dados;
+        fetch('http://localhost:8080/v1/toque_gourmet/receita/upload', {
+            method: 'POST',
+            body: formData
+        }).then(response => response.json())
+          .then(result => {
+              if (result.status) {
+                  alert('Receita cadastrada com sucesso!');
+                  limparTodosCampos();
+              } else {
+                  alert('Erro: ' + result.message);
+              }
+          });
     }
 
     function gerenciarPreviewImagem() {

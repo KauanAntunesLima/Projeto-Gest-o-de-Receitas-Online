@@ -1,8 +1,5 @@
-function getRecipePagePath() {
-    return '/src/assets/pages/recipe.html';
-}
-
 async function fetchDados(url) {
+    console.log(url)
     try {
         const response = await fetch(url);
         return await response.json();
@@ -21,19 +18,20 @@ async function fetchReceitas() {
 }
 
 export function criarCard(receita) {
+
     const card = document.createElement('div');
     card.classList.add('card');
     card.addEventListener('click', () => {
-        window.location.href = `${getRecipePagePath()}?id=${receita.id}`;
+        
+        window.location.href = `${'/src/assets/pages/recipe.html'}?id=${receita.id_receita}`;
     });
 
     const cardPreview = document.createElement('div');
     cardPreview.classList.add('card-preview');
 
     const img = document.createElement('img');
-    const isPages = window.location.pathname.includes('/pages/');
-    const imgPathBase = isPages ? '../img/' : './src/assets/img/';
-    img.src = receita.imagem ? `${imgPathBase}${receita.imagem}` : `${imgPathBase}default.jpg`;
+
+    img.src = receita.imagem 
     img.alt = receita.titulo || receita.nome;
     img.classList.add('recipe-preview');
 
@@ -41,12 +39,12 @@ export function criarCard(receita) {
     cardTitleRatio.classList.add('card-title-ratio');
 
     const spanTitle = document.createElement('span');
-    spanTitle.textContent = receita.titulo || receita.nome;
+    spanTitle.textContent = receita.titulo;
 
     const ratioDiv = document.createElement('div');
     ratioDiv.classList.add('ratio');
 
-    const starPath = isPages ? '../img/Star 5.svg' : './src/assets/img/Star 5.svg';
+    const starPath = './src/assets/img/Star 5.svg';
     for (let i = 0; i < 5; i++) {
         const star = document.createElement('img');
         star.src = starPath;
@@ -114,6 +112,8 @@ export async function initAllRecipes() {
                 receitaIndex++;
             }
         }
+
+        
         mainContainer.appendChild(rowDiv);
     }
 }
@@ -162,7 +162,7 @@ export async function initRecipeDetails() {
 
     const bgImg = document.getElementById('recipe-bg-img');
     if (bgImg) {
-        bgImg.src = receita.imagem ? `../img/${receita.imagem}` : '../img/default-bg.jpg';
+        bgImg.src = receita.imagem
     }
 
     const titleEl = document.getElementById('recipe-title');
