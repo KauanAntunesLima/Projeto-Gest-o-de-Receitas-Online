@@ -62,9 +62,8 @@ const listarReceita = async function () {
 
                                 receita.ingredientes.push(novoIngrediente)
 
-                                let ingredientesAlergenosDaReceita =
-                                    await controllerIngredienteAlergenos.pegarIngredientesAlergenosPorIngredientesId(ingrediente.id_ingredientes)
-
+                                let ingredientesAlergenosDaReceita = await controllerIngredienteAlergenos.pegarIngredientesAlergenosPorIngredientesId(ingrediente.id_ingredientes)
+                                if (ingredientesAlergenosDaReceita.length > 0)
                                 for (let alergeno of ingredientesAlergenosDaReceita.response.alergenos) {
 
                                     let alergenos = await controllerAlergenos.pegarIdAlergenos(alergeno.id_alergenos)
@@ -183,9 +182,9 @@ const pegarIdReceita = async function (id) {
 
             if (result) {
                 if (result.length > 0) {
-
+                    console.log(id)
                     let cozinhaId = await controllerReceitaCozinha.buscarCozinhaReceitaId(id)
-
+                    console.log(cozinhaId)
                     if (cozinhaId) {
                         let cozinha = await controllerCozinha.pegarIdCozinha(cozinhaId.response.receitaCozinha[0].id_cozinha)
 
@@ -200,7 +199,7 @@ const pegarIdReceita = async function (id) {
                                 result[0].modo_preparo = []
 
                                 let modoDePreparo = await controllerModoPreparo.pegarModoPreparoPorIdReceita(result[0].id_receita)
-
+                                
                                 for (let modo_preparo of modoDePreparo.response.modo_preparo) {
 
                                     let preparo = {
@@ -227,7 +226,7 @@ const pegarIdReceita = async function (id) {
                                                 unidade: id.unidade
                                             }
                                             let ingredientesAlergenosDaReceita = await controllerIngredienteAlergenos.pegarIngredientesAlergenosPorIngredientesId(ingrediente.id_ingredientes)
-
+                                            if(ingredientesAlergenosDaReceita > 0)
                                             for (let alergeno of ingredientesAlergenosDaReceita.response.alergenos) {
 
                                                 let alergenos = await controllerAlergenos.pegarIdAlergenos(alergeno.id_alergenos)
