@@ -566,6 +566,17 @@ app.delete('/v1/toque_gourmet/usuario/:id', cors(), async function (request, res
     response.json(usuario)
 })
 
+//Ambiente de Logindo Usuario
+
+app.post ('/v1/toque_gourmet/usuario/login', cors(), bodyParserJSON, async function (req, res) {
+
+    let dadosBody = req.body
+    let idUsuario = req.params.id
+    let usuario = await controllerUsuario.loginUsuario(dadosBody, idUsuario)
+    res.status(usuario.status_code)
+    res.json(usuario)
+})
+
 //ultima linha do codigo 
 app.listen(PORT, function () {
     console.log('API aguardando requisição')

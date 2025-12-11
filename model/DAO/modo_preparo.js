@@ -103,24 +103,19 @@ const setUpdateModoPreparo = async function (modo_preparo) {
     }
 }
 
-
 const setDeleteModoPreparo = async function (id) {
-
     try {
-        let sql = `DELETE FROM tbl_modo_preparo where id_modo_preparo = ${id}`
+        const result = await prisma.$executeRaw`
+            DELETE FROM tbl_modo_preparo WHERE id_modo_preparo = ${id}
+        `;
 
-        //$executeRawUnsafe()  -> permite apenas executar scripts sql que não tem retorno de dados (INSERT, UPDATE, DELETE)
-        let result = await prisma.$executeRawUnsafe(sql)
-
-        if (result) {
-            return true
-        } else {
-            return false
-        }
+        return result > 0
     } catch (error) {
+        console.log(error)
         return false
     }
-}
+};
+
 
 module.exports = {
     getSelectAllModoPreparo,

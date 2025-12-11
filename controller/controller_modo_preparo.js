@@ -37,6 +37,7 @@ const listarModoPreparo = async function () {
 }
 
 const pegarIdModoPreparo = async function (id) {
+    console.log(id)
     
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
 
@@ -173,8 +174,8 @@ const inserirModoPreparo = async function (modoPreparo, contentType) {
 }
 
 const deletarModoPreparo = async function (id) {
-    
-    //apaga um filme filtrando pelo id
+    console.log(id)
+
         let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
     
      try{
@@ -184,8 +185,7 @@ const deletarModoPreparo = async function (id) {
             let excluirModoPreparo = await pegarIdModoPreparo(id)
            
             if (excluirModoPreparo.status_code == 200) {
-         
-             
+     
             let result = await modoPreparoDAO.setDeleteModoPreparo(parseInt(id))
          if(result){
             MESSAGE.HEADER.status = MESSAGE.SUCCESS_DELETE_ITEM.status
@@ -198,7 +198,7 @@ const deletarModoPreparo = async function (id) {
             return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
          }
          }else{
-           return excluirModoPreparo
+           return excluirReceita
            
          }
         }else{
@@ -219,6 +219,9 @@ const validarDadosModoPreparo = async function (modoPreparo){
 
     }else if(modoPreparo.descricao == '' || modoPreparo.descricao == null || modoPreparo.descricao == undefined){
         MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [descrição] invalido!!!'
+        return MESSAGE.ERROR_REQUIRED_FIELDS
+    }else if(modoPreparo_id_cozinha == '' || modoPreparo_id_cozinha == null || modoPreparo.modoPreparo_id_cozinha == undefined){
+        MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [id_cozinha] invalido!!!'
         return MESSAGE.ERROR_REQUIRED_FIELDS
     }
 }

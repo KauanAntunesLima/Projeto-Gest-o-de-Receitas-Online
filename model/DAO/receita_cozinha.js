@@ -46,7 +46,7 @@ const getSelectBYIdReceitaCozinha = async function (id) {
     }
     }
 
-   const getSelectLastIdReceitaCozinha = async function () {
+const getSelectLastIdReceitaCozinha = async function () {
     try {
      
    

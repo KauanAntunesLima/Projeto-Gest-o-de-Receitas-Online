@@ -6,6 +6,7 @@
  * Versão: 2.0
  ****************************************************************************************/
 const usuarioDAO = require('../model/DAO/usuario.js')
+const criptografia = require('../modulo/crypto-password.js')
 
 const MESSAGE_DEFAULT = require('../modulo/config_messages.js')
 
@@ -123,6 +124,7 @@ const atualizarUsuario = async function (usuario, id, contentType) {
 }
 
 const inserirUsuario = async function (usuario, contentType) {
+    console.log(usuario)
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
 
     try {
@@ -132,7 +134,16 @@ const inserirUsuario = async function (usuario, contentType) {
 
             if (!dadosValidos) {
 
-                let result = await usuarioDAO.setInsertUsuario(usuario)
+                let senhaCriptografada = criptografia.hashPassword(usuario.senha)
+
+                let usuarioCriptografado = {
+                    nome: usuario.nome,
+                    email: usuario.email,
+                    senha: senhaCriptografada,
+                    imagem: usuario.imagem
+                  }
+                  console.log(usuarioCriptografado)
+                let result = await usuarioDAO.setInsertUsuario(usuarioCriptografado)
                 
                 if (result) {
 
@@ -163,6 +174,36 @@ const inserirUsuario = async function (usuario, contentType) {
     }
 
 }
+
+const loginUsuario = async function (usuario) {
+
+    let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
+
+        try {
+
+            const user = await usuarioDAO.getUsuarioByUsuarioNome(usuario.nome);
+            console.log(user)
+            if (!user) {
+
+                return MESSAGE.ERROR_REQUIRED_FIELDS;
+                
+            }
+
+            let senhaVerificada = criptografia.verifyPassword(usuario.senha, user.senha)
+
+            if(senhaVerificada){
+                let usuarioValido = await usuarioDAO.getUsuarioByUsuarioSenha(user.nome, user.senha)
+                delete usuarioValido.senha
+                MESSAGE.HEADER.status = MESSAGE.SUCCESS_REQUEST.status
+                MESSAGE.HEADER.status_code = MESSAGE.SUCCESS_REQUEST.status_code
+                MESSAGE.HEADER.response.usuario = usuarioValido
+                return MESSAGE.HEADER //200
+            }
+
+        } catch (error) {
+            return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER;
+        }
+    }
 
 const deletarUsuario = async function (id) {
     console.log(id)
@@ -203,7 +244,6 @@ const deletarUsuario = async function (id) {
     }
 }
 
-
 const validarDadosUsuario = async function (usuario) {
 
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
@@ -225,11 +265,13 @@ const validarDadosUsuario = async function (usuario) {
     return MESSAGE.ERROR_REQUIRED_FIELDS
     }
 }
+    
 
 module.exports = {
     listarUsuario,
     pegarIdUsuario,
     atualizarUsuario,
     inserirUsuario,
-    deletarUsuario
+    deletarUsuario,
+    loginUsuario
 }

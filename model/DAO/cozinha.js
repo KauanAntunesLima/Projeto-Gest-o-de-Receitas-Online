@@ -73,18 +73,21 @@ const getSelectLastIdCozinha = async function (params){
 }
 
 const setUpdateCozinha = async function (cozinha) {
+
     try{
         let sql = `update tbl_cozinha set
         nome             = '${cozinha.nome}'
         where id_cozinha = ${cozinha.id_cozinha}`
 
         let result = await prisma.$executeRawUnsafe(sql)
+    
         if(result){
             return true
         }else{
             return false
         }
     }catch (error){
+    
         return false
     }
     

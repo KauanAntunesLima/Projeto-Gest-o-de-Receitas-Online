@@ -38,7 +38,36 @@ const getSelectByIdUsuario = async function (id) {
     
 }
 
+const getUsuarioByUsuarioNome = async function (usuario) {
+    try{
+        let sql = `SELECT * FROM tbl_usuario WHERE nome = '${usuario}'`;
+
+        const result = await prisma.$queryRawUnsafe(sql);
+
+        if (Array.isArray(result)){
+            return result[0]
+        }
+    }catch(error){
+        return false
+    }  
+}
+
+const getUsuarioByUsuarioSenha = async function (usuario, senha) {
+
+    try{
+        let sql = `SELECT * FROM tbl_usuario WHERE nome = '${usuario}' and senha = '${senha}'`;
+        const result = await prisma.$queryRawUnsafe(sql);
+        console.log(result)
+        if (Array.isArray(result)){
+            return result[0]
+        }
+    }catch(error){
+        return false
+    }  
+}
+
 const setInsertUsuario = async function (usuario) {
+    console.log(usuario)
 
     try{
 
@@ -62,6 +91,7 @@ const setInsertUsuario = async function (usuario) {
         }
 
     }catch(error){
+        console.log(error)
         return false
     }
 }
@@ -132,5 +162,7 @@ module.exports = {
     getSelectLastIdUsuario,
     setInsertUsuario,
     setUpdateUsuario,
-    setDeleteUsuario
+    setDeleteUsuario,
+    getUsuarioByUsuarioNome,
+    getUsuarioByUsuarioSenha
 }
