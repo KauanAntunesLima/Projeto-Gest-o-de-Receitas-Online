@@ -445,6 +445,7 @@ BEGIN
     DELETE FROM tbl_receita_ingredientes  WHERE id_receita = OLD.id_receita;
     DELETE FROM tbl_usuario_notas_receita WHERE id_receita = OLD.id_receita;
 	DELETE FROM tbl_receita_cozinha		  WHERE id_receita = OLD.id_receita;
+    DELETE FROM tbl_receita_categoria     WHERE id_receita = OLD.id_receita;
 END $$
 
 CREATE TRIGGER trg_delete_ingredientes_relations
@@ -487,11 +488,3 @@ BEGIN
 END $$
 
 DELIMITER ;
-
-
-
-
-
-
-
-

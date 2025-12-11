@@ -442,7 +442,8 @@ const deletarReceita = async function (id) {
 
 
                 let result = await receitaDAO.setDeleteReceita(parseInt(id))
-                if (result) {
+
+                if (!result) {
                     MESSAGE.HEADER.status = MESSAGE.SUCCESS_DELETE_ITEM.status
                     MESSAGE.HEADER.status_code = MESSAGE.SUCCESS_DELETE_ITEM.status_code
                     MESSAGE.HEADER.message = MESSAGE.SUCCESS_DELETE_ITEM.message
@@ -454,7 +455,6 @@ const deletarReceita = async function (id) {
                 }
             } else {
                 return excluirReceita
-
             }
         } else {
             MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [ID] inválido!!'
