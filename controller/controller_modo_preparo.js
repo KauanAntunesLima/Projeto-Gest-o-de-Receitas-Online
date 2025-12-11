@@ -75,7 +75,45 @@ const pegarIdModoPreparo = async function (id) {
 
     }
 }
+const pegarModoPreparoPorIdReceita = async function (id) {
 
+    
+    let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
+
+    try {
+        //Validaçaõ de campo obrigatório
+        if (id != '' && id != null && id != undefined && !isNaN(id) && id > 0) {
+
+            //Chama a função para filtrar pelo ID
+            let result = await modoPreparoDAO.getSelectModoPreparoByIdReceita(parseInt(id))
+            console.log(result)
+
+            if (result) {
+                if (result.length > 0) {
+                    MESSAGE.HEADER.status = MESSAGE.SUCCESS_REQUEST.status
+                    MESSAGE.HEADER.status_code = MESSAGE.SUCCESS_REQUEST.status_code
+                    MESSAGE.HEADER.response.modo_preparo = result
+
+                    console.log(result)
+                    return MESSAGE.HEADER //200
+                } else {
+                    return MESSAGE.ERROR_NOT_FOUND //404
+                }
+
+            } else {
+                return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
+            }
+        } else {
+            MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [ID] inválido' //400
+            return MESSAGE.ERROR_REQUIRED_FIELDS //400
+        }
+
+    } catch (error) {
+        console.log(error)
+        return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER //500
+
+    }
+}
 const atualizarModoPreparo = async function (modoPreparo, id, contentType) {
 
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
@@ -133,17 +171,19 @@ const atualizarModoPreparo = async function (modoPreparo, id, contentType) {
 }
 
 const inserirModoPreparo = async function (modoPreparo, contentType) {
-
+    console.log(modoPreparo, contentType)
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
 
     try {
 
         if (String(contentType).toUpperCase() == 'APPLICATION/JSON') {
+
             let dadosValidos = await validarDadosModoPreparo(modoPreparo)
 
             if (!dadosValidos){
                
                 let result = await modoPreparoDAO.setInsertModoPreparo(modoPreparo)
+
             if (result) {
                 let lastIdModoPreparo = await modoPreparoDAO.getSelectLastIdModoPreparo(modoPreparo)
 
@@ -219,15 +259,15 @@ const validarDadosModoPreparo = async function (modoPreparo){
     }else if(modoPreparo.descricao == '' || modoPreparo.descricao == null || modoPreparo.descricao == undefined){
         MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [descrição] invalido!!!'
         return MESSAGE.ERROR_REQUIRED_FIELDS
-    }else if(modoPreparo_id_cozinha == '' || modoPreparo_id_cozinha == null || modoPreparo.modoPreparo_id_cozinha == undefined){
-        MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [id_cozinha] invalido!!!'
-        return MESSAGE.ERROR_REQUIRED_FIELDS
+    }else{
+        return false
     }
 }
 
 module.exports = {
     listarModoPreparo,
     pegarIdModoPreparo,
+    pegarModoPreparoPorIdReceita,
     atualizarModoPreparo,
     inserirModoPreparo,
     deletarModoPreparo

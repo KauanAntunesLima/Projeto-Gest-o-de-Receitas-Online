@@ -400,6 +400,7 @@ const inserirReceita = async function (receita, contentType) {
                             }
 
                             await controllerModoPreparo.inserirModoPreparo(modoPreparoList, 'application/json')
+
                         }
 
                         //adiciona no Json de filme o ID que foi gerado no BD
@@ -481,23 +482,23 @@ const validarDadosReceita = async function (receita) {
         return MESSAGE.ERROR_REQUIRED_FIELDS
 
     } else if (receita.tempo_preparo == '' || receita.tempo_preparo == null || receita.tempo_preparo == undefined) {
-        MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [Receita] invalido!!!'
+        MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [tempo] invalido!!!'
         return MESSAGE.ERROR_REQUIRED_FIELDS
 
     } else if (receita.dificuldade == '' || receita.dificuldade == null || receita.dificuldade == undefined) {
-        MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [Receita] invalido!!!'
+        MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [dificuldade] invalido!!!'
         return MESSAGE.ERROR_REQUIRED_FIELDS
 
     } else if (receita.data_criacao == '' || receita.data_criacao == null || receita.data_criacao == undefined) {
-        MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [Receita] invalido!!!'
+        MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [data_criacao] invalido!!!'
         return MESSAGE.ERROR_REQUIRED_FIELDS
 
     } else if (receita.data_edicao == '') {
-        MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [Receita] invalido!!!'
+        MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [edicao] invalido!!!'
         return MESSAGE.ERROR_REQUIRED_FIELDS
 
     } else if (receita.imagem == '' || receita.imagem == null || receita.imagem == undefined || receita.imagem.length > 255) {
-        MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [Receita] invalido!!!'
+        MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [imagem] invalido!!!'
         return MESSAGE.ERROR_REQUIRED_FIELDS
     }
 }
