@@ -199,7 +199,19 @@ const pegarIdReceita = async function (id) {
                                 result[0].alergenos = []
                                 result[0].modo_preparo = []
 
-                                
+                                let modoDePreparo = await controllerModoPreparo.pegarModoPreparoPorIdReceita(result[0].id_receita)
+
+                                for (let modo_preparo of modoDePreparo.response.modo_preparo) {
+
+                                    let preparo = {
+                                        numero_passo: modo_preparo.numero_passo,
+                                        descricao: modo_preparo.descricao
+
+                                    }
+
+                                    result[0].modo_preparo.push(preparo)
+
+                                }
                                 for (id of infoIngredienteDaReceita.response.receita_ingredientes) {
 
                                     let ingredienteAchado = await controllerIngrediente.pegarIdIngrediente(id.id_ingredientes)
