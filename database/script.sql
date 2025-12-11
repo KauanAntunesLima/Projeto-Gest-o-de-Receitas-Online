@@ -195,11 +195,6 @@ INSERT INTO tbl_ingredientes_alergenos (id_alergenos, id_ingredientes) VALUES
 
 -- Receitas (1-5 originais, 6-12 novas)
 INSERT INTO tbl_receita (id_receita, id_usuario, titulo, descricao, tempo_preparo, dificuldade, data_criacao, data_edicao, imagem) VALUES
-(1, 1, 'Bolo de Cenoura', 'Bolo simples com cobertura de chocolate.', 40, 'facil', '2025-01-01', NULL, 'bolo.jpg'),
-(2, 2, 'Lasanha Tradicional', 'Receita italiana clássica.', 90, 'medio', '2025-01-02', NULL, 'lasanha.jpg'),
-(3, 3, 'Sushi', 'Prato japonês com arroz e peixe.', 60, 'dificil', '2025-01-03', NULL, 'sushi.jpg'),
-(4, 4, 'Torta de Limão', 'Sobremesa gelada com creme de limão.', 50, 'medio', '2025-01-04', NULL, 'torta.jpg'),
-(5, 5, 'Strogonoff de Frango', 'Clássico brasileiro de frango com creme.', 35, 'facil', '2025-01-05', NULL, 'strogonoff.jpg'),
 (6, 1, 'Penne ao Molho Branco com Presunto', 'Massa penne com molho cremoso e cubos de presunto.', 25, 'facil', curdate(), NULL, 'https://toquesenaistorage.blob.core.windows.net/tgsenai/Comidacompresunto.jpeg'),
 (7, 1, 'Crepioca de Queijo', 'Massa leve de tapioca com ovo recheada.', 15, 'facil', curdate(), NULL, 'https://toquesenaistorage.blob.core.windows.net/tgsenai/crepioca.jpeg'),
 (8, 1, 'Bolo Caseiro de Canela', 'Bolo fofinho para o café da tarde.', 45, 'facil', curdate(), NULL, 'https://toquesenaistorage.blob.core.windows.net/tgsenai/bolocaseiro.jpeg'),
@@ -210,11 +205,6 @@ INSERT INTO tbl_receita (id_receita, id_usuario, titulo, descricao, tempo_prepar
 
 -- Vinculo Receita -> Cozinha
 INSERT INTO tbl_receita_cozinha (id_receita, id_cozinha) VALUES
-(1, 1), -- Bolo Cenoura -> Brasileira
-(2, 2), -- Lasanha -> Italiana
-(3, 3), -- Sushi -> Japonesa
-(4, 5), -- Torta Limão -> Francesa
-(5, 1), -- Strogonoff -> Brasileira
 (6, 2), -- Penne -> Italiana
 (7, 1), -- Crepioca -> Brasileira
 (8, 1), -- Bolo Canela -> Brasileira
@@ -225,11 +215,6 @@ INSERT INTO tbl_receita_cozinha (id_receita, id_cozinha) VALUES
 
 -- Vinculo Receita -> Categoria
 INSERT INTO tbl_receita_categoria (id_receita, id_categoria) VALUES
-(1, 13), -- Bolo Cenoura -> Bolos e Tortas
-(2, 6),  -- Lasanha -> Massas
-(3, 2),  -- Sushi -> Pratos Principais
-(4, 12), -- Torta Limão -> Sobremesas
-(5, 8),  -- Strogonoff -> Frango
 (6, 6),  -- Penne -> Massas
 (7, 10), -- Crepioca -> Lanches
 (8, 13), -- Bolo Canela -> Bolos e Tortas
@@ -240,10 +225,6 @@ INSERT INTO tbl_receita_categoria (id_receita, id_categoria) VALUES
 
 -- Vinculo Receita -> Ingredientes
 INSERT INTO tbl_receita_ingredientes (id_receita, id_ingredientes, quantidade, unidade) VALUES
--- Receitas 1-5
-(1, 1, 200, 'g'), (1, 2, 100, 'g'),
-(2, 1, 300, 'g'),
-(5, 4, 250, 'g'), (5, 5, 150, 'g'),
 -- Receita 6 (Penne)
 (6, 6, 250, 'g'), (6, 7, 100, 'g'), (6, 8, 200, 'ml'),
 -- Receita 7 (Crepioca)
@@ -261,11 +242,6 @@ INSERT INTO tbl_receita_ingredientes (id_receita, id_ingredientes, quantidade, u
 
 -- Modo de Preparo
 INSERT INTO tbl_modo_preparo (id_receita, numero_passo, descricao) VALUES
--- Receitas 1-5 (Versão curta original)
-(1, 1, 'Misture a massa'), (1, 2, 'Asse no forno'),
-(2, 1, 'Monte as camadas'),
-(3, 1, 'Cozinhe o arroz'),
-(5, 1, 'Refogue o frango'),
 -- Receitas 6-12 (Versão detalhada 5 passos)
 -- Penne
 (6, 1, 'Coloque 2 litros de água a ferver com uma pitada generosa de sal.'),
@@ -312,11 +288,11 @@ INSERT INTO tbl_modo_preparo (id_receita, numero_passo, descricao) VALUES
 
 -- Notas (para receitas 1-5)
 INSERT INTO tbl_usuario_notas_receita (id_usuario, id_receita, nota, descricao) VALUES
-(1, 1, 4.5, 'Ficou ótimo!'),
-(2, 2, 5.0, 'Delicioso!'),
-(3, 3, 3.5, 'Difícil, mas bom.'),
-(4, 4, 4.0, 'Bem refrescante.'),
-(5, 5, 5.0, 'Perfeito!');
+(1, 6, 4.5, 'Ficou ótimo!'),
+(2, 7, 5.0, 'Delicioso!'),
+(3, 8, 3.5, 'Difícil, mas bom.'),
+(4, 9, 4.0, 'Bem refrescante.'),
+(5, 10, 5.0, 'Perfeito!');
 
 -- ==================================================================
 -- 3. VIEWS, PROCEDURES E TRIGGERS
@@ -508,3 +484,5 @@ BEGIN
 END $$
 
 DELIMITER ;
+
+select * from tbl_receita_cozinha;
