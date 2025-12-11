@@ -92,7 +92,7 @@ const atualizarCozinha = async function (cozinha, id, contentType) {
                 if (validarId.status_code == 200) {
                     cozinha.id_cozinha = parseInt(id)
                  
-                    //Chama a função do DAO para atualizar um novo filme
+                
                     let result = await cozinhaDAO.setUpdateCozinha(cozinha)
 
                     if (result) {
@@ -110,11 +110,11 @@ const atualizarCozinha = async function (cozinha, id, contentType) {
                     }
                 } else {
 
-                    return validarId // retorno da funçaõ de buscarFilmeId (400 ou 404 ou 500)
+                    return validarId 
                 }
 
             } else {
-                return validarDados //retorno da funçaõ de valodar dados do filme 400
+                return validarDados 
             }
         } else {
             return MESSAGE.ERROR_CONTENT_TYPE //415
@@ -208,7 +208,7 @@ const deletarCozinha = async function (id) {
 const validarDadosCozinha = async function (cozinha){
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
    
-    
+
      if(cozinha.nome == '' || cozinha.nome == null || cozinha.nome == undefined || cozinha.nome.length > 100){
         MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [Cozinha] invalido!!!'
         return MESSAGE.ERROR_REQUIRED_FIELDS

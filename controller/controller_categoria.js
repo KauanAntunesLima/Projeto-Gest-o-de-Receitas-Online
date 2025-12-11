@@ -140,7 +140,7 @@ const atualizarCategoria = async function (categoria, id, contentType) {
                 if (validarId.status_code == 200) {
                     categoria.id_categoria = parseInt(id)
 
-                    //Chama a função do DAO para atualizar um novo filme
+  
                     let result = await categoriaDAO.setUpdateCategoria(categoria)
 
                     if (result) {
@@ -193,7 +193,7 @@ const validarDadosCategoria = async function (categoria) {
 
 const deletarCategoria = async function (id) {
     
-    //apaga um filme filtrando pelo id
+
         let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
     
      try{

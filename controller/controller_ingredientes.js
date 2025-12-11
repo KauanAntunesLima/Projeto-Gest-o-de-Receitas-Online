@@ -92,7 +92,7 @@ const inserirIngrediente = async function (ingrediente, contentType) {
 
                 if (lastIdIngrediente) {
 
-                    //adiciona no Json de filme o ID que foi gerado no BD
+                   
                     ingrediente.id_ingredientes = lastIdIngrediente
                     MESSAGE.HEADER.status = MESSAGE.SUCCES_CREATED_ITEM.status
                     MESSAGE.HEADER.status_code = MESSAGE.SUCCES_CREATED_ITEM.status_code
@@ -125,19 +125,19 @@ const atualizarIngredientes = async function (ingredientes, id, contentType) {
         //validção do content-type
         if (String(contentType).toUpperCase() == 'APPLICATION/JSON') {
            
-            //chama a função de validação dos dados de cadastro
+ 
             let validarDados = await validarDadosIngrediente(ingredientes)
 
             if (!validarDados) {
               
-                //chama a função para validar a consistencia do id e verificar se existe no banco de dados
+           
                 let validarId = await pegarIdIngrediente(id)
 
                 //verifica se o id existe no BD, caso exista teremos o status 200
                 if (validarId.status_code == 200) {
                     ingredientes.id_ingredientes = parseInt(id)
                  
-                    //Chama a função do DAO para atualizar um novo filme
+             
                     let result = await ingredientesDAO.setUpdateIngredientes(ingredientes)
 
                     if (result) {
@@ -155,11 +155,11 @@ const atualizarIngredientes = async function (ingredientes, id, contentType) {
                     }
                 } else {
 
-                    return validarId // retorno da funçaõ de buscarFilmeId (400 ou 404 ou 500)
+                    return validarId 
                 }
 
             } else {
-                return validarDados //retorno da funçaõ de valodar dados do filme 400
+                return validarDados
             }
         } else {
             return MESSAGE.ERROR_CONTENT_TYPE //415

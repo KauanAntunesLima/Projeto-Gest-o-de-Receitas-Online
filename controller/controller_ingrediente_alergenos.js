@@ -106,22 +106,22 @@ const atualizarIngredienteAlergenos = async function (ingredienteAlergenos, id, 
 
     try {
 
-        //validção do content-type
+    
         if (String(contentType).toUpperCase() == 'APPLICATION/JSON') {
            
-            //chama a função de validação dos dados de cadastro
+ 
             let validarDados = await validarDadosIngredienteAlergenos(ingredienteAlergenos)
 
             if (!validarDados) {
               
-                //chama a função para validar a consistencia do id e verificar se existe no banco de dados
+         
                 let validarId = await pegarIngredientesAlergenosPorIdIdAlergenos(id)
 
-                //verifica se o id existe no BD, caso exista teremos o status 200
+              
                 if (validarId.status_code == 200) {
                     ingredienteAlergenos.id_alergenos = parseInt(id)
                  
-                    //Chama a função do DAO para atualizar um novo filme
+         
                     let result = await ingredienteAlergenosDAO.setUpdateIngredienteAlergenos(ingredienteAlergenos)
 
                     if (result) {
@@ -135,15 +135,15 @@ const atualizarIngredienteAlergenos = async function (ingredienteAlergenos, id, 
                         return MESSAGE.HEADER
                     } else {
 
-                        return MESSAGE.ERROR_INERNAL_SERVER_MODEL//500
+                        return MESSAGE.ERROR_INERNAL_SERVER_MODEL
                     }
                 } else {
 
-                    return validarId // retorno da funçaõ de buscarFilmeId (400 ou 404 ou 500)
+                    return validarId 
                 }
 
             } else {
-                return validarDados //retorno da funçaõ de valodar dados do filme 400
+                return validarDados 
             }
         } else {
             return MESSAGE.ERROR_CONTENT_TYPE //415
@@ -197,7 +197,7 @@ const inserirIngredientesAlergenos = async function (ingredienteAlergenos, conte
 }
 
 const deletarIngredientesAlergenos = async function (id) {
-    //apaga um filme filtrando pelo id
+
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
 
     try {

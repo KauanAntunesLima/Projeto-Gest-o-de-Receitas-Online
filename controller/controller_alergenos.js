@@ -107,19 +107,16 @@ const atualizarAlergenos = async function (alergenos, id, contentType) {
                     }
                 } else {
 
-                    return validarId // retorno da funçaõ de buscarFilmeId (400 ou 404 ou 500)
-                }
+                    return validarId 
 
-            } else {
-                return validarDados //retorno da funçaõ de valodar dados do filme 400
+            } 
             }
         } else {
             return MESSAGE.ERROR_CONTENT_TYPE //415
         }
-    } catch (error) {
-
+    }catch (error) {
         return MESSAGE_DEFAULT.ERROR_INTERNAL_SERVER_CONTROLLER //500
-    }
+    } 
 }
 
 const inserirAlergenos = async function (alergenos, contentType) {
@@ -165,7 +162,7 @@ const inserirAlergenos = async function (alergenos, contentType) {
 }
 
 const deletarAlergenos = async function (id) {
-    //apaga um filme filtrando pelo id
+
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
 
     try {
