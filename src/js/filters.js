@@ -121,6 +121,7 @@ function exibirResultados(receitas, termo) {
 
     if (!container) return;
 
+
     while (container.firstChild) {
         container.removeChild(container.firstChild);
     }
@@ -132,19 +133,16 @@ function exibirResultados(receitas, termo) {
         recipeCardsDiv.style.alignItems = 'center';
 
         const mensagem = document.createElement('p');
-        mensagem.textContent = `Nenhuma receita encontrada para "${termo}"`;
-        mensagem.style.color = '#666';
-        mensagem.style.padding = '40px';
 
         recipeCardsDiv.appendChild(mensagem);
         container.appendChild(recipeCardsDiv);
         return;
     }
 
-    const recipeCardsDiv = document.createElement('div');
-    recipeCardsDiv.className = 'recipe-cards';
 
-    receitas.forEach(receita => {
+    let receitaIndex = 0;
+
+    function criarCard(receita) {
         const card = document.createElement('div');
         card.className = 'card';
         card.style.cursor = 'pointer';
@@ -189,27 +187,31 @@ function exibirResultados(receitas, termo) {
         const recipeMeta = document.createElement('div');
         recipeMeta.className = 'recipe-meta';
 
-        const tempo = document.createElement('span');
-        tempo.className = 'tempo';
-        tempo.textContent = `⏱ ${receita.tempo_preparo}min`;
-
-        const dificuldade = document.createElement('span');
-        dificuldade.className = 'dificuldade';
-        dificuldade.textContent = `📊 ${receita.dificuldade}`;
-
-        recipeMeta.appendChild(tempo);
-        recipeMeta.appendChild(dificuldade);
         cardDescription.appendChild(descricao);
         cardDescription.appendChild(recipeMeta);
 
         card.appendChild(cardPreview);
         card.appendChild(cardDescription);
 
-        recipeCardsDiv.appendChild(card);
-    });
+        return card;
+    }
 
-    container.appendChild(recipeCardsDiv);
+    // Montar linhas de 4
+    while (receitaIndex < receitas.length) {
+        const rowDiv = document.createElement('div');
+        rowDiv.classList.add('recipe-cards');
+
+        for (let i = 0; i < 4; i++) {
+            if (receitaIndex < receitas.length) {
+                rowDiv.appendChild(criarCard(receitas[receitaIndex]));
+                receitaIndex++;
+            }
+        }
+
+        container.appendChild(rowDiv);
+    }
 }
+
 
 function abrirReceita(idReceita) {
     window.location.href = `recipe.html?id=${idReceita}`;

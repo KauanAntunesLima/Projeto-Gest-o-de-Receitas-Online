@@ -449,9 +449,33 @@ document.addEventListener('DOMContentLoaded', function() {
             id_cozinha: 1,
             id_categoria: 1,
             ingredientes: [],
-            alergenos: [],
-            categorias: [],
-            dificuldade: ''
+            modo_preparo: []
+        };
+
+        const horas = document.querySelector('.time-inputs input:nth-child(1)').value || 0;
+        const minutos = document.querySelector('.time-inputs input:nth-child(2)').value || 0;
+        const segundos = document.querySelector('.time-inputs input:nth-child(3)').value || 0;
+        dados.tempo_preparo = (parseInt(horas) * 60) + parseInt(minutos) + Math.ceil(parseInt(segundos) / 60);
+
+        const categoria = document.getElementById('categoria').value;
+        const dificuldade = document.getElementById('dificuldade').value;
+        const tipoCozinha = document.getElementById('tipo_cozinha').value;
+
+        const categoriaMap = {
+            'entradas': 1, 'pratos_principais': 2, 'acompanhamentos': 3, 'saladas': 4,
+            'sopas': 5, 'massas': 6, 'carnes': 7, 'frango': 8, 'peixes_e_frutos_do_mar': 9,
+            'lanches': 10, 'petiscos': 11, 'sobremesas': 12, 'bolos_e_tortas': 13,
+            'bebidas': 14, 'vegano': 15, 'vegetariano': 16, 'light__fit': 17,
+            'café_da_manhã': 18, 'brunch': 19
+        };
+
+        const cozinhaMap = {
+            'brasileira': 1, 'japonesa': 3, 'italiana': 2,
+            'mexicana': 4, 'francesa': 5, 'Outra': 6,
+        };
+
+        const dificuldadeMap = {
+            'facil': 'facil', 'medio': 'medio', 'dificil': 'dificil'
         };
 
         if (categoriaMap[categoria]) {

@@ -44,7 +44,7 @@ export function criarCard(receita) {
     const ratioDiv = document.createElement('div');
     ratioDiv.classList.add('ratio');
 
-    const starPath = './src/assets/img/Star 5.svg';
+    const starPath = '/src/assets/img/Star 5.svg';
     for (let i = 0; i < 5; i++) {
         const star = document.createElement('img');
         star.src = starPath;
@@ -156,48 +156,78 @@ export async function initRecipeDetails() {
     if (!id) return;
 
     const data = await fetchDados(`http://localhost:8080/v1/toque_gourmet/receita/${id}`);
-    let receita = data && data.receita || (data && data.response && data.response.receita && data.response.receita[0]) || data;
-
+    let receita = data?.receita || data?.response?.receita?.[0] || data;
     if (!receita) return;
 
+    // IMAGEM
     const bgImg = document.getElementById('recipe-bg-img');
-    if (bgImg) {
-        bgImg.src = receita.imagem
-    }
+    if (bgImg) bgImg.src = receita.imagem;
 
+    // TÍTULO
     const titleEl = document.getElementById('recipe-title');
-    if(titleEl) {
-        titleEl.textContent = receita.titulo || receita.nome;
-    }
+    if (titleEl) titleEl.textContent = receita.titulo;
 
+    // DIFICULDADE
     const diffEl = document.getElementById('recipe-difficulty-text');
-    if(diffEl) {
-        diffEl.textContent = receita.dificuldade || 'Média';
-    }
+    if (diffEl) diffEl.textContent = receita.dificuldade;
 
-    const ingredientsContainer = document.getElementById('ingredients-list');
+    // ================= INGREDIENTES =================
+    const ingredientsContainer = document.querySelector('.ingredients');
     if (ingredientsContainer && receita.ingredientes) {
-        clearContainer(ingredientsContainer);
+
+        // Remove tudo após o <h2>
+        [...ingredientsContainer.querySelectorAll('.ingredient-info')].forEach(el => el.remove());
 
         receita.ingredientes.forEach(ing => {
             const nomeIng = ing.nome || ing.nome_ingrediente || 'Ingrediente';
             const qtd = ing.quantidade || '';
             const medida = ing.medida || ing.unidade_medida || '';
 
-            ingredientsContainer.appendChild(criarIngredientInfo(nomeIng, qtd, medida));
+            ingredientsContainer.appendChild(
+                criarIngredientInfo(nomeIng, qtd, medida)
+            );
         });
     }
 
+    // ================= MODO DE PREPARO =================
     const stepsContainer = document.getElementById('steps-list');
     if (stepsContainer && receita.modo_preparo) {
         clearContainer(stepsContainer);
 
-        let passos = Array.isArray(receita.modo_preparo) ?
-            receita.modo_preparo :
-            receita.modo_preparo.split('.').filter(p => p.trim() !== '');
+        const passos = Array.isArray(receita.modo_preparo)
+            ? receita.modo_preparo
+            : receita.modo_preparo.split('.').filter(p => p.trim());
 
         passos.forEach(passo => {
             stepsContainer.appendChild(criarStep(passo));
         });
+    }
+
+    // =============================================================
+    // FUNÇÃO compatível com a estrutura REAL da página
+    // =============================================================
+    function criarIngredientInfo(nome, quantidade, medida) {
+        const wrapper = document.createElement('div');
+        wrapper.classList.add('ingredient-info');
+
+        const nomeSpan = document.createElement('span');
+        nomeSpan.textContent = nome;
+
+        const unityDiv = document.createElement('div');
+        unityDiv.classList.add('unity-info');
+
+        const qtdSpan = document.createElement('span');
+        qtdSpan.textContent = `Quantidade: ${quantidade}`;
+
+        const medidaSpan = document.createElement('span');
+        medidaSpan.textContent = `Unidade: ${medida}`;
+
+        unityDiv.appendChild(qtdSpan);
+        unityDiv.appendChild(medidaSpan);
+
+        wrapper.appendChild(nomeSpan);
+        wrapper.appendChild(unityDiv);
+
+        return wrapper;
     }
 }

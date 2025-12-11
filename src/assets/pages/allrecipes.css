@@ -44,6 +44,7 @@ main {
     border-radius: 10px;
     width: 87px;
     height: 46px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 
 .filter-choices {
@@ -53,19 +54,23 @@ main {
     height: 0px;
     background-color: var(--cor-primaria);
     border-radius: 10px;
-    width: 100px;
+    padding: 0px;
+    width: 210px;
     transition: 0.8s;
     overflow: hidden;
+    max-height: 0px;
+    min-height: 0px;
 }
 
 .filter-options:hover .filter-choices {
-
+    background-color: var(--cor-secundaria);
     transition: 0.6s;
-    width: 200px;
-    height: 450px;
+    width: 210px;
     padding: 20px;
+    min-height: 450px;
     overflow-y: auto;
     scrollbar-width: none;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 
 .filtro-group {
@@ -109,7 +114,7 @@ main {
     border: 1px solid #ccc;
     border-radius: 5px;
     background-color: white;
-    color: #333;
+    color: #000000;
     cursor: pointer;
     display: flex;
     justify-content: space-between;
