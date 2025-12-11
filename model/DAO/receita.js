@@ -47,7 +47,6 @@ const setInsertReceita = async function (receita){
         tempo_preparo,
         dificuldade,
         data_criacao,
-        data_edicao,
         imagem)
         values(
         ${receita.id_usuario},
@@ -56,16 +55,17 @@ const setInsertReceita = async function (receita){
         ${receita.tempo_preparo},
         '${receita.dificuldade}',
         '${receita.data_criacao}',
-        '${receita.data_edicao}',
         '${receita.imagem}')`
 
         let result = await prisma.$executeRawUnsafe(sql)
+        console.log(result)
         if (result){
             return true
         }else{
             return false
         }
     }catch(error){
+        console.log(error)
         return false
     }
 }

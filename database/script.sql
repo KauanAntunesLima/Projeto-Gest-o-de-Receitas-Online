@@ -1,10 +1,9 @@
 CREATE DATABASE db_gestao_receita_ds2t;
-
 USE db_gestao_receita_ds2t;
 
 CREATE TABLE tbl_receita(
-    id_receita      INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    id_usuario		INT NOT NULL,
+    id_receita  INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    id_usuario  INT NOT NULL,
     titulo          VARCHAR(100) NOT NULL,
     descricao       TEXT NOT NULL,
     tempo_preparo   INT NOT NULL,
@@ -46,7 +45,6 @@ INSERT INTO tbl_cozinha (nome) VALUES
 ('Mexicana'),
 ('Francesa');
 
-
 CREATE TABLE tbl_usuario(
     id_usuario  INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     nome        VARCHAR(100) NOT NULL,
@@ -61,7 +59,6 @@ INSERT INTO tbl_usuario (nome, email, senha, imagem) VALUES
 ('João Pedro', 'joao@email.com', 'senha1', 'user3.png'),
 ('Lucas Rocha', 'lucas@email.com', 'senha2', 'user4.png'),
 ('Ana Souza', 'ana@email.com', 'pass123', 'user5.png');
-
 
 CREATE TABLE tbl_categoria(
     id_categoria INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -81,10 +78,7 @@ CREATE TABLE tbl_modo_preparo(
     id_receita      INT NOT NULL,
     numero_passo    INT NOT NULL,
     descricao       TEXT NOT NULL,
-
-    CONSTRAINT FK_MODO_PREPARO_RECEITA
-    FOREIGN KEY (id_receita)
-    REFERENCES tbl_receita(id_receita)
+    CONSTRAINT FK_MODO_PREPARO_RECEITA FOREIGN KEY (id_receita) REFERENCES tbl_receita(id_receita)
 );
 
 INSERT INTO tbl_modo_preparo (id_receita, numero_passo, descricao) VALUES
@@ -113,14 +107,8 @@ CREATE TABLE tbl_receita_ingredientes (
     id_ingredientes         INT NOT NULL,
     quantidade              DECIMAL(10,2) NOT NULL,
     unidade                 VARCHAR(20) NOT NULL,
-
-    CONSTRAINT FK_RECEITA_INGREDIENTES_RECEITA
-        FOREIGN KEY (id_receita)
-        REFERENCES tbl_receita(id_receita),
-
-    CONSTRAINT FK_INGREDIENTES_RECEITA_INGREDIENTES
-        FOREIGN KEY (id_ingredientes)
-        REFERENCES tbl_ingredientes(id_ingredientes)
+    FOREIGN KEY (id_receita) REFERENCES tbl_receita(id_receita),
+    FOREIGN KEY (id_ingredientes) REFERENCES tbl_ingredientes(id_ingredientes)
 );
 
 INSERT INTO tbl_receita_ingredientes (id_receita, id_ingredientes, quantidade, unidade) VALUES
@@ -130,21 +118,14 @@ INSERT INTO tbl_receita_ingredientes (id_receita, id_ingredientes, quantidade, u
 (5, 4, 250, 'g'),
 (5, 5, 150, 'g');
 
-
 CREATE TABLE tbl_usuario_notas_receita(
     id_usuario_notas_receita INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     id_usuario               INT NOT NULL,
     id_receita               INT NOT NULL,
     nota                     DECIMAL(2,1) NOT NULL,
     descricao                VARCHAR(200) NOT NULL,
-    
-    CONSTRAINT FK_USUARIO_NOTAS_RECEITA_USUARIO
-        FOREIGN KEY (id_usuario)
-        REFERENCES tbl_usuario(id_usuario),
-    
-    CONSTRAINT FK_RECEITA_NOTAS_USUARIO_RECEITA
-        FOREIGN KEY (id_receita)
-        REFERENCES tbl_receita(id_receita)
+    FOREIGN KEY (id_usuario) REFERENCES tbl_usuario(id_usuario),
+    FOREIGN KEY (id_receita) REFERENCES tbl_receita(id_receita)
 );
 
 INSERT INTO tbl_usuario_notas_receita (id_usuario, id_receita, nota, descricao) VALUES
@@ -158,76 +139,36 @@ CREATE TABLE tbl_ingredientes_alergenos(
     id_ingredientes_alergenos INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     id_alergenos              INT NOT NULL,
     id_ingredientes           INT NOT NULL,
-    
-    CONSTRAINT FK_INGREDIENTES_ALERGENOS_INGREDIENTES
-        FOREIGN KEY (id_ingredientes)
-        REFERENCES tbl_ingredientes(id_ingredientes),
-    
-    CONSTRAINT FK_ALERGENOS_INGREDIENTES_ALERGENOS
-        FOREIGN KEY (id_alergenos)
-        REFERENCES tbl_alergenos(id_alergenos)
+    FOREIGN KEY (id_ingredientes) REFERENCES tbl_ingredientes(id_ingredientes),
+    FOREIGN KEY (id_alergenos) REFERENCES tbl_alergenos(id_alergenos)
 );
 
-INSERT INTO tbl_ingredientes_alergenos (id_alergenos, id_ingredientes)
-VALUES (1, 1);
-
-INSERT INTO tbl_ingredientes_alergenos (id_alergenos, id_ingredientes)
-VALUES (2, 2);
-
-INSERT INTO tbl_ingredientes_alergenos (id_alergenos, id_ingredientes)
-VALUES (3, 3);
-
-INSERT INTO tbl_ingredientes_alergenos (id_alergenos, id_ingredientes)
-VALUES (4, 4);
-
-INSERT INTO tbl_ingredientes_alergenos (id_alergenos, id_ingredientes)
-VALUES (5, 5);
-
-
+INSERT INTO tbl_ingredientes_alergenos (id_alergenos, id_ingredientes) VALUES
+(1, 1), (2, 2), (3, 3), (4, 4), (5, 5);
 
 CREATE TABLE tbl_receita_cozinha(
     id_receita_cozinha INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     id_receita         INT NOT NULL,
     id_cozinha         INT NOT NULL,
-    
-    CONSTRAINT FK_RECEITA_COZINHA_RECEITA
-        FOREIGN KEY (id_receita)
-        REFERENCES tbl_receita(id_receita),
-    
-    CONSTRAINT FK_COZINHA_RECEITA_COZINHA
-        FOREIGN KEY (id_cozinha)
-        REFERENCES tbl_cozinha(id_cozinha)
+    FOREIGN KEY (id_receita) REFERENCES tbl_receita(id_receita),
+    FOREIGN KEY (id_cozinha) REFERENCES tbl_cozinha(id_cozinha)
 );
 
 INSERT INTO tbl_receita_cozinha (id_receita, id_cozinha) VALUES
-(1, 1),
-(2, 2),
-(3, 3),
-(5, 1),
-(4, 5);
+(1, 1),(2, 2),(3, 3),(5, 1),(4, 5);
 
 CREATE TABLE tbl_receita_categoria(
     id_receita_categoria INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     id_receita INT NOT NULL,
     id_categoria INT NOT NULL,
-
-    CONSTRAINT FK_RECEITA_CATEGORIA_RECEITA
-        FOREIGN KEY (id_receita)
-        REFERENCES tbl_receita(id_receita),
-
-    CONSTRAINT FK_RECEITA_CATEGORIA_CATEGORIA
-        FOREIGN KEY (id_categoria)
-        REFERENCES tbl_categoria(id_categoria)
+    FOREIGN KEY (id_receita) REFERENCES tbl_receita(id_receita),
+    FOREIGN KEY (id_categoria) REFERENCES tbl_categoria(id_categoria)
 );
 
 INSERT INTO tbl_receita_categoria (id_receita, id_categoria) VALUES
-(1, 1),  
-(2, 2),  
-(3, 3),  
-(4, 1),  
-(5, 4);  
+(1, 1),(2, 2),(3, 3),(4, 1),(5, 4);
 
--- Criação das minhas VIEW.
+-- VIEWS -------------------------
 
 CREATE VIEW vw_receitas_completas AS
 SELECT
@@ -243,79 +184,47 @@ SELECT
     cz.nome AS cozinha,
     cat.nome AS categoria
 FROM tbl_receita r
-LEFT JOIN tbl_receita_ingredientes ri 
-       ON ri.id_receita = r.id_receita
-LEFT JOIN tbl_ingredientes i 
-       ON i.id_ingredientes = ri.id_ingredientes
-LEFT JOIN tbl_receita_cozinha rc 
-       ON rc.id_receita = r.id_receita
-LEFT JOIN tbl_cozinha cz 
-       ON cz.id_cozinha = rc.id_cozinha
-LEFT JOIN tbl_receita_categoria rcat
-       ON rcat.id_receita = r.id_receita
-LEFT JOIN tbl_categoria cat
-       ON cat.id_categoria = rcat.id_categoria;
+LEFT JOIN tbl_receita_ingredientes ri  ON ri.id_receita = r.id_receita
+LEFT JOIN tbl_ingredientes i           ON i.id_ingredientes = ri.id_ingredientes
+LEFT JOIN tbl_receita_cozinha rc       ON rc.id_receita = r.id_receita
+LEFT JOIN tbl_cozinha cz               ON cz.id_cozinha = rc.id_cozinha
+LEFT JOIN tbl_receita_categoria rcat   ON rcat.id_receita = r.id_receita
+LEFT JOIN tbl_categoria cat            ON cat.id_categoria = rcat.id_categoria;
 
 CREATE VIEW vw_receita_ingredientes AS
-SELECT
-	r.id_receita,
-    r.titulo,
-    i.nome AS ingrediente,
-    ri.quantidade,
-    ri.unidade
+SELECT r.id_receita, r.titulo, i.nome AS ingrediente, ri.quantidade, ri.unidade
 FROM tbl_receita r
 JOIN tbl_receita_ingredientes ri ON ri.id_receita = r.id_receita
-JOIN tbl_ingredientes i ON i.id_ingredientes = ri.id_ingredientes;
+JOIN tbl_ingredientes i          ON i.id_ingredientes = ri.id_ingredientes;
 
 CREATE VIEW vw_modo_preparo AS
-SELECT
-	m.id_receita,
-    r.titulo,
-    m.numero_passo,
-    m.descricao
+SELECT m.id_receita, r.titulo, m.numero_passo, m.descricao
 FROM tbl_modo_preparo m
 JOIN tbl_receita r ON r.id_receita = m.id_receita
 ORDER BY m.id_receita, m.numero_passo;
 
-
 CREATE VIEW vw_alergenos_por_ingredientes AS
-SELECT 
-    i.id_ingredientes,
-    i.nome AS ingrediente,
-    a.nome AS alergeno
+SELECT i.id_ingredientes, i.nome AS ingrediente, a.nome AS alergeno
 FROM tbl_ingredientes i
-LEFT JOIN tbl_ingredientes_alergenos ia 
-       ON ia.id_ingredientes = i.id_ingredientes
-LEFT JOIN tbl_alergenos a 
-       ON a.id_alergenos = ia.id_alergenos;
+LEFT JOIN tbl_ingredientes_alergenos ia ON ia.id_ingredientes = i.id_ingredientes
+LEFT JOIN tbl_alergenos a ON a.id_alergenos = ia.id_alergenos;
 
 CREATE VIEW vw_notas_receitas AS
-SELECT
-	u.nome 	 	AS usuario,
-    r.titulo 	AS receita,
-    n.nota,
-    n.descricao AS comentario
+SELECT u.nome AS usuario, r.titulo AS receita, n.nota, n.descricao AS comentario
 FROM tbl_usuario_notas_receita n
 JOIN tbl_usuario u ON u.id_usuario = n.id_usuario
 JOIN tbl_receita r ON r.id_receita = n.id_receita;
 
-
--- Criação dos meus filtros
+-- PROCEDURES -----------------------
 
 DELIMITER $$
 
 CREATE PROCEDURE filtrar_por_ingrediente(IN p_ingrediente VARCHAR(100))
 BEGIN 
-    SELECT
-        r.id_receita,
-        r.titulo,
-        r.descricao,
-        i.nome AS ingrediente
+    SELECT r.id_receita, r.titulo, r.descricao, i.nome AS ingrediente
     FROM tbl_receita r
-    JOIN tbl_receita_ingredientes ri 
-        ON r.id_receita = ri.id_receita
-    JOIN tbl_ingredientes i 
-        ON ri.id_ingredientes = i.id_ingredientes
+    JOIN tbl_receita_ingredientes ri ON r.id_receita = ri.id_receita
+    JOIN tbl_ingredientes i ON ri.id_ingredientes = i.id_ingredientes
     WHERE i.nome LIKE CONCAT('%', p_ingrediente, '%');
 END $$
 
@@ -325,56 +234,36 @@ DELIMITER $$
 
 CREATE PROCEDURE filtrar_por_categoria(IN p_categoria VARCHAR(100))
 BEGIN
-	SELECT
-		r.titulo,
-        c.nome AS categoria,
-        r.dificuldade,
-        r.tempo_preparo
-	FROM
-		tbl_receita r
-	JOIN
-		tbl_receita_categoria rc ON r.id_receita = rc.id_receita
-	JOIN
-		tbl_categoria c ON rc.id_categoria = c.id_categoria
-	WHERE
-		c.nome = p_categoria
-	GROUP BY
-		r.id_receita, r.titulo, c.nome, r.dificuldade, r.tempo_preparo;
+    SELECT r.titulo, c.nome AS categoria, r.dificuldade, r.tempo_preparo
+    FROM tbl_receita r
+    JOIN tbl_receita_categoria rc ON r.id_receita = rc.id_receita
+    JOIN tbl_categoria c ON rc.id_categoria = c.id_categoria
+    WHERE c.nome = p_categoria
+    GROUP BY r.id_receita, r.titulo, c.nome, r.dificuldade, r.tempo_preparo;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
-CREATE PROCEDURE filtrar_por_dificuldade(IN p_dificuldade ENUM('facil', 'medio', 'dificil'))
+CREATE PROCEDURE filtrar_por_dificuldade(IN p_dificuldade VARCHAR(10))
 BEGIN
-    SELECT
-        titulo,
-        dificuldade,
-        tempo_preparo
-    FROM
-        tbl_receita
-    WHERE
-        dificuldade = p_dificuldade
-    ORDER BY
-        tempo_preparo ASC;
+    SELECT titulo, dificuldade, tempo_preparo
+    FROM tbl_receita
+    WHERE dificuldade = p_dificuldade
+    ORDER BY tempo_preparo ASC;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
 CREATE PROCEDURE filtrar_por_tempo_maximo(IN p_tempo_maximo INT)
 BEGIN
-    SELECT 
-        titulo, 
-        tempo_preparo 
-    FROM 
-        tbl_receita
-    WHERE 
-        tempo_preparo <= p_tempo_maximo
-    ORDER BY 
-        tempo_preparo ASC;
+    SELECT titulo, tempo_preparo
+    FROM tbl_receita
+    WHERE tempo_preparo <= p_tempo_maximo
+    ORDER BY tempo_preparo ASC;
 END $$
 
 DELIMITER ;
@@ -383,28 +272,21 @@ DELIMITER $$
 
 CREATE PROCEDURE filtrar_por_cozinha(IN p_cozinha VARCHAR(100))
 BEGIN
-	SELECT
-		r.titulo,
-        cz.nome AS cozinha
-	FROM 
-		tbl_receita r
-	JOIN
-		tbl_receita_cozinha rc ON r.id_receita = rc.id_receita
-	JOIN	
-		tbl_cozinha cz ON rc.id_cozinha = cz.id_cozinha
-	WHERE
-		cz.nome = p_cozinha 
-	GROUP BY
-		r.id_receita, r.titulo, cz.nome;
+    SELECT r.titulo, cz.nome AS cozinha
+    FROM tbl_receita r
+    JOIN tbl_receita_cozinha rc ON r.id_receita = rc.id_receita
+    JOIN tbl_cozinha cz ON rc.id_cozinha = cz.id_cozinha
+    WHERE cz.nome = p_cozinha
+    GROUP BY r.id_receita, r.titulo, cz.nome;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
 CREATE PROCEDURE filtrar_excluir_alergeno(IN p_alergeno VARCHAR(100))
 BEGIN
-    SELECT r.id_receita, r.titulo, r.descricao  
+    SELECT r.id_receita, r.titulo, r.descricao
     FROM tbl_receita r
     WHERE r.id_receita NOT IN (
         SELECT ri.id_receita
@@ -417,44 +299,57 @@ END $$
 
 DELIMITER ;
 
--- Criação das minhas TRIGGERS    
-    
+-- TRIGGERS --------------------------
+
 DELIMITER $$
 
-CREATE  TRIGGER trg_delete_receita_relations 
+CREATE TRIGGER trg_delete_receita_relations 
 BEFORE DELETE ON tbl_receita
 FOR EACH ROW
 BEGIN 
-	DELETE FROM tbl_modo_preparo 		  WHERE id_receita = OLD.id_receita;
-    DELETE FROM tbl_receita_ingredientes  WHERE id_receita = OLD.id_receita;
+    DELETE FROM tbl_modo_preparo WHERE id_receita = OLD.id_receita;
+    DELETE FROM tbl_receita_ingredientes WHERE id_receita = OLD.id_receita;
     DELETE FROM tbl_usuario_notas_receita WHERE id_receita = OLD.id_receita;
-	DELETE FROM tbl_receita_cozinha		  WHERE id_receita = OLD.id_receita;
+    DELETE FROM tbl_receita_cozinha WHERE id_receita = OLD.id_receita;
 END $$
+
+DELIMITER ;
+
+DELIMITER $$
 
 CREATE TRIGGER trg_delete_ingredientes_relations
 BEFORE DELETE ON tbl_ingredientes
 FOR EACH ROW
 BEGIN
-	DELETE FROM tbl_receita_ingredientes   WHERE id_ingredientes = OLD.id_ingredientes;
+    DELETE FROM tbl_receita_ingredientes WHERE id_ingredientes = OLD.id_ingredientes;
     DELETE FROM tbl_ingredientes_alergenos WHERE id_ingredientes = OLD.id_ingredientes;
 END $$
 
+DELIMITER ;
+
+DELIMITER $$
 
 CREATE TRIGGER trg_delete_alergenos_relations
 BEFORE DELETE ON tbl_alergenos
 FOR EACH ROW 
 BEGIN
-	DELETE FROM tbl_ingredientes_alergenos WHERE id_alergenos = OLD.id_alergenos;
+    DELETE FROM tbl_ingredientes_alergenos WHERE id_alergenos = OLD.id_alergenos;
 END $$
 
+DELIMITER ;
+
+DELIMITER $$
 
 CREATE TRIGGER trg_delete_usuario_relations
 BEFORE DELETE ON tbl_usuario
 FOR EACH ROW
 BEGIN
-	DELETE FROM tbl_usuario_notas_receita WHERE id_usuario = OLD.id_usuario;
+    DELETE FROM tbl_usuario_notas_receita WHERE id_usuario = OLD.id_usuario;
 END $$
 
+DELIMITER ;
+
+DELIMITER $$
 
 CREATE TRIGGER trg_delete_categoria_relations
 BEFORE DELETE ON tbl_categoria
@@ -462,6 +357,10 @@ FOR EACH ROW
 BEGIN
     DELETE FROM tbl_receita_categoria WHERE id_categoria = OLD.id_categoria;
 END $$
+
+DELIMITER ;
+
+DELIMITER $$
 
 CREATE TRIGGER trg_delete_cozinha_relations
 BEFORE DELETE ON tbl_cozinha
@@ -471,13 +370,3 @@ BEGIN
 END $$
 
 DELIMITER ;
-
-
-
-
-
-
-
-
-
-

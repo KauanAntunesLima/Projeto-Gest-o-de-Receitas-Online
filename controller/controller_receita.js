@@ -316,23 +316,33 @@ const inserirReceita = async function (receita, contentType) {
 
             if (!dadosValidos) {
 
-                let result = await receitaDAO.setInsertReceita(receita)
+                let novaReceita = {
+                    id_usuario: receita.id_usuario,
+                    titulo: receita.titulo,
+                    descricao: receita.descricao,
+                    tempo_preparo: receita.tempo_preparo,
+                    dificuldade: receita.dificuldade,
+                    data_criacao: receita.data_criacao,
+                    imagem: receita.imagem
+                }
+
+                let result = await receitaDAO.setInsertReceita(novaReceita)
                 if (result) {
-                    let lastIdReceita = await receitaDAO.getSelectLastIdReceita(receita)
+                    let lastIdReceita = await receitaDAO.getSelectLastIdReceita()
 
                     if (lastIdReceita) {
-                        
 
-                            await controllerReceitaCozinha.inserirReceitaCozinha({
-                                id_receita: lastIdReceita,
-                                id_cozinha: receita.id_cozinha
-                            })  
 
-                            let batata = await controllerReceitaCategoria.inserirReceitaCategoria({
-                                id_receita: lastIdReceita,
-                                id_categoria: receita.id_categoria
-                            }, 'application/json')
-                            console.log(batata)
+                        await controllerReceitaCozinha.inserirReceitaCozinha({
+                            id_receita: lastIdReceita,
+                            id_cozinha: receita.id_cozinha
+                        })
+
+                        await controllerReceitaCategoria.inserirReceitaCategoria({
+                            id_receita: lastIdReceita,
+                            id_categoria: receita.id_categoria
+                        }, 'application/json')
+
 
                         for (let ingrediente of receita.ingredientes) {
 

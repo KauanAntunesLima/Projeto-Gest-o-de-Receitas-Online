@@ -24,7 +24,6 @@ const uploadFiles = async function(file){
     let lengthFile = Number(file.size) / 1024
 
 
-    console.log (lengthFile)
     //Validação do tipo de extensão e do tamanho do arquivo
     if(arrayAllowTypes.indexOf(mimeType) != -1 && lengthFile.toFixed(1) <= 5000){
 
@@ -47,7 +46,6 @@ const uploadFiles = async function(file){
             body: file.buffer
         })
 
-        console.log(response)
         if(response.status == 201)
             return urlFile
         else

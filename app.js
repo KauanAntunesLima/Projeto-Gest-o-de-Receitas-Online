@@ -8,9 +8,21 @@
 const express = require('express')
 const cors = require('cors')
 const bodyParser = require('body-parser')
+const multer = require('multer')
 
 const bodyParserJSON = bodyParser.json()
 const app = express()
+
+// Configuração do Multer para upload de arquivos
+const upload = multer({
+    storage: multer.memoryStorage(),
+    limits: {
+        fileSize: 5 * 1024 * 1024 // 5MB em bytes
+    }
+})
+
+// Import do controller de upload para Azure
+const controllerUploadAzure = require('./upload/controller_upload_azure.js')
 
 const PORT = process.PORT || 8080
 
@@ -42,7 +54,7 @@ app.get('/v1/toque_gourmet/receita', cors(), async function (req, res) {
     res.json(receita)
 })
 
-app.get('/v1/toque_gourmet/receita/:id', cors(), async function (req,res) {
+app.get('/v1/toque_gourmet/receita/:id', cors(), async function (req, res) {
 
     let idReceita = req.params.id
     let receita = await controllerReceita.pegarIdReceita(idReceita)
@@ -50,8 +62,8 @@ app.get('/v1/toque_gourmet/receita/:id', cors(), async function (req,res) {
     res.json(receita)
 })
 
-//Ambiente POST
-app.post ('/v1/toque_gourmet/receita', cors(), bodyParserJSON, async function (req, res) {
+//Ambiente POST (sem imagem)
+app.post('/v1/toque_gourmet/receita', cors(), bodyParserJSON, async function (req, res) {
 
     let dadosBody = req.body
     let contentType = req.headers['content-type']
@@ -59,10 +71,60 @@ app.post ('/v1/toque_gourmet/receita', cors(), bodyParserJSON, async function (r
     let receita = await controllerReceita.inserirReceita(dadosBody, contentType)
     res.status(receita.status_code)
     res.json(receita)
-    
+
 })
 
-//ambiente PUT
+//Ambiente POST com upload de imagem para Azure
+app.post('/v1/toque_gourmet/receita/upload', cors(), upload.single('imagem'), async function (req, res) {
+
+    try {
+        // Verifica se foi enviado um arquivo
+        if (!req.file) {
+            return res.status(400).json({
+                status: false,
+                status_code: 400,
+                message: 'É necessário enviar uma imagem',
+                error: 'Nenhum arquivo enviado'
+            })
+        }
+
+        // Faz upload para Azure
+        let urlImagem = await controllerUploadAzure.uploadFiles(req.file)
+
+        if (!urlImagem) {
+            return res.status(400).json({
+                status: false,
+                status_code: 400,
+                message: 'Erro ao fazer upload da imagem',
+                error: 'Falha no upload para Azure'
+            })
+        }
+
+        console.log('Imagem enviada para:', urlImagem)
+
+        // Adiciona a URL da imagem aos dados da receita
+        let dadosBody = JSON.parse(req.body.dados)
+        dadosBody.imagem = urlImagem
+
+        // Insere a receita no banco com a URL da imagem
+        let contentType = 'application/json'
+        let receita = await controllerReceita.inserirReceita(dadosBody, contentType)
+
+        res.status(receita.status_code)
+        res.json(receita)
+
+    } catch (error) {
+        console.error('Erro no insert com upload:', error)
+        res.status(500).json({
+            status: false,
+            status_code: 500,
+            message: 'Erro interno do servidor',
+            error: error.message
+        })
+    }
+})
+
+//ambiente PUT (sem imagem)
 
 app.put('/v1/toque_gourmet/receita/:id', cors(), bodyParserJSON, async function (req, res) {
 
@@ -75,9 +137,60 @@ app.put('/v1/toque_gourmet/receita/:id', cors(), bodyParserJSON, async function 
     res.json(receita)
 })
 
+//ambiente PUT com upload de imagem para Azure
+app.put('/v1/toque_gourmet/receita/upload/:id', cors(), upload.single('imagem'), async function (req, res) {
+
+    try {
+        // Verifica se foi enviado um arquivo
+        if (!req.file) {
+            return res.status(400).json({
+                status: false,
+                status_code: 400,
+                message: 'É necessário enviar uma imagem',
+                error: 'Nenhum arquivo enviado'
+            })
+        }
+
+        // Faz upload para Azure
+        let urlImagem = await controllerUploadAzure.uploadFiles(req.file)
+
+        if (!urlImagem) {
+            return res.status(400).json({
+                status: false,
+                status_code: 400,
+                message: 'Erro ao fazer upload da imagem',
+                error: 'Falha no upload para Azure'
+            })
+        }
+
+        console.log('Imagem atualizada para:', urlImagem)
+
+        // Adiciona a URL da imagem aos dados da receita
+        let dadosReceita = JSON.parse(req.body.dados)
+        dadosReceita.imagem = urlImagem
+        dadosReceita.id_receita = req.params.id
+
+        // Atualiza a receita no banco com a nova URL da imagem
+        let contentType = 'application/json'
+        let receita = await controllerReceita.atualizarReceita(dadosReceita, req.params.id, contentType)
+
+        res.status(receita.status_code)
+        res.json(receita)
+
+    } catch (error) {
+        console.error('Erro no update com upload:', error)
+        res.status(500).json({
+            status: false,
+            status_code: 500,
+            message: 'Erro interno do servidor',
+            error: error.message
+        })
+    }
+})
+
 
 //Buscar receitas por nome
-app.get('/v1/toque_gourmet/receita/nome/:nome', cors(), async function(request, response){
+app.get('/v1/toque_gourmet/receita/nome/:nome', cors(), async function (request, response) {
 
     let nome = request.params.nome
     let receita = await controllerReceita.buscarReceitaPorNome(nome)
@@ -86,7 +199,7 @@ app.get('/v1/toque_gourmet/receita/nome/:nome', cors(), async function(request, 
 })
 
 //Filtrar receitas com múltiplos parâmetros
-app.post('/v1/toque_gourmet/receita/filtro', cors(), bodyParserJSON, async function(request, response){
+app.post('/v1/toque_gourmet/receita/filtro', cors(), bodyParserJSON, async function (request, response) {
 
     let filtros = request.body
 
@@ -98,7 +211,7 @@ app.post('/v1/toque_gourmet/receita/filtro', cors(), bodyParserJSON, async funct
 
 // ambiente delete
 
-app.delete('/v1/toque_gourmet/receita/:id', cors(), async function(request, response){
+app.delete('/v1/toque_gourmet/receita/:id', cors(), async function (request, response) {
 
     let idReceita = request.params.id
     let receita = await controllerReceita.deletarReceita(idReceita)
@@ -112,12 +225,12 @@ app.delete('/v1/toque_gourmet/receita/:id', cors(), async function(request, resp
 
 //ambiente get
 
- app.get('/v1/toque_gourmet/alergenos', cors(), async function(req, res){
+app.get('/v1/toque_gourmet/alergenos', cors(), async function (req, res) {
 
-    let alergenos = await controllerAlergenos.listarAlergenos() 
+    let alergenos = await controllerAlergenos.listarAlergenos()
     res.status(alergenos.status_code)
     res.json(alergenos)
-}) 
+})
 
 app.get('/v1/toque_gourmet/alergenos/:id', cors(), async function (request, response) {
 
@@ -125,20 +238,20 @@ app.get('/v1/toque_gourmet/alergenos/:id', cors(), async function (request, resp
     let alergenos = await controllerAlergenos.pegarIdAlergenos(idAlergenos)
     response.status(alergenos.status_code)
     response.json(alergenos)
-    
+
 })
 
 //ambiente POST
 
-app.post ('/v1/toque_gourmet/alergenos', cors(), bodyParserJSON, async function (req, res) {
+app.post('/v1/toque_gourmet/alergenos', cors(), bodyParserJSON, async function (req, res) {
 
     let dadosBody = req.body
     let contentType = req.headers['content-type']
-  
+
     let alergeno = await controllerAlergenos.inserirAlergenos(dadosBody, contentType)
     res.status(alergeno.status_code)
     res.json(alergeno)
-    
+
 })
 
 //ambiente PUT
@@ -156,7 +269,7 @@ app.put('/v1/toque_gourmet/alergenos/:id', cors(), bodyParserJSON, async functio
 
 //ambiente delete
 
-app.delete('/v1/toque_gourmet/alergenos/:id', cors(), async function(request, response){
+app.delete('/v1/toque_gourmet/alergenos/:id', cors(), async function (request, response) {
 
     let idAlergeno = request.params.id
     let alergeno = await controllerAlergenos.deletarAlergenos(idAlergeno)
@@ -172,9 +285,9 @@ app.delete('/v1/toque_gourmet/alergenos/:id', cors(), async function(request, re
 
 //ambiente GET
 
-app.get('/v1/toque_gourmet/ingredientes', cors(), async function(req, res){
+app.get('/v1/toque_gourmet/ingredientes', cors(), async function (req, res) {
 
-    let ingrediente = await controllerIngredientes.listarIngredientes() 
+    let ingrediente = await controllerIngredientes.listarIngredientes()
     res.status(ingrediente.status_code)
     res.json(ingrediente)
 })
@@ -185,20 +298,20 @@ app.get('/v1/toque_gourmet/ingredientes/:id', cors(), async function (request, r
     let ingrediente = await controllerIngredientes.pegarIdIngrediente(idIngrediente)
     response.status(ingrediente.status_code)
     response.json(ingrediente)
-    
+
 })
 
 //ambiente post
 
-app.post ('/v1/toque_gourmet/ingredientes', cors(), bodyParserJSON, async function (req, res) {
+app.post('/v1/toque_gourmet/ingredientes', cors(), bodyParserJSON, async function (req, res) {
 
     let dadosBody = req.body
     let contentType = req.headers['content-type']
-  
+
     let ingrediente = await controllerIngredientes.inserirIngrediente(dadosBody, contentType)
     res.status(ingrediente.status_code)
     res.json(ingrediente)
-    
+
 })
 
 //ambiente PUT
@@ -216,7 +329,7 @@ app.put('/v1/toque_gourmet/ingredientes/:id', cors(), bodyParserJSON, async func
 
 //ambiente delete
 
-app.delete('/v1/toque_gourmet/ingredientes/:id', cors(), async function(request, response){
+app.delete('/v1/toque_gourmet/ingredientes/:id', cors(), async function (request, response) {
 
     let idIngrediente = request.params.id
     let ingrediente = await controllerIngredientes.deletarIngrediente(idIngrediente)
@@ -230,9 +343,9 @@ app.delete('/v1/toque_gourmet/ingredientes/:id', cors(), async function(request,
 
 //ambiente GET
 
-app.get('/v1/toque_gourmet/categoria', cors(), async function(req, res){
+app.get('/v1/toque_gourmet/categoria', cors(), async function (req, res) {
 
-    let categoria = await controllerCategoria.listarCategoria() 
+    let categoria = await controllerCategoria.listarCategoria()
     res.status(categoria.status_code)
     res.json(categoria)
 })
@@ -243,20 +356,20 @@ app.get('/v1/toque_gourmet/categoria/:id', cors(), async function (request, resp
     let categoria = await controllerCategoria.pegarIdCategoria(idCategoria)
     response.status(categoria.status_code)
     response.json(categoria)
-    
+
 })
 
 //ambiente POST
 
-app.post ('/v1/toque_gourmet/categoria', cors(), bodyParserJSON, async function (req, res) {
+app.post('/v1/toque_gourmet/categoria', cors(), bodyParserJSON, async function (req, res) {
 
     let dadosBody = req.body
     let contentType = req.headers['content-type']
-  
+
     let categoria = await controllerCategoria.inserirCategoria(dadosBody, contentType)
     res.status(categoria.status_code)
     res.json(categoria)
-    
+
 })
 
 //Ambiente PUT
@@ -275,7 +388,7 @@ app.put('/v1/toque_gourmet/categoria/:id', cors(), bodyParserJSON, async functio
 
 // ambiente delete
 
-app.delete('/v1/toque_gourmet/categoria/:id', cors(), async function(request, response){
+app.delete('/v1/toque_gourmet/categoria/:id', cors(), async function (request, response) {
 
     let idCategoria = request.params.id
     let categoria = await controllerCategoria.deletarCategoria(idCategoria)
@@ -295,7 +408,7 @@ app.get('/v1/toque_gourmet/cozinha', cors(), async function (req, res) {
     res.json(cozinha)
 })
 
-app.get('/v1/toque_gourmet/cozinha/:id', cors(), async function (req,res) {
+app.get('/v1/toque_gourmet/cozinha/:id', cors(), async function (req, res) {
 
     let idCozinha = req.params.id
     let cozinha = await controllerCozinha.pegarIdCozinha(idCozinha)
@@ -304,14 +417,14 @@ app.get('/v1/toque_gourmet/cozinha/:id', cors(), async function (req,res) {
 })
 
 //Ambiente POST
-app.post ('/v1/toque_gourmet/cozinha', cors(), bodyParserJSON, async function (req, res) {
+app.post('/v1/toque_gourmet/cozinha', cors(), bodyParserJSON, async function (req, res) {
 
     let dadosBody = req.body
     let contentType = req.headers['content-type']
     let cozinha = await controllerCozinha.inserirCozinha(dadosBody, contentType)
     res.status(cozinha.status_code)
     res.json(cozinha)
-    
+
 })
 
 //ambiente PUT
@@ -330,7 +443,7 @@ app.put('/v1/toque_gourmet/cozinha/:id', cors(), bodyParserJSON, async function 
 
 // ambiente delete
 
-app.delete('/v1/toque_gourmet/cozinha/:id', cors(), async function(request, response){
+app.delete('/v1/toque_gourmet/cozinha/:id', cors(), async function (request, response) {
 
     let idCozinha = request.params.id
     let cozinha = await controllerCozinha.deletarCozinha(idCozinha)
@@ -351,7 +464,7 @@ app.get('/v1/toque_gourmet/modo_preparo', cors(), async function (req, res) {
     res.json(cozinha)
 })
 
-app.get('/v1/toque_gourmet/modo_preparo/:id', cors(), async function (req,res) {
+app.get('/v1/toque_gourmet/modo_preparo/:id', cors(), async function (req, res) {
 
     let idModoPreparo = req.params.id
     let modoPreparo = await controllerModoPreparo.pegarIdModoPreparo(idModoPreparo)
@@ -361,14 +474,14 @@ app.get('/v1/toque_gourmet/modo_preparo/:id', cors(), async function (req,res) {
 
 //Ambiente Post
 
-app.post ('/v1/toque_gourmet/modo_preparo', cors(), bodyParserJSON, async function (req, res) {
+app.post('/v1/toque_gourmet/modo_preparo', cors(), bodyParserJSON, async function (req, res) {
 
     let dadosBody = req.body
     let contentType = req.headers['content-type']
     let modoPreparo = await controllerModoPreparo.inserirModoPreparo(dadosBody, contentType)
     res.status(modoPreparo.status_code)
     res.json(modoPreparo)
-    
+
 })
 
 //Ambiente PUT
@@ -387,7 +500,7 @@ app.put('/v1/toque_gourmet/modo_preparo/:id', cors(), bodyParserJSON, async func
 
 //Ambiente DELETE
 
-app.delete('/v1/toque_gourmet/modo_preparo/:id', cors(), async function(request, response){
+app.delete('/v1/toque_gourmet/modo_preparo/:id', cors(), async function (request, response) {
 
     let idModoPreparo = request.params.id_modo_preparo
     let modoPreparo = await controllerModoPreparo.deletarModoPreparo(idModoPreparo)
@@ -409,7 +522,7 @@ app.get('/v1/toque_gourmet/usuario', cors(), async function (req, res) {
     res.json(usuario)
 })
 
-app.get('/v1/toque_gourmet/usuario/:id', cors(), async function (req,res) {
+app.get('/v1/toque_gourmet/usuario/:id', cors(), async function (req, res) {
 
     let idUsuario = req.params.id
     let usuario = await controllerUsuario.pegarIdUsuario(idUsuario)
@@ -419,14 +532,14 @@ app.get('/v1/toque_gourmet/usuario/:id', cors(), async function (req,res) {
 
 //Ambiente POST
 
-app.post ('/v1/toque_gourmet/usuario', cors(), bodyParserJSON, async function (req, res) {
+app.post('/v1/toque_gourmet/usuario', cors(), bodyParserJSON, async function (req, res) {
 
     let dadosBody = req.body
     let contentType = req.headers['content-type']
     let usuario = await controllerUsuario.inserirUsuario(dadosBody, contentType)
     res.status(usuario.status_code)
     res.json(usuario)
-    
+
 })
 
 //Ambiente PUT
@@ -445,7 +558,7 @@ app.put('/v1/toque_gourmet/usuario/:id', cors(), bodyParserJSON, async function 
 
 //Ambiente DELETE
 
-app.delete('/v1/toque_gourmet/usuario/:id', cors(), async function(request, response){
+app.delete('/v1/toque_gourmet/usuario/:id', cors(), async function (request, response) {
 
     let idUsuario = request.params.id
     let usuario = await controllerUsuario.deletarUsuario(idUsuario)
@@ -457,4 +570,3 @@ app.delete('/v1/toque_gourmet/usuario/:id', cors(), async function(request, resp
 app.listen(PORT, function () {
     console.log('API aguardando requisição')
 })
- 
