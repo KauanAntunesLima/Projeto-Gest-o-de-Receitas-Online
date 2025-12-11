@@ -70,7 +70,7 @@ CREATE TABLE tbl_categoria(
     descricao    TEXT NULL
 );
 
-INSERT INTO categorias (nome, descricao) VALUES
+INSERT INTO tbl_categorias (nome, descricao) VALUES
 ('entradas', 'Categoria de entradas'),
 ('pratos_principais', 'Categoria de pratos principais'),
 ('acompanhamentos', 'Categoria de acompanhamentos'),
