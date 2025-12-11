@@ -192,11 +192,12 @@ const loginUsuario = async function (usuario) {
             let senhaVerificada = criptografia.verifyPassword(usuario.senha, user.senha)
 
             if(senhaVerificada){
-                let usuarioValido = await usuarioDAO.getUsuarioByUsuarioSenha(user.nome, user.senha)
-                delete usuarioValido.senha
+
+                delete user.senha
                 MESSAGE.HEADER.status = MESSAGE.SUCCESS_REQUEST.status
                 MESSAGE.HEADER.status_code = MESSAGE.SUCCESS_REQUEST.status_code
-                MESSAGE.HEADER.response.usuario = usuarioValido
+                MESSAGE.HEADER.response.usuario = user
+                console.log(user)
                 return MESSAGE.HEADER //200
             }
 
@@ -260,9 +261,8 @@ const validarDadosUsuario = async function (usuario) {
         MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [senha] invalido!!!'
         return MESSAGE.ERROR_REQUIRED_FIELDS
 
-    }else if(usuario.imagem == '' || usuario.imagem == null || usuario.imagem == undefined || usuario.imagem.length > 255){
-     MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [imagem] invalido!!!'
-    return MESSAGE.ERROR_REQUIRED_FIELDS
+    }else{
+        return false
     }
 }
     
