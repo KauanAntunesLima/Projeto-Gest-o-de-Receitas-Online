@@ -36,6 +36,17 @@ const getSelectByIdModoPreparo = async function (id) {
         return false
     }
 }
+const getSelectModoPreparoByIdReceita = async function (id) {
+    try {
+        const result = await prisma.$queryRaw`
+            SELECT * FROM tbl_modo_preparo WHERE id_receita = ${id}
+        `
+        return result
+    } catch (error) {
+        console.log(error)
+        return false
+    }
+}
 
 const getSelectLastIdModoPreparo = async function (params) {
 
@@ -121,6 +132,7 @@ module.exports = {
     getSelectAllModoPreparo,
     getSelectByIdModoPreparo,
     getSelectLastIdModoPreparo,
+    getSelectModoPreparoByIdReceita,
     setUpdateModoPreparo,
     setInsertModoPreparo,
     setDeleteModoPreparo
