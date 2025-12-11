@@ -185,8 +185,10 @@ const pegarIdReceita = async function (id) {
                 if (result.length > 0) {
 
                     let cozinhaId = await controllerReceitaCozinha.buscarCozinhaReceitaId(id)
+
                     if (cozinhaId) {
                         let cozinha = await controllerCozinha.pegarIdCozinha(cozinhaId.response.receitaCozinha[0].id_cozinha)
+
                         if (cozinha) {
                             result[0].cozinha = cozinha.response.cozinha
 
@@ -336,7 +338,7 @@ const inserirReceita = async function (receita, contentType) {
                         await controllerReceitaCozinha.inserirReceitaCozinha({
                             id_receita: lastIdReceita,
                             id_cozinha: receita.id_cozinha
-                        })
+                        }, 'application/json')
 
                         await controllerReceitaCategoria.inserirReceitaCategoria({
                             id_receita: lastIdReceita,
@@ -385,8 +387,8 @@ const inserirReceita = async function (receita, contentType) {
                 return dadosValidos
             }
         }
-    } catch (eror) {
-        console.log(eror)
+    } catch (error) {
+
         return MESSAGE_DEFAULT.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
 }
