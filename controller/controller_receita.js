@@ -37,7 +37,7 @@ const listarReceita = async function () {
 
                 let receitaIngrediente = await controllerReceitaIngrediente.pegarReceitaIngredientePorIdReceita(receita.id_receita)
 
-                receita.ingrediente = []
+                receita.ingredientes = []
                 receita.alergenos = []
 
                 if (receitaIngrediente &&
@@ -60,7 +60,7 @@ const listarReceita = async function () {
                                     unidade: id.unidade
                                 }
 
-                                receita.ingrediente.push(novoIngrediente)
+                                receita.ingredientes.push(novoIngrediente)
 
                                 let ingredientesAlergenosDaReceita =
                                     await controllerIngredienteAlergenos.pegarIngredientesAlergenosPorIngredientesId(ingrediente.id_ingredientes)
@@ -195,7 +195,8 @@ const pegarIdReceita = async function (id) {
                             let infoIngredienteDaReceita = await controllerReceitaIngrediente.pegarReceitaIngredientePorIdReceita(id)
                             if (infoIngredienteDaReceita) {
 
-                                result[0].ingrediente = []
+                                result[0].ingredientes = []
+                                result[0].alergenos = []
 
                                 for (id of infoIngredienteDaReceita.response.receita_ingredientes) {
 
@@ -211,13 +212,32 @@ const pegarIdReceita = async function (id) {
                                                 quantidade: id.quantidade,
                                                 unidade: id.unidade
                                             }
+                                            let ingredientesAlergenosDaReceita = await controllerIngredienteAlergenos.pegarIngredientesAlergenosPorIngredientesId(ingrediente.id_ingredientes)
 
-                                            result[0].ingrediente.push(novoIngrediente)
+                                            for (let alergeno of ingredientesAlergenosDaReceita.response.alergenos) {
+
+                                                let alergenos = await controllerAlergenos.pegarIdAlergenos(alergeno.id_alergenos)
+
+                                                for (let alergenoNome of alergenos.response.alergenos) {
+
+                                                    let alergenosAchado = {
+                                                        id_ingrediente: alergeno.id_ingredientes,
+                                                        ingrediente_nome: ingrediente.nome,
+                                                        alergeno: alergenoNome.nome
+                                                    }
+
+                                                    result[0].alergenos.push(alergenosAchado)
+                                                }
+                                            }
+
+                                            result[0].ingredientes.push(novoIngrediente)
                                         }
                                     } else {
                                         return ingredienteAchado
                                     }
+
                                 }
+
                                 MESSAGE.HEADER.status = MESSAGE.SUCCESS_REQUEST.status
                                 MESSAGE.HEADER.status_code = MESSAGE.SUCCESS_REQUEST.status_code
                                 MESSAGE.HEADER.response.receita = result
