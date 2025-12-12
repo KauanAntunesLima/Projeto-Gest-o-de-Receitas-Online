@@ -161,13 +161,15 @@ main {
 }
 
 #filtro-categorias label {
-    display: block;
+    display: flex;
     color: white;
-    font-size: 14px;
     font-weight: 300;
     margin-bottom: 5px;
     cursor: pointer;
     padding: 3px 0;
+}
+#filtro-categorias label span{
+    font-size: 14px;
 }
 
 #filtro-categorias label:hover {
