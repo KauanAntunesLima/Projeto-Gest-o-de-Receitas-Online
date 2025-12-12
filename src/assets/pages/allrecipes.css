@@ -143,6 +143,63 @@ main {
     z-index: 1000;
 }
 
+/* Quando o dropdown está visível */
+.multi-select-dropdown.show {
+    display: block;
+}
+
+/* Estilo para o filtro de categorias dinâmico */
+#filtro-categorias {
+    margin-bottom: 15px;
+}
+
+#filtro-categorias h3 {
+    color: white;
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+#filtro-categorias label {
+    display: block;
+    color: white;
+    font-size: 14px;
+    font-weight: 300;
+    margin-bottom: 5px;
+    cursor: pointer;
+    padding: 3px 0;
+}
+
+#filtro-categorias label:hover {
+    color: #FF8000;
+}
+
+#filtro-categorias input[type="checkbox"] {
+    margin-right: 8px;
+    accent-color: #FF8000;
+}
+
+/* Estilos para os checkboxes dinâmicos de categoria */
+.multi-select-dropdown label {
+    display: block !important;
+    color: #333 !important;
+    font-size: 14px !important;
+    font-weight: 300 !important;
+    margin-bottom: 0 !important;
+    cursor: pointer !important;
+    padding: 8px 12px !important;
+    transition: background-color 0.2s !important;
+}
+
+.multi-select-dropdown label:hover {
+    background-color: #f0f0f0 !important;
+}
+
+.multi-select-dropdown input[type="checkbox"] {
+    margin-right: 8px !important;
+    accent-color: var(--cor-secundaria) !important;
+}
+
 .multi-select-option {
     display: block;
     padding: 8px 12px;

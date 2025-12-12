@@ -7,17 +7,12 @@ function isAllrecipesPage() {
 
 async function buscarCategoriasAPI() {
     try {
-        console.log('Buscando categorias da API...');
         const response = await fetch('http://localhost:8080/v1/toque_gourmet/categoria');
         const data = await response.json();
 
-        console.log('Resposta da API de categorias:', data);
-
         if (data.status && data.response && data.response.categoria) {
-            console.log('Categorias encontradas:', data.response.categoria);
             return data.response.categoria;
         }
-        console.log('Nenhuma categoria encontrada');
         return [];
     } catch (error) {
         console.error('Erro ao buscar categorias:', error);
@@ -27,28 +22,19 @@ async function buscarCategoriasAPI() {
 
 async function buscarAlergenosAPI() {
     try {
-        console.log('🔍 Buscando alergenos da API...');
         const response = await fetch('http://localhost:8080/v1/toque_gourmet/alergenos');
         const data = await response.json();
 
-        console.log('📋 Resposta da API de alergenos:', data);
-
-        // Verificar diferentes estruturas possíveis
         if (data.status && data.response) {
             if (data.response.alergenos) {
-                console.log('✅ Alergenos encontrados:', data.response.alergenos);
                 return data.response.alergenos;
             } else if (data.response.alergeno) {
-                console.log('✅ Alergenos encontrados (singular):', data.response.alergeno);
                 return data.response.alergeno;
             }
         }
-
-        console.log('⚠️ Nenhum alergeno encontrado na estrutura esperada');
-        console.log('🔍 Estrutura da resposta:', Object.keys(data));
         return [];
     } catch (error) {
-        console.error('❌ Erro ao buscar alergenos:', error);
+        console.error('Erro ao buscar alergenos:', error);
         return [];
     }
 }
@@ -77,9 +63,7 @@ function criarFiltroCategorias(categorias) {
         input.type = 'checkbox';
         input.name = 'categoria';
 
-        // Debug: verificar estrutura da categoria
-        console.log('Categoria:', categoria.nome, 'ID:', categoria.id_categoria, ' Campos:', Object.keys(categoria));
-
+  
         // Usar o campo correto de ID baseado na estrutura da API
         input.value = categoria.id_categoria || categoria.id || categoria.codigo;
 
@@ -135,28 +119,16 @@ function criarFiltroAlergenos(alergenos) {
 }
 
 async function inicializarFiltrosDinamicos() {
-    console.log('🚀 Inicializando filtros dinâmicos...');
-    if (!isAllrecipesPage()) {
-        console.log('❌ Não está na página allrecipes');
-        return;
-    }
+    if (!isAllrecipesPage()) return;
 
-    console.log('✅ Está na página allrecipes, buscando categorias...');
     const categorias = await buscarCategoriasAPI();
     if (categorias.length > 0) {
-        console.log('📦 Criando filtro de categorias com', categorias.length, 'categorias');
         criarFiltroCategorias(categorias);
-    } else {
-        console.log('⚠️ Nenhuma categoria encontrada para criar filtro');
     }
 
-    console.log('🔍 Buscando alergenos...');
     const alergenos = await buscarAlergenosAPI();
     if (alergenos.length > 0) {
-        console.log('📦 Criando filtro de alergenos com', alergenos.length, 'alergenos');
         criarFiltroAlergenos(alergenos);
-    } else {
-        console.log('⚠️ Nenhum alergeno encontrado para criar filtro');
     }
 
     document.querySelectorAll('.filter-choices input[type="checkbox"]:not([name="alergenos"])').forEach(cb => {
@@ -244,33 +216,24 @@ async function executarBusca() {
 async function capturarFiltros() {
     const tempoSelecionado = Array.from(document.querySelectorAll('input[name="tempo"]:checked')).map(cb => cb.value);
 
-    const categoriasSelecionadas = Array.from(document.querySelectorAll('input[name="categoria"]:checked'));
-    console.log('🏷️ Categorias selecionadas:', categoriasSelecionadas.length);
-    categoriasSelecionadas.forEach(cb => {
-        console.log(`  - Categoria: ${cb.nextElementSibling?.textContent} (valor: ${cb.value})`);
-    });
-
     const filtros = {
         dificuldade: Array.from(document.querySelectorAll('input[name="dificuldade"]:checked')).map(cb => cb.value)[0] || null,
         tipo: Array.from(document.querySelectorAll('input[name="tipo"]:checked')).map(cb => cb.value),
-        categoria: categoriasSelecionadas
+        categoria: Array.from(document.querySelectorAll('input[name="categoria"]:checked'))
             .map(cb => {
                 const value = cb.value;
                 const numValue = Number(value);
-                // Verificar se é um número válido
                 return isNaN(numValue) || value === 'null' || value === 'undefined' || value === '' ? null : numValue;
             })
-            .filter(val => val !== null), // Remover valores nulos
+            .filter(val => val !== null),
         alergenos: Array.from(document.querySelectorAll('input[name="alergenos"]:checked')).map(cb => cb.value)
     };
 
     if (tempoSelecionado.length > 0) {
-
         const menorTempo = Math.min(...tempoSelecionado.map(Number));
         filtros.tempo_max = menorTempo;
     }
 
-    // Remover apenas filtros vazios, mas manter arrays com conteúdo
     Object.keys(filtros).forEach(key => {
         if (filtros[key] === null || filtros[key] === undefined ||
             (Array.isArray(filtros[key]) && filtros[key].length === 0)) {
@@ -278,16 +241,12 @@ async function capturarFiltros() {
         }
     });
 
-    console.log('🔍 Filtros finais:', JSON.stringify(filtros, null, 2));
-
     localStorage.setItem('recipeFilters', JSON.stringify(filtros));
 
     if (!isAllrecipesPage()) {
         redirectToAllrecipes(filtros);
     } else {
-        console.log('📡 Enviando filtros para API...');
         const receitas = await buscarPorFiltros(filtros);
-        console.log('📋 Receitas encontradas:', receitas.length);
         exibirResultados(receitas, 'filtros aplicados');
     }
 }
@@ -475,7 +434,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 100);
     }
 
-    // Event listeners para elementos estáticos (serão re-adicionados após criação dinâmica)
+    // Event listeners para elementos estáticos
     document.querySelectorAll('.filter-choices input[type="checkbox"]').forEach(cb => {
         cb.addEventListener('change', async () => {
             await capturarFiltros();
