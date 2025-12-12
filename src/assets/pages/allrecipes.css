@@ -65,7 +65,7 @@ main {
 .filter-options:hover .filter-choices {
     background-color: var(--cor-secundaria);
     transition: 0.6s;
-    width: 210px;
+    width: 300px;
     padding: 20px;
     min-height: 450px;
     overflow-y: auto;

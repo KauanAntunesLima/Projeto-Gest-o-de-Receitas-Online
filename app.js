@@ -1,10 +1,10 @@
-import { initHome, initAllRecipes, initRecipeDetails } from './src/js/cards.js';
+import { initHome, initAllRecipes, initRecipeDetails, criarCard } from './src/js/cards.js';
 let receitasUsuario = [];
 function buscarReceitasLocal(termo) {
     termo = termo.toLowerCase();
     const receitasFiltradas = receitasUsuario.filter(receita => {
         return receita.titulo.toLowerCase().includes(termo) ||
-               receita.descricao.toLowerCase().includes(termo);
+            receita.descricao.toLowerCase().includes(termo);
     });
     exibirReceitasEmGrid(receitasFiltradas);
     const receitasCount = document.querySelector('.info-filter span span');
@@ -191,72 +191,31 @@ function limparCardsReceitas() {
         });
     }
 }
-function criarCardParaPerfil(receita) {
-    const card = document.createElement('div');
-    card.classList.add('card');
-    card.addEventListener('click', () => {
-        const encodedData = encodeURIComponent(JSON.stringify(receita));
-        window.location.href = `formrecipe.html?recipe=${encodedData}`;
-    });
-
-    const cardPreview = document.createElement('div');
-    cardPreview.classList.add('card-preview');
-
-    const img = document.createElement('img');
-    img.src = receita.imagem;
-    img.alt = receita.titulo || receita.nome;
-    img.classList.add('recipe-preview');
-
-    const cardTitleRatio = document.createElement('div');
-    cardTitleRatio.classList.add('card-title-ratio');
-
-    const spanTitle = document.createElement('span');
-    spanTitle.textContent = receita.titulo;
-
-    const ratioDiv = document.createElement('div');
-    ratioDiv.classList.add('ratio');
-
-    const starPath = '/src/assets/img/Star 5.svg';
-    for (let i = 0; i < 5; i++) {
-        const star = document.createElement('img');
-        star.src = starPath;
-        star.alt = 'star';
-        star.classList.add('star');
-        ratioDiv.appendChild(star);
-    }
-
-    cardTitleRatio.appendChild(spanTitle);
-    cardTitleRatio.appendChild(ratioDiv);
-    cardPreview.appendChild(img);
-    cardPreview.appendChild(cardTitleRatio);
-
-    const cardDescription = document.createElement('div');
-    cardDescription.classList.add('card-description');
-    const p = document.createElement('p');
-    p.textContent = receita.descricao || 'Sem descrição disponível';
-    cardDescription.appendChild(p);
-
-    card.appendChild(cardPreview);
-    card.appendChild(cardDescription);
-
-    return card;
-}
 
 function exibirReceitasEmGrid(receitas) {
     limparCardsReceitas();
     const mainElement = document.querySelector('main');
     let receitaIndex = 0;
+
     while (receitaIndex < receitas.length) {
-        const rowDiv = document.createElement('div');
-        rowDiv.classList.add('recipe-cards');
+        const recipeCards = document.createElement('div');
+        recipeCards.classList.add('recipe-cards');
+
         for (let i = 0; i < 4; i++) {
             if (receitaIndex < receitas.length) {
-                const card = criarCardParaPerfil(receitas[receitaIndex]);
-                rowDiv.appendChild(card);
+                const receitaAtual = receitas[receitaIndex];
+                const card = criarCard(receitaAtual);
+                // Remover o event listener padrão e adicionar o do perfil
+                card.removeEventListener('click', card._clickHandler);
+                card.addEventListener('click', () => {
+                    const encodedData = encodeURIComponent(JSON.stringify(receitaAtual));
+                    window.location.href = `formrecipe.html?recipe=${encodedData}`;
+                });
+                recipeCards.appendChild(card);
                 receitaIndex++;
             }
         }
-        mainElement.appendChild(rowDiv);
+        mainElement.appendChild(recipeCards);
     }
 }
 document.addEventListener('DOMContentLoaded', () => {

@@ -125,6 +125,31 @@ function criarStep(passo) {
     return divStep;
 }
 
+function criarIngredientInfo(nome, quantidade, unidade) {
+    const wrapper = document.createElement('div');
+    wrapper.classList.add('ingredient-info');
+
+    const nomeSpan = document.createElement('span');
+    nomeSpan.textContent = nome;
+
+    const unityDiv = document.createElement('div');
+    unityDiv.classList.add('unity-info');
+
+    const qtdSpan = document.createElement('span');
+    qtdSpan.textContent = `Quantidade: ${quantidade}`;
+
+    const unidadeSpan = document.createElement('span');
+    unidadeSpan.textContent = `Unidade: ${unidade}`;
+
+    unityDiv.appendChild(qtdSpan);
+    unityDiv.appendChild(unidadeSpan);
+
+    wrapper.appendChild(nomeSpan);
+    wrapper.appendChild(unityDiv);
+
+    return wrapper;
+}
+
 export async function initRecipeDetails() {
     const urlParams = new URLSearchParams(window.location.search);
     const id = urlParams.get('id');
@@ -152,10 +177,10 @@ export async function initRecipeDetails() {
         receita.ingredientes.forEach(ing => {
             const nomeIng = ing.nome || ing.nome_ingrediente || 'Ingrediente';
             const qtd = ing.quantidade || '';
-            const medida = ing.medida || ing.unidade_medida || '';
+            const unidade = ing.unidade || '';
 
             ingredientsContainer.appendChild(
-                criarIngredientInfo(nomeIng, qtd, medida)
+                criarIngredientInfo(nomeIng, qtd, unidade)
             );
         });
     }
@@ -173,28 +198,5 @@ export async function initRecipeDetails() {
         });
     }
 
-    function criarIngredientInfo(nome, quantidade, medida) {
-        const wrapper = document.createElement('div');
-        wrapper.classList.add('ingredient-info');
+  }
 
-        const nomeSpan = document.createElement('span');
-        nomeSpan.textContent = nome;
-
-        const unityDiv = document.createElement('div');
-        unityDiv.classList.add('unity-info');
-
-        const qtdSpan = document.createElement('span');
-        qtdSpan.textContent = `Quantidade: ${quantidade}`;
-
-        const medidaSpan = document.createElement('span');
-        medidaSpan.textContent = `Unidade: ${medida}`;
-
-        unityDiv.appendChild(qtdSpan);
-        unityDiv.appendChild(medidaSpan);
-
-        wrapper.appendChild(nomeSpan);
-        wrapper.appendChild(unityDiv);
-
-        return wrapper;
-    }
-}

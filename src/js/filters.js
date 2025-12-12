@@ -37,11 +37,16 @@ async function buscarPorNome(nome) {
 }
 
 async function buscarPorFiltros(filtros) {
+    console.log('Enviando requisição para:', 'http://localhost:8080/v1/toque_gourmet/receita/filtro');
+    console.log('Corpo da requisição:', JSON.stringify(filtros, null, 2));
+
     const data = await safeFetchJson('http://localhost:8080/v1/toque_gourmet/receita/filtro', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(filtros)
     });
+
+    console.log('Resposta da API:', data);
     return data?.status_code === 200 ? data.response.receitas || [] : [];
 }
 
@@ -121,13 +126,19 @@ function extrairFiltrosDaURL(urlParams) {
     const categoria = urlParams.get('categoria');
     const tipo = urlParams.get('tipo');
     const alergenos = urlParams.get('alergenos');
+    const ingredientes = urlParams.get('ingredientes');
 
     if (nome) filtros.nome = nome;
     if (tempoMax) filtros.tempo_max = Number(tempoMax);
-    if (dificuldade) filtros.dificuldade = dificuldade;
+    if (dificuldade) {
+        filtros.dificuldade = dificuldade.includes(',')
+            ? dificuldade.split(',').map(s => s.trim())
+            : dificuldade;
+    }
     if (categoria) filtros.categoria = categoria.split(',').map(s => Number(s.trim()));
     if (tipo) filtros.tipo = tipo.split(',').map(s => s.trim());
     if (alergenos) filtros.alergenos = alergenos.split(',').map(s => s.trim());
+  if (ingredientes) filtros.ingredientes = ingredientes.split(',').map(s => s.trim());
 
     return filtros;
 }
@@ -136,7 +147,7 @@ async function capturarFiltros() {
     const tempoSelecionado = Array.from(document.querySelectorAll('input[name="tempo"]:checked')).map(cb => cb.value);
 
     const filtros = {
-        dificuldade: document.querySelector('input[name="dificuldade"]:checked')?.value ?? null,
+        dificuldade: Array.from(document.querySelectorAll('input[name="dificuldade"]:checked')).map(cb => cb.value),
         tipo: Array.from(document.querySelectorAll('input[name="tipo"]:checked')).map(cb => cb.value),
         categoria: Array.from(document.querySelectorAll('input[name="categoria"]:checked'))
             .map(cb => {
@@ -146,6 +157,18 @@ async function capturarFiltros() {
         alergenos: Array.from(document.querySelectorAll('input[name="alergenos"]:checked')).map(cb => cb.value)
     };
 
+    // Capturar ingredientes do input de texto
+    const ingredientesInput = document.getElementById('ingredientes-input');
+    if (ingredientesInput && ingredientesInput.value.trim()) {
+        const ingredientes = ingredientesInput.value
+            .split(',')
+            .map(i => i.trim().toLowerCase())
+            .filter(i => i.length > 0);
+        if (ingredientes.length > 0) {
+            filtros.ingredientes = ingredientes;
+        }
+    }
+
     if (tempoSelecionado.length > 0) {
         filtros.tempo_max = Math.min(...tempoSelecionado.map(Number));
     }
@@ -154,6 +177,14 @@ async function capturarFiltros() {
         const v = filtros[k];
         if (v === null || v === undefined) delete filtros[k];
         if (Array.isArray(v) && v.length === 0) delete filtros[k];
+        if (Array.isArray(v) && v.length === 1 && k === 'dificuldade') {
+            // Se for apenas uma dificuldade, converte para string para manter compatibilidade
+            if (v[0]) {
+                filtros[k] = v[0];
+            } else {
+                delete filtros[k];
+            }
+        }
     });
 
     localStorage.setItem('recipeFilters', JSON.stringify(filtros));
@@ -162,10 +193,16 @@ async function capturarFiltros() {
         const params = new URLSearchParams();
         if (filtros.nome) params.set('nome', filtros.nome);
         if (filtros.tempo_max) params.set('tempo_max', filtros.tempo_max);
-        if (filtros.dificuldade) params.set('dificuldade', filtros.dificuldade);
+        if (filtros.dificuldade) {
+            const dificuldadeValue = Array.isArray(filtros.dificuldade)
+                ? filtros.dificuldade.join(',')
+                : filtros.dificuldade;
+            params.set('dificuldade', dificuldadeValue);
+        }
         if (filtros.tipo) params.set('tipo', filtros.tipo.join(','));
         if (filtros.categoria) params.set('categoria', filtros.categoria.join(','));
         if (filtros.alergenos) params.set('alergenos', filtros.alergenos.join(','));
+        if (filtros.ingredientes) params.set('ingredientes', filtros.ingredientes.join(','));
         const qs = params.toString();
         window.location.href = qs ? `/src/assets/pages/allrecipes.html?${qs}` : 'allrecipes.html';
         return;
@@ -188,14 +225,22 @@ function carregarFiltrosSalvos() {
     Object.keys(filtros).forEach(tipo => {
         const valor = filtros[tipo];
         if (tipo === 'dificuldade' && valor) {
-            const cb = document.querySelector(`input[name="dificuldade"][value="${valor}"]`);
-            if (cb) cb.checked = true;
+            const dificuldades = Array.isArray(valor) ? valor : [valor];
+            dificuldades.forEach(dif => {
+                const cb = document.querySelector(`input[name="dificuldade"][value="${dif}"]`);
+                if (cb) cb.checked = true;
+            });
         } else if (Array.isArray(valor)) {
             valor.forEach(v => {
                 const vStr = String(v);
                 const cb = document.querySelector(`input[name="${tipo}"][value="${vStr}"]`);
                 if (cb) cb.checked = true;
             });
+        } else if (tipo === 'ingredientes' && valor) {
+            const ingredientesInput = document.getElementById('ingredientes-input');
+            if (ingredientesInput) {
+                ingredientesInput.value = Array.isArray(valor) ? valor.join(', ') : valor;
+            }
         }
     });
 
@@ -338,6 +383,37 @@ function onFilterChoicesChange(e) {
         }, 120);
     }
 }
+
+// Adicionar evento para o input de ingredientes
+document.addEventListener('DOMContentLoaded', () => {
+    const ingredientesInput = document.getElementById('ingredientes-input');
+    if (ingredientesInput) {
+        ingredientesInput.addEventListener('focus', () => {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => {
+                capturarFiltros();
+            }, 120);
+        });
+
+        // Também adiciona evento para quando o usuário sai do input
+        ingredientesInput.addEventListener('blur', () => {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => {
+                capturarFiltros();
+            }, 300);
+        });
+
+        // E para quando digita (opcional, com debounce)
+        ingredientesInput.addEventListener('input', () => {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => {
+                if (ingredientesInput.value.trim()) {
+                    capturarFiltros();
+                }
+            }, 500);
+        });
+    }
+});
 
 async function inicializarPaginaAllrecipes() {
     const urlParams = new URLSearchParams(window.location.search);

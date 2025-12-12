@@ -64,7 +64,6 @@ header .options{
     font-weight: 300;
 }
 .recipe-cards{
-    min-height: 1200px;
     padding: 0;
 }
 .recipe-cards:last-child:has(.card:hover){
