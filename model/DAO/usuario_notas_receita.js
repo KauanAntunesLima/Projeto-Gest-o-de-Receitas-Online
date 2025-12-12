@@ -67,6 +67,8 @@ const getSelectUsuarioNotasReceitaByUsuarioId = async function (id) {
 }
 
 const setinsertUsuarioNotasReceita = async function (usuarioNotasReceita) {
+
+    console.log(usuarioNotasReceita)
     try {
         const sql = `
         INSERT INTO tbl_usuario_notas_receita
@@ -76,7 +78,7 @@ const setinsertUsuarioNotasReceita = async function (usuarioNotasReceita) {
                      descricao)
                 VALUES (${usuarioNotasReceita.id_usuario},
                         ${usuarioNotasReceita.id_receita},
-                        "${usuarioNotasReceita.nota}",
+                        ${usuarioNotasReceita.nota},
                         "${usuarioNotasReceita.descricao}")
     `
 
@@ -152,11 +154,14 @@ const setDeleteUsuarioNotasReceita = async function (id) {
     }
 
 }
+
 const setDeleteByIdUsuarioAndReceitaId = async function (idReceita){
+    console.log(idReceita)
     try{
         let sql = `DELETE FROM tbl_usuario_notas_receita WHERE id_receita=${idReceita}`
 
         let result = await prisma.$executeRawUnsafe(sql)
+        
 
 if(result){
     return true
@@ -165,6 +170,7 @@ if(result){
 }
 
     }catch(error){
+        console.log(error)
         return false 
     }
 }

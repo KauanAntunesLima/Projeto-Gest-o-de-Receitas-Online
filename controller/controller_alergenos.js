@@ -74,10 +74,10 @@ const atualizarAlergenos = async function (alergenos, id, contentType) {
 
     try {
 
-        //validção do content-type
+
         if (String(contentType).toUpperCase() == 'APPLICATION/JSON') {
            
-            //chama a função de validação dos dados de cadastro
+      
             let validarDados = await validarDadosAlergenos(alergenos)
 
             if (!validarDados) {
@@ -89,7 +89,7 @@ const atualizarAlergenos = async function (alergenos, id, contentType) {
                 if (validarId.status_code == 200) {
                     alergenos.id_alergenos = parseInt(id)
                  
-                    //Chama a função do DAO para atualizar um novo filme
+       
                     let result = await alergenosDAO.setUpdateAlergenos(alergenos)
 
                     if (result) {

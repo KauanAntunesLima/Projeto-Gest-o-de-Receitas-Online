@@ -15,6 +15,7 @@ const controllerAlergenos = require('./controller_alergenos.js')
 const controllerReceitaCategoria = require('./controller_receita_categoria.js')
 const controllerCategoria = require('./controller_categoria.js')
 const controllerModoPreparo = require('./controller_modo_preparo.js')
+const controllerUsuarioNota = require('./controller_usuario_notas_receita.js')
 
 const MESSAGE_DEFAULT = require('../modulo/config_messages.js')
 
@@ -417,6 +418,15 @@ const inserirReceita = async function (receita, contentType) {
                             await controllerModoPreparo.inserirModoPreparo(modoPreparoList, 'application/json')
 
                         }
+                      /*   for (let avaliacao of receita.avaliacao){
+                            let notasList = {
+                                id_usuario: avaliacao.id_usuario,
+                                id_receita: avaliacao.id_receita,
+                                nota: avaliacao.nota,
+                                descricao: avaliacao.descricao
+                            }
+                            await controllerUsuarioNota.inserirUsuarioNotasReceita(notasList, 'application/json')
+                        } */
 
                         //adiciona no Json de filme o ID que foi gerado no BD
                         receita.id = lastIdReceita

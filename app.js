@@ -9,6 +9,26 @@ const express = require('express')
 const cors = require('cors')
 const bodyParser = require('body-parser')
 const multer = require('multer')
+const swaggerJsdoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express')
+const swaggerJSDoc = require('swagger-jsdoc')
+
+const options = {
+    definition: {
+        openapi: '3.0.1',
+        info: {
+            title: 'Toque Gourmet',
+            description: 'API destinada ao gerenciamento de receitas culinarias, usuarios, ingredientes, cozinhas e categorias A API permite operacoes CRUD nas principais entidades e inclui um endpoint de filtro unificado',
+            termsOfService: 'http://swagger.io/terms/',
+            contact: { email: 'gabrielcavalcantedossantos743@email.com' }
+        },
+    },
+    apis: ['./docs/openapi.yaml']
+};
+
+const specs = swaggerJsdoc(options);
+
+//bagui do swagger aqui em cima se houver erro vir aqui o
 
 const bodyParserJSON = bodyParser.json()
 const app = express()
@@ -41,6 +61,7 @@ const controllerCategoria = require('./controller/controller_categoria.js')
 const controllerCozinha = require('./controller/controller_cozinha.js')
 const controllerModoPreparo = require('./controller/controller_modo_preparo.js')
 const controllerUsuario = require('./controller/controller_usuario.js')
+const controllerUsuarioNota = require('./controller/controller_usuario_notas_receita.js')
 
 /***********************
  * EndPoints tbl_receita
@@ -576,7 +597,7 @@ app.delete('/v1/toque_gourmet/usuario/:id', cors(), async function (request, res
 
 //Ambiente de Logindo Usuario
 
-app.post ('/v1/toque_gourmet/usuario/login', cors(), bodyParserJSON, async function (req, res) {
+app.post('/v1/toque_gourmet/usuario/login', cors(), bodyParserJSON, async function (req, res) {
 
     let dadosBody = req.body
     console.log(dadosBody)
@@ -584,6 +605,75 @@ app.post ('/v1/toque_gourmet/usuario/login', cors(), bodyParserJSON, async funct
     res.status(usuario.status_code)
     res.json(usuario)
 })
+
+/***********************
+ * EndPoints tbl_usuario
+ * **********************/
+
+//ambiente GET
+
+app.get('/v1/toque_gourmet/receita/avaliacao', cors(), bodyParserJSON, async function (req, res) {
+    let avaliacao = await controllerUsuarioNota.listarUsuarioNotasReceita()
+    res.status(avaliacao.status_code)
+    res.json(avaliacao)
+})
+
+app.get('/v1/toque_gourmet/receita/avaliacao/:id', cors(), async function (req, res) {
+
+    let idAvaliacao = req.params.id
+    let avaliacao = await controllerUsuario.pegarIdUsuario(idAvaliacao)
+    res.status(avaliacao.status_code)
+    res.json(avaliacao)
+})
+
+//ambiente POST
+
+app.post('/v1/toque_gourmet/receita/avaliacao/', cors(), bodyParserJSON, async function (req, res) {
+
+    let dadosBody = req.body
+    let contentType = req.headers['content-type']  
+
+    let avaliacao = await controllerUsuarioNota.inserirUsuarioNotasReceita(dadosBody, contentType)
+    res.status(avaliacao.status_code)
+    res.json(avaliacao)
+})
+
+
+//ambiente PUT
+
+app.put('/v1/toque_gourmet/receita/avaliacao/:id', cors(), bodyParserJSON, async function (req, res) {
+
+    let dadosBody = req.body
+    let idavaliacao = req.params.id
+    let contentType = req.headers['content-type']
+
+    let avaliacao = await controllerUsuarioNota.atualizarUsuarioNotasReceita(dadosBody, idavaliacao, contentType)
+    console.log(avaliacao)
+    res.status(avaliacao.status_code)
+    res.json(avaliacao)
+})
+
+//ambiente DELETE
+
+app.delete('/v1/toque_gourmet/receita/avaliacao/:id', cors(), async function (request, response) {
+
+    let idAvaliacao = request.params.id
+    let avaliacao = await controllerUsuarioNota.excluirUsuarioNotasReceita(idAvaliacao)
+    response.status(avaliacao.status_code)
+    response.json(avaliacao)
+})
+
+app.delete('/v1/toque_gourmet/nota/receita/avaliacao/:id', cors(), async function (request, response) {
+
+    let idAvaliacao = request.params.id
+    let avaliacao = await controllerUsuarioNota.excluirNotaReceitaPorUsuario(idAvaliacao)
+    response.status(avaliacao.status_code)
+    response.json(avaliacao)
+})
+
+
+app.use('/v1/toque_gourmet/swagger', swaggerUi.serve, swaggerUi.setup(specs, { explorer: true }) // Habilita a interface interativa
+);
 
 //ultima linha do codigo 
 app.listen(PORT, function () {

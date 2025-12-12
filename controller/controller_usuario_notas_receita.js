@@ -16,7 +16,7 @@ const listarUsuarioNotasReceita = async function() {
 
         //Chama a função do DAO para retornar a lista de filmes  gêneros
         let result = await usuarioNotasReceitaDAO.getSelectAllUsuarioNotasReceita()
-
+       
         if (result) {
             if (result.length > 0) {
                 MESSAGE.HEADER.status = MESSAGE.SUCCESS_REQUEST.status
@@ -133,8 +133,11 @@ const listarReceitaIdUsuario = async function (idUsuario) {
 
 const inserirUsuarioNotasReceita = async function (usuarioNotasReceita, contentType) {
 
+    let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
         try {
+            console.log(contentType)
         if (String(contentType).toUpperCase() == 'APPLICATION/JSON') {
+            
 
             let validarDados = await validarDadosUsuarioNotasReceita(usuarioNotasReceita)
 
@@ -292,7 +295,7 @@ const excluirUsuarioNotasReceita = async function (id) {
 
 }
 
-const excluirReceitaPorUsuario = async function (id) {
+const excluirNotaReceitaPorUsuario = async function (id) {
 
     //Realizando uma cópia do objeto MESSAGE_DEFAULT, permitindo que as alterações desta função
     //não interfiram em outras funções
@@ -343,5 +346,5 @@ module.exports = {
     listarUsuarioNotasReceita,
     atualizarUsuarioNotasReceita,
     excluirUsuarioNotasReceita,
-    excluirReceitaPorUsuario
+    excluirNotaReceitaPorUsuario
 }

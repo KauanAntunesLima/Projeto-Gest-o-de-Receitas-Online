@@ -6,7 +6,9 @@
     "form-data": "^4.0.5",
     "multer": "^2.0.2",
     "node-fetch": "^3.3.2",
-    "prisma": "6.16.3"
+    "prisma": "6.16.3",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
   },
   "name": "gestao-de-receita",
   "version": "1.0.0",
