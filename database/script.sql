@@ -308,16 +308,17 @@ SELECT
     r.data_criacao,
     r.data_edicao,
     r.imagem,
-    i.nome AS ingrediente,
-    cz.nome AS cozinha,
-    cat.nome AS categoria
+    GROUP_CONCAT(DISTINCT i.nome ORDER BY i.nome SEPARATOR ', ') AS ingredientes,
+    GROUP_CONCAT(DISTINCT cz.nome ORDER BY cz.nome SEPARATOR ', ') AS cozinhas,
+    GROUP_CONCAT(DISTINCT cat.nome ORDER BY cat.nome SEPARATOR ', ') AS categorias
 FROM tbl_receita r
-LEFT JOIN tbl_receita_ingredientes ri ON ri.id_receita = r.id_receita
-LEFT JOIN tbl_ingredientes i ON i.id_ingredientes = ri.id_ingredientes
-LEFT JOIN tbl_receita_cozinha rc ON rc.id_receita = r.id_receita
-LEFT JOIN tbl_cozinha cz ON cz.id_cozinha = rc.id_cozinha
-LEFT JOIN tbl_receita_categoria rcat ON rcat.id_receita = r.id_receita
-LEFT JOIN tbl_categoria cat ON cat.id_categoria = rcat.id_categoria;
+INNER JOIN tbl_receita_ingredientes ri ON ri.id_receita = r.id_receita
+INNER JOIN tbl_ingredientes i ON i.id_ingredientes = ri.id_ingredientes
+INNER JOIN tbl_receita_cozinha rc ON rc.id_receita = r.id_receita
+INNER JOIN tbl_cozinha cz ON cz.id_cozinha = rc.id_cozinha
+INNER JOIN tbl_receita_categoria rcat ON rcat.id_receita = r.id_receita
+INNER JOIN tbl_categoria cat ON cat.id_categoria = rcat.id_categoria
+GROUP BY r.id_receita;
 
 CREATE VIEW vw_receita_ingredientes AS
 SELECT
