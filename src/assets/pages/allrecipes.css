@@ -175,6 +175,21 @@ main {
 #filtro-categorias label:hover {
     color: #FF8000;
 }
+#filtro-alergenos label {
+    display: flex;
+    color: white;
+    font-weight: 300;
+    margin-bottom: 5px;
+    cursor: pointer;
+    padding: 3px 0;
+}
+#filtro-alergenos label span{
+    font-size: 14px;
+}
+
+#filtro-alergenos label:hover {
+    color: #FF8000;
+}
 
 #filtro-categorias input[type="checkbox"] {
     margin-right: 8px;
