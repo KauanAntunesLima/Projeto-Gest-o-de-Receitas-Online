@@ -124,7 +124,7 @@ const atualizarUsuario = async function (usuario, id, contentType) {
 }
 
 const inserirUsuario = async function (usuario, contentType) {
-    console.log(usuario)
+
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
 
     try {
@@ -142,7 +142,7 @@ const inserirUsuario = async function (usuario, contentType) {
                     senha: senhaCriptografada,
                     imagem: usuario.imagem
                   }
-                  console.log(usuarioCriptografado)
+
                 let result = await usuarioDAO.setInsertUsuario(usuarioCriptografado)
                 
                 if (result) {
@@ -207,7 +207,7 @@ const loginUsuario = async function (usuario) {
     }
 
 const deletarUsuario = async function (id) {
-    console.log(id)
+
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
 
     try {
@@ -220,7 +220,7 @@ const deletarUsuario = async function (id) {
             if (excluirUsuario.status_code == 200) {
                
                 let idUser = parseInt(id)
-                console.log(idUser)
+
                 let result = await usuarioDAO.setDeleteUsuario(idUser)
 
                 if (result) {

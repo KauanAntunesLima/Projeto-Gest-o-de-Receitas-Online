@@ -13,6 +13,7 @@ const controllerIngrediente = require('./controller_ingredientes.js')
 const controllerIngredienteAlergenos = require('./controller_ingrediente_alergenos.js')
 const controllerAlergenos = require('./controller_alergenos.js')
 const controllerReceitaCategoria = require('./controller_receita_categoria.js')
+const controllerCategoria = require('./controller_categoria.js')
 const controllerModoPreparo = require('./controller_modo_preparo.js')
 
 const MESSAGE_DEFAULT = require('../modulo/config_messages.js')
@@ -34,6 +35,13 @@ const listarReceita = async function () {
                     receita.cozinha = cozinha.response.cozinha
                 }
 
+                let categoriaId = await controllerReceitaCategoria.pegarReceitaCategoriaPorIdReceita(receita.id_receita)
+                if (categoriaId && categoriaId.response && categoriaId.response.receita_categoria && categoriaId.response.receita_categoria.length > 0) {
+                    let categoria = await controllerCategoria.pegarIdCategoria(categoriaId.response.receita_categoria[0].id_categoria)
+                    if (categoria && categoria.response && categoria.response.categoria) {
+                        receita.categoria = categoria.response.categoria[0]
+                    }
+                }
 
                 let receitaIngrediente = await controllerReceitaIngrediente.pegarReceitaIngredientePorIdReceita(receita.id_receita)
 
@@ -182,14 +190,22 @@ const pegarIdReceita = async function (id) {
 
             if (result) {
                 if (result.length > 0) {
-                    console.log(id)
+
                     let cozinhaId = await controllerReceitaCozinha.buscarCozinhaReceitaId(id)
-                    console.log(cozinhaId)
+
                     if (cozinhaId) {
                         let cozinha = await controllerCozinha.pegarIdCozinha(cozinhaId.response.receitaCozinha[0].id_cozinha)
 
                         if (cozinha) {
                             result[0].cozinha = cozinha.response.cozinha
+
+                            let categoriaId = await controllerReceitaCategoria.pegarReceitaCategoriaPorIdReceita(id)
+                            if (categoriaId && categoriaId.response && categoriaId.response.receita_categoria && categoriaId.response.receita_categoria.length > 0) {
+                                let categoria = await controllerCategoria.pegarIdCategoria(categoriaId.response.receita_categoria[0].id_categoria)
+                                if (categoria && categoria.response && categoria.response.categoria) {
+                                    result[0].categoria = categoria.response.categoria[0]
+                                }
+                            }
 
                             let infoIngredienteDaReceita = await controllerReceitaIngrediente.pegarReceitaIngredientePorIdReceita(id)
                             if (infoIngredienteDaReceita) {

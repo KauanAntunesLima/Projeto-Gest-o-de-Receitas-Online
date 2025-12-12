@@ -211,9 +211,8 @@ app.get('/v1/toque_gourmet/receita/usuario/:idUsuario', cors(), async function (
 app.post('/v1/toque_gourmet/receita/filtro', cors(), bodyParserJSON, async function (request, response) {
 
     let filtros = request.body
-
+    console.log(filtros)
     let receitas = await controllerReceita.filtrarReceitas(filtros)
-
     response.status(receitas.status_code)
     response.json(receitas)
 })
