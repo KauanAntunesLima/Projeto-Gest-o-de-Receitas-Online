@@ -23,8 +23,8 @@ function redirectToAllrecipes(filtros = {}) {
 
     const queryString = params.toString();
     const url = queryString ?
-        `allrecipes.html?${queryString}` :
-        'allrecipes.html';
+        `src/assets/pages/allrecipes.html?${queryString}` :
+        'src/assets/pages/allrecipes.html';
 
     window.location.href = url;
 }
@@ -74,13 +74,21 @@ async function executarBusca() {
 }
 
 async function capturarFiltros() {
+    const tempoSelecionado = Array.from(document.querySelectorAll('input[name="tempo"]:checked')).map(cb => cb.value);
+
     const filtros = {
-        tempo: Array.from(document.querySelectorAll('input[name="tempo"]:checked')).map(cb => cb.value),
         dificuldade: Array.from(document.querySelectorAll('input[name="dificuldade"]:checked')).map(cb => cb.value)[0] || null,
         tipo: Array.from(document.querySelectorAll('input[name="tipo"]:checked')).map(cb => cb.value),
         categoria: Array.from(document.querySelectorAll('input[name="categoria"]:checked')).map(cb => cb.value),
         alergenos: Array.from(document.querySelectorAll('input[name="alergenos"]:checked')).map(cb => cb.value)
     };
+
+    // Converte tempo para tempo_max (número em minutos)
+    if (tempoSelecionado.length > 0) {
+        // Pega o menor tempo selecionado (max permitido)
+        const menorTempo = Math.min(...tempoSelecionado.map(Number));
+        filtros.tempo_max = menorTempo;
+    }
 
     Object.keys(filtros).forEach(key => {
         if (!filtros[key] || (Array.isArray(filtros[key]) && filtros[key].length === 0)) {
@@ -152,7 +160,7 @@ function exibirResultados(receitas, termo) {
         cardPreview.className = 'card-preview';
 
         const img = document.createElement('img');
-        img.src = `../assets/img/${receita.imagem}`;
+        img.src = `${receita.imagem}`;
         img.alt = receita.titulo;
         img.className = 'recipe-preview';
 
@@ -231,6 +239,11 @@ document.addEventListener('click', function(e) {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Se está na página allrecipes, inicializa o carregamento
+    if (isAllrecipesPage()) {
+        inicializarPaginaAllrecipes();
+    }
+
     carregarFiltrosSalvos();
 
     document.querySelectorAll('.filter-choices input[type="checkbox"]').forEach(cb => {
@@ -264,13 +277,23 @@ document.addEventListener('DOMContentLoaded', () => {
 async function inicializarPaginaAllrecipes() {
     const urlParams = new URLSearchParams(window.location.search);
     const filtrosSalvos = localStorage.getItem('recipeFilters');
+    const nomeBusca = urlParams.get('nome');
 
-    // Verifica se há filtros na URL ou no localStorage
+    // Verifica se há filtro de nome na URL
+    if (nomeBusca) {
+        // Se há nome na URL, faz a busca direta
+        console.log('Buscando por nome:', nomeBusca);
+        const receitas = await buscarPorNome(nomeBusca);
+        exibirResultados(receitas, nomeBusca);
+        return;
+    }
+
+    // Verifica se há outros filtros na URL ou no localStorage
     const temFiltrosNaURL = urlParams.toString().length > 0;
     const temFiltrosSalvos = filtrosSalvos && Object.keys(JSON.parse(filtrosSalvos)).length > 0;
 
     if (temFiltrosNaURL || temFiltrosSalvos) {
-        // Se há filtros, aplica os filtros
+        // Se há outros filtros, aplica os filtros
         await capturarFiltros();
     } else {
         // Se não há filtros, carrega todas as receitas

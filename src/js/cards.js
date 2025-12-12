@@ -118,30 +118,6 @@ export async function initAllRecipes() {
     }
 }
 
-function criarIngredientInfo(nomeIng, qtd, medida) {
-    const divInfo = document.createElement('div');
-    divInfo.classList.add('ingredient-info');
-
-    const spanNome = document.createElement('span');
-    spanNome.textContent = nomeIng;
-
-    const unityInfo = document.createElement('div');
-    unityInfo.classList.add('unity-info');
-
-    const spanQtd = document.createElement('span');
-    spanQtd.textContent = `Quantidade: ${qtd}`;
-
-    const spanMedida = document.createElement('span');
-    spanMedida.textContent = `Unidade: ${medida}`;
-
-    unityInfo.appendChild(spanQtd);
-    unityInfo.appendChild(spanMedida);
-    divInfo.appendChild(spanNome);
-    divInfo.appendChild(unityInfo);
-
-    return divInfo;
-}
-
 function criarStep(passo) {
     const divStep = document.createElement('div');
     divStep.classList.add('step');
