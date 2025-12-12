@@ -260,6 +260,33 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+// Função para inicializar a página allrecipes corretamente
+async function inicializarPaginaAllrecipes() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const filtrosSalvos = localStorage.getItem('recipeFilters');
+
+    // Verifica se há filtros na URL ou no localStorage
+    const temFiltrosNaURL = urlParams.toString().length > 0;
+    const temFiltrosSalvos = filtrosSalvos && Object.keys(JSON.parse(filtrosSalvos)).length > 0;
+
+    if (temFiltrosNaURL || temFiltrosSalvos) {
+        // Se há filtros, aplica os filtros
+        await capturarFiltros();
+    } else {
+        // Se não há filtros, carrega todas as receitas
+        try {
+            const response = await fetch('http://localhost:8080/v1/toque_gourmet/receita');
+            const data = await response.json();
+
+            if (data.status && data.response && data.response.receita) {
+                exibirResultados(data.response.receita, '');
+            }
+        } catch (error) {
+            console.error('Erro ao carregar receitas:', error);
+        }
+    }
+}
+
 window.filtrarSistema = {
     executarBusca,
     capturarFiltros,

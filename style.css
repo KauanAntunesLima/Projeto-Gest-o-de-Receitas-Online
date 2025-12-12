@@ -88,6 +88,255 @@ select {
     border-radius: 45px;
     background-color: var(--cor-secundaria);
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    position: relative;
+    cursor: pointer;
+}
+
+.profile .profile-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 10px;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 12px 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    z-index: 1000;
+    white-space: nowrap;
+}
+
+.profile .profile-dropdown span {
+    color: #333;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.profile:hover .profile-dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* Estilos para Modais */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.modal-overlay[style*="flex"] {
+    opacity: 1;
+}
+
+.modal-content {
+    position: relative;
+    background: white;
+    border-radius: 8px;
+    max-width: 90%;
+    max-height: 90%;
+    overflow-y: auto;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+}
+
+.modal-overlay[style*="flex"] .modal-content {
+    transform: scale(1);
+}
+
+.modal-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #666;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.modal-close:hover {
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+/* Estilos específicos do modal de login */
+.modal {
+    padding: 40px;
+    text-align: center;
+    min-width: 400px;
+}
+
+.modal h1 {
+    margin-bottom: 30px;
+    color: #333;
+}
+
+.modal form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.modal input {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.modal input:focus {
+    outline: none;
+    border-color: var(--cor-primaria);
+}
+
+.modal .response {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.modal button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.modal button[type="submit"] {
+    background-color: var(--cor-primaria);
+    color: white;
+}
+
+.modal button[type="submit"]:hover {
+    background-color: #158015;
+}
+
+.modal button[type="button"] {
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+.modal button[type="button"]:hover {
+    background-color: #e0e0e0;
+}
+
+.error-message {
+    color: #ff4444;
+    font-size: 14px;
+    margin-top: 15px;
+    padding: 10px;
+    background-color: #ffe6e6;
+    border-radius: 4px;
+}
+
+/* Estilos específicos do modal de perfil */
+.profile-modal {
+    padding: 30px;
+    text-align: center;
+    min-width: 600px;
+    max-width: 800px;
+}
+
+.profile-header {
+    margin-bottom: 30px;
+}
+
+.profile-header h1 {
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.profile-header p {
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.add-recipe-btn {
+    background-color: var(--cor-secundaria);
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.add-recipe-btn:hover {
+    background-color: #e67300;
+}
+
+.user-stats {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-item span {
+    display: block;
+    font-size: 36px;
+    font-weight: bold;
+    color: var(--cor-primaria);
+}
+
+.stat-item p {
+    margin-top: 5px;
+    color: #666;
+}
+
+#user-recipes-container {
+    margin-bottom: 20px;
+}
+
+#user-recipes-container .recipe-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.logout-btn {
+    background-color: #ff4444;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.logout-btn:hover {
+    background-color: #cc0000;
 }
 
 main {
@@ -682,4 +931,85 @@ footer .right-content {
     .right-content .contact {
         padding-left: 50px;
     }
+}
+/* Estilos simples para o dialog de login */
+.modal {
+    display: none; /* Escondido por padrão */
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    padding: 40px;
+    border: none;
+    border-radius: 20px;
+    background-color: white;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    max-width: 400px;
+    width: 90%;
+}
+
+/* Aparece apenas quando está aberto */
+.modal[open] {
+    display: flex;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+}
+
+.modal::backdrop {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal h1 {
+    color: var(--cor-primaria);
+    font-weight: 400;
+    margin-bottom: 20px;
+}
+
+.modal input {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    background-color: var(--cor-primaria);
+    color: white;
+    text-align: center;
+}
+
+.modal input[type="password"] {
+    background-color: var(--cor-primaria);
+    color: white;
+}
+
+.modal input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.modal .response {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+    justify-content: center;
+}
+
+.modal button {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 20px;
+    background-color: var(--cor-primaria);
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.modal button:hover {
+    transform: scale(1.05);
+}
+
+.modal button:first-child {
+    background-color: black;
 }

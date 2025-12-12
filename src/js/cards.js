@@ -199,7 +199,7 @@ export async function initRecipeDetails() {
             : receita.modo_preparo.split('.').filter(p => p.trim());
 
         passos.forEach(passo => {
-            stepsContainer.appendChild(criarStep(passo));
+            stepsContainer.appendChild(criarStep(passo.descricao));
         });
     }
 
