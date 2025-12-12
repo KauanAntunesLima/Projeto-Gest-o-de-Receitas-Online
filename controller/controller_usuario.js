@@ -181,8 +181,8 @@ const loginUsuario = async function (usuario) {
 
         try {
 
-            const user = await usuarioDAO.getUsuarioByUsuarioNome(usuario.nome);
-            console.log(user)
+            const user = await usuarioDAO.getUsuarioByUsuarioNome(usuario.usuario);
+
             if (!user) {
 
                 return MESSAGE.ERROR_REQUIRED_FIELDS;
@@ -197,7 +197,7 @@ const loginUsuario = async function (usuario) {
                 MESSAGE.HEADER.status = MESSAGE.SUCCESS_REQUEST.status
                 MESSAGE.HEADER.status_code = MESSAGE.SUCCESS_REQUEST.status_code
                 MESSAGE.HEADER.response.usuario = user
-                console.log(user)
+
                 return MESSAGE.HEADER //200
             }
 

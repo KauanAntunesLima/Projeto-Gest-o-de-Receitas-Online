@@ -198,6 +198,15 @@ app.get('/v1/toque_gourmet/receita/nome/:nome', cors(), async function (request,
     response.json(receita)
 })
 
+//Listar receitas por usuário
+app.get('/v1/toque_gourmet/receita/usuario/:idUsuario', cors(), async function (request, response) {
+
+    let id = request.params.idUsuario
+    let receitas = await controllerReceita.listarReceitasPorUsuario(id)
+    response.status(receitas.status_code)
+    response.json(receitas)
+})
+
 //Filtrar receitas com múltiplos parâmetros
 app.post('/v1/toque_gourmet/receita/filtro', cors(), bodyParserJSON, async function (request, response) {
 
@@ -571,8 +580,8 @@ app.delete('/v1/toque_gourmet/usuario/:id', cors(), async function (request, res
 app.post ('/v1/toque_gourmet/usuario/login', cors(), bodyParserJSON, async function (req, res) {
 
     let dadosBody = req.body
-    let idUsuario = req.params.id
-    let usuario = await controllerUsuario.loginUsuario(dadosBody, idUsuario)
+    console.log(dadosBody)
+    let usuario = await controllerUsuario.loginUsuario(dadosBody)
     res.status(usuario.status_code)
     res.json(usuario)
 })

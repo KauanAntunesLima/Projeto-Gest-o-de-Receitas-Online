@@ -501,6 +501,35 @@ const validarDadosReceita = async function (receita) {
         return MESSAGE.ERROR_REQUIRED_FIELDS
     }
 }
+const listarReceitasPorUsuario = async function (idUsuario) {
+    let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
+
+    try {
+        if (idUsuario != '' && idUsuario != null && idUsuario != undefined && !isNaN(idUsuario) && idUsuario > 0) {
+            let result = await receitaDAO.getSelectReceitasByUsuario(parseInt(idUsuario))
+
+            if (result !== false) {
+                if (result.length > 0) {
+                    MESSAGE.HEADER.status = MESSAGE.SUCCESS_REQUEST.status
+                    MESSAGE.HEADER.status_code = MESSAGE.SUCCESS_REQUEST.status_code
+                    MESSAGE.HEADER.response.receitas = result
+                    return MESSAGE.HEADER
+                } else {
+                    return MESSAGE.ERROR_NOT_FOUND
+                }
+            } else {
+                return MESSAGE.ERROR_INTERNAL_SERVER_MODEL
+            }
+        } else {
+            MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [ID_USUARIO] inválido'
+            return MESSAGE.ERROR_REQUIRED_FIELDS
+        }
+    } catch (error) {
+        console.log(error)
+        return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER
+    }
+}
+
 module.exports = {
     listarReceita,
     pegarIdReceita,
@@ -508,5 +537,6 @@ module.exports = {
     atualizarReceita,
     deletarReceita,
     filtrarReceitas,
-    buscarReceitaPorNome
+    buscarReceitaPorNome,
+    listarReceitasPorUsuario
 }

@@ -215,6 +215,28 @@ FROM vw_receitas_completas`
     }
 }
 
+const getSelectReceitasByUsuario = async function (idUsuario) {
+    try {
+        let sql = `
+            SELECT DISTINCT r.*
+            FROM tbl_receita r
+            WHERE r.id_usuario = ${idUsuario}
+            ORDER BY r.data_criacao DESC
+        `
+
+        let result = await prisma.$queryRawUnsafe(sql)
+
+        if (Array.isArray(result)) {
+            return result
+        } else {
+            return []
+        }
+    } catch (error) {
+        console.log('Erro ao buscar receitas do usuário:', error)
+        return false
+    }
+}
+
 module.exports = {
     getSelectAllreceita,
     getSelectByIdReceita,
@@ -223,5 +245,6 @@ module.exports = {
     setUpdateReceita,
     setDeleteReceita,
     getSelectReceitaByNome,
-    getSelectReceitasComFiltrosView
+    getSelectReceitasComFiltrosView,
+    getSelectReceitasByUsuario
 }
