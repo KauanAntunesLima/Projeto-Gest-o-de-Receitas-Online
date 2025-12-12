@@ -151,10 +151,11 @@ const filtrarReceitas = async function (filtrosRequest) {
         // Tratar os filtros da requisição
         const filtros = {
             tempo_max: filtrosRequest.tempo_max ? Number(filtrosRequest.tempo_max) : undefined,
-            dificuldade: filtrosRequest.dificuldade || undefined,
+            dificuldade: filtrosRequest.dificuldade ? [].concat(filtrosRequest.dificuldade) : undefined,
             tipo: filtrosRequest.tipo ? [].concat(filtrosRequest.tipo) : undefined,
             categoria: filtrosRequest.categoria ? [].concat(filtrosRequest.categoria) : undefined,
             nome: filtrosRequest.nome || undefined,
+            ingredientes: filtrosRequest.ingredientes ? [].concat(filtrosRequest.ingredientes) : undefined,
             alergenos: filtrosRequest.alergenos ? [].concat(filtrosRequest.alergenos) : undefined
         }
         console.log(filtros)
@@ -469,7 +470,7 @@ const deletarReceita = async function (id) {
 
                 let result = await receitaDAO.setDeleteReceita(parseInt(id))
 
-                if (!result) {
+                if (result) {
                     MESSAGE.HEADER.status = MESSAGE.SUCCESS_DELETE_ITEM.status
                     MESSAGE.HEADER.status_code = MESSAGE.SUCCESS_DELETE_ITEM.status_code
                     MESSAGE.HEADER.message = MESSAGE.SUCCESS_DELETE_ITEM.message

@@ -164,13 +164,19 @@ const getSelectReceitasComFiltrosView = async function (filtros) {
             where.push(`tempo_preparo <= ${filtros.tempo_max}`)
         }
 
-        if (filtros.dificuldade) {
-            where.push(`dificuldade = '${filtros.dificuldade}'`)
+        if (filtros.dificuldade && filtros.dificuldade.length > 0) {
+            const dificuldadesString = filtros.dificuldade.map(d => `'${d}'`).join(',')
+            where.push(`dificuldade IN (${dificuldadesString})`)
         }
 
         if (filtros.tipo && filtros.tipo.length > 0) {
             const tiposString = filtros.tipo.map(t => `'${t}'`).join(',')
             where.push(`tipo_cozinha IN (${tiposString})`)
+        }
+
+        if (filtros.ingredientes && filtros.ingredientes.length > 0) {
+            const ingredientesConditions = filtros.ingredientes.map(ing => `ingredientes LIKE '%${ing.replace(/'/g, "''")}%'`)
+            where.push(`(${ingredientesConditions.join(' OR ')})`)
         }
 
         if (filtros.categoria && filtros.categoria.length > 0) {
@@ -205,7 +211,7 @@ FROM vw_receitas_completas`
         }
 
         sql += `\nORDER BY titulo ASC`
-
+        console.log(sql)
         let result = await prisma.$queryRawUnsafe(sql)
 
         if (Array.isArray(result)) {
