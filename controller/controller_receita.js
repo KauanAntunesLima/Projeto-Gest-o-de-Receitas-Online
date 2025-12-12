@@ -156,9 +156,9 @@ const filtrarReceitas = async function (filtrosRequest) {
             nome: filtrosRequest.nome || undefined,
             alergenos: filtrosRequest.alergenos ? [].concat(filtrosRequest.alergenos) : undefined
         }
-
+        console.log(filtros)
         let result = await receitaDAO.getSelectReceitasComFiltrosView(filtros)
-
+        console.log(result)
         if (result !== false) {
             if (result.length > 0) {
                 MESSAGE.HEADER.status = MESSAGE.SUCCESS_REQUEST.status

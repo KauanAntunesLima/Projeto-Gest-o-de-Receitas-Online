@@ -174,10 +174,14 @@ const getSelectReceitasComFiltrosView = async function (filtros) {
         }
 
         if (filtros.categoria && filtros.categoria.length > 0) {
-            const categoriasString = filtros.categoria.map(cat => {
-                return `'${cat.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}'`
-            }).join(',')
-            where.push(`categoria IN (${categoriasString})`)
+            const idsCategoria = filtros.categoria.map(cat => parseInt(cat)).filter(cat => !isNaN(cat))
+            if (idsCategoria.length > 0) {
+                where.push(`id_receita IN (
+                    SELECT DISTINCT id_receita
+                    FROM tbl_receita_categoria
+                    WHERE id_categoria IN (${idsCategoria.join(',')})
+                )`)
+            }
         }
 
         if (filtros.nome) {
@@ -210,7 +214,7 @@ FROM vw_receitas_completas`
             return []
         }
     } catch (error) {
-
+        console.log(error)
         return false
     }
 }
