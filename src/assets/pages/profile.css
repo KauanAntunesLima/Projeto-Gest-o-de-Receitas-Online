@@ -51,6 +51,7 @@ header .options{
 .user-options .new-recipe{
     display: flex;
     align-items: center;
+    cursor: pointer;
     justify-content: center;
     height: 35px;
     width: 180px;

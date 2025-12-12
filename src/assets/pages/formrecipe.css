@@ -105,6 +105,7 @@ textarea {
 
 .step-item textarea {
     flex: 1;
+    min-height: 60px;
 }
 
 .step-actions {
@@ -117,21 +118,24 @@ textarea {
 .add,
 .delete {
     border: none;
-    background: #000;
     color: #fff;
     width: 32px;
     height: 32px;
     border-radius: 50%;
     cursor: pointer;
     font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
 }
 
-.delete {
-    background: #dc3545;
+.delete:hover {
+    transform: scale(1.1);
 }
 
-.add {
-    background: #198754;
+.add:hover {
+    transform: scale(1.1);
 }
 
 .ingredients-photo {
@@ -329,4 +333,247 @@ textarea {
 .other-fields .extra-row select:focus {
     border-color: var(--cor-primaria);
     box-shadow: 0 0 0 2px rgba(28, 147, 28, 0.1);
+}
+
+.form-actions {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 40px;
+    padding: 20px 0;
+}
+
+.btn-clear,
+.btn-confirm {
+    padding: 12px 30px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-clear {
+    background: #6c757d;
+    color: white;
+}
+
+.btn-confirm {
+    background: var(--cor-primaria);
+    color: white;
+}
+
+.btn-clear:hover {
+    background: #5a6268;
+}
+
+.btn-confirm:hover {
+    background: #169a16;
+}
+
+@media (max-width: 1024px) {
+    .ingredients-photo {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .ingredients-box {
+        width: 100%;
+    }
+
+    .extra-info {
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .options {
+        font-size: 32px;
+        text-align: center;
+        padding: 20px;
+    }
+
+    .recipe-form {
+        padding: 0 20px;
+    }
+
+    .top-infos {
+        flex-direction: column;
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+
+    .time-group .time-inputs {
+        flex-wrap: wrap;
+    }
+
+    .time-group input {
+        flex: 1;
+        min-width: 80px;
+    }
+
+    .steps-section {
+        padding: 15px;
+        margin-bottom: 30px;
+    }
+
+    .step-item {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .step-actions {
+        flex-direction: row;
+        justify-content: flex-end;
+        align-self: flex-end;
+    }
+
+    .ingredients-box {
+        padding: 15px;
+    }
+
+    .ingredients-header {
+        grid-template-columns: 30px 1fr 1fr auto auto;
+        font-size: 14px;
+        gap: 5px;
+    }
+
+    .ingredient-row {
+        grid-template-columns: 30px 1fr 1fr auto auto;
+        gap: 5px;
+    }
+
+    .ingredient-row input {
+        font-size: 14px;
+    }
+
+    .photo-upload {
+        width: 100%;
+    }
+
+    .photo-preview img {
+        height: 200px;
+    }
+
+    .extra-info {
+        padding: 15px;
+    }
+
+    .extra-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+
+    .extra-row label {
+        width: auto;
+        font-size: 14px;
+    }
+
+    .extra-row select,
+    .extra-row input {
+        width: 100%;
+        font-size: 14px;
+    }
+
+    .allergens-header {
+        grid-template-columns: 1fr 1fr auto auto;
+        font-size: 14px;
+        gap: 5px;
+    }
+
+    .allergen-row {
+        grid-template-columns: 1fr 1fr auto auto;
+        gap: 5px;
+    }
+
+    .form-actions {
+        flex-direction: column;
+        gap: 15px;
+        padding: 20px;
+    }
+
+    .btn-clear,
+    .btn-confirm {
+        width: 100%;
+        padding: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .options {
+        font-size: 24px;
+    }
+
+    .recipe-form {
+        padding: 0 15px;
+    }
+
+    .recipe-form h3 {
+        font-size: 20px;
+    }
+
+    .input-group {
+        font-size: 18px;
+    }
+
+    .recipe-form input,
+    textarea,
+    select {
+        font-size: 16px;
+        padding: 12px;
+    }
+
+    .time-group .time-inputs {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .time-group input {
+        text-align: left;
+    }
+
+    .ingredients-header {
+        display: none;
+    }
+
+    .ingredient-row {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        align-items: stretch;
+    }
+
+    .ingredient-number {
+        display: none;
+    }
+
+    .ingredient-row input {
+        margin-bottom: 5px;
+    }
+
+    .add,
+    .delete {
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
+    }
+
+    .step-actions {
+        justify-content: center;
+    }
+
+    .photo-preview img {
+        height: 180px;
+    }
+
+    .allergen-row {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .allergen-row select {
+        margin-top: 5px;
+    }
 }

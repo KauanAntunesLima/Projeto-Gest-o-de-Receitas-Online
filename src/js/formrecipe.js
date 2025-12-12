@@ -1,4 +1,12 @@
 document.addEventListener('DOMContentLoaded', function() {
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const usuarioId = urlParams.get('usuario_id');
+
+    if (!usuarioId) {
+        window.location.href = 'profile.html';
+        return;
+    }
     function gerenciarPassos() {
         const stepsList = document.querySelector('.steps-list');
 
@@ -384,15 +392,23 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function resetarParaEstadoInicial() {
         const stepsList = document.querySelector('.steps-list');
-        const primeiroStep = stepsList.querySelector('.step-item');
-        stepsList.innerHTML = '';
-        stepsList.appendChild(primeiroStep);
+    const primeiroStep = stepsList.querySelector('.step-item');
+
+    // Remove todos os filhos mantendo primeiroStep
+    while (stepsList.firstChild) {
+        stepsList.removeChild(stepsList.firstChild);
+    }
+    stepsList.appendChild(primeiroStep);
         atualizarBotoesSteps();
 
         const ingredientsBox = document.querySelector('.ingredients-box');
         const header = ingredientsBox.querySelector('.ingredients-header');
         const primeiroIngrediente = ingredientsBox.querySelector('.ingredient-row');
-        ingredientsBox.innerHTML = '';
+
+        // Remove todos os filhos mantendo header e primeiro ingrediente
+        while (ingredientsBox.firstChild) {
+            ingredientsBox.removeChild(ingredientsBox.firstChild);
+        }
         ingredientsBox.appendChild(header);
         ingredientsBox.appendChild(primeiroIngrediente);
         atualizarBotoesIngredientes();
@@ -439,7 +455,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const formData = new FormData();
 
         const dados = {
-            id_usuario: 1,
+            id_usuario: parseInt(usuarioId),
             titulo: document.querySelector('.top-infos input[type="text"]').value.trim(),
             descricao: document.querySelector('.top-infos input[type="text"]').value.trim(),
             tempo_preparo: 0,

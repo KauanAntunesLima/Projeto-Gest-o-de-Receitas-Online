@@ -1,4 +1,4 @@
-import { initHome, initAllRecipes, initRecipeDetails } from './src/js/cards.js';
+import { initHome, initAllRecipes, initRecipeDetails, criarCard } from './src/js/cards.js';
 let receitasUsuario = [];
 function buscarReceitasLocal(termo) {
     termo = termo.toLowerCase();
@@ -104,8 +104,13 @@ function carregarPerfil() {
         }
         if (usuario.id_usuario) {
             buscarReceitasUsuario(usuario.id_usuario);
-            // Configurar busca local na página de perfil
             configurarBuscaPerfil();
+            const newRecipeBtn = document.querySelector('.new-recipe');
+            if (newRecipeBtn) {
+                newRecipeBtn.addEventListener('click', () => {
+                    window.location.href = `formrecipe.html?usuario_id=${usuario.id_usuario}`;
+                });
+            }
         }
     } else {
     }
@@ -177,45 +182,14 @@ async function buscarReceitasUsuario(usuarioId) {
     }
 }
 function limparCardsReceitas() {
-    const recipeCardsContainers = document.querySelectorAll('.recipe-cards');
-    recipeCardsContainers.forEach(container => {
-        container.innerHTML = '';
-    });
-}
-function criarCardReceita(receita) {
-    const card = document.createElement('div');
-    card.className = 'card';
-    const cardPreview = document.createElement('div');
-    cardPreview.className = 'card-preview';
-    const img = document.createElement('img');
-    img.src = receita.imagem;
-    img.alt = receita.titulo;
-    img.className = 'recipe-preview';
-    const cardTitleRatio = document.createElement('div');
-    cardTitleRatio.className = 'card-title-ratio';
-    const title = document.createElement('span');
-    title.textContent = receita.titulo;
-    const ratio = document.createElement('div');
-    ratio.className = 'ratio';
-    for (let i = 0; i < 5; i++) {
-        const star = document.createElement('img');
-        star.src = '../img/Star 5.svg';
-        star.alt = '';
-        star.className = 'star';
-        ratio.appendChild(star);
+    // Limpa apenas os cards criados dinamicamente na página profile
+    const mainElement = document.querySelector('main');
+    if (mainElement) {
+        const recipeCards = mainElement.querySelectorAll('.recipe-cards');
+        recipeCards.forEach(container => {
+            container.remove();
+        });
     }
-    cardTitleRatio.appendChild(title);
-    cardTitleRatio.appendChild(ratio);
-    cardPreview.appendChild(img);
-    cardPreview.appendChild(cardTitleRatio);
-    const cardDescription = document.createElement('div');
-    cardDescription.className = 'card-description';
-    const description = document.createElement('p');
-    description.textContent = receita.descricao || 'Deliciosa receita para você aproveitar!';
-    cardDescription.appendChild(description);
-    card.appendChild(cardPreview);
-    card.appendChild(cardDescription);
-    return card;
 }
 function exibirReceitasEmGrid(receitas) {
     limparCardsReceitas();
@@ -226,7 +200,7 @@ function exibirReceitasEmGrid(receitas) {
         rowDiv.classList.add('recipe-cards');
         for (let i = 0; i < 4; i++) {
             if (receitaIndex < receitas.length) {
-                const card = criarCardReceita(receitas[receitaIndex]);
+                const card = criarCard(receitas[receitaIndex]);
                 rowDiv.appendChild(card);
                 receitaIndex++;
             }
@@ -251,6 +225,10 @@ document.addEventListener('DOMContentLoaded', () => {
             initHome();
         }
     }
+
+    // Adicionar botões de navegação em todas as páginas
+    addReloadButton();
+    addBackButton();
 });
 function abrirCadastro() {
     const dialog = document.querySelector('.modal');
@@ -349,7 +327,48 @@ async function cadastrarUsuario() {
         alert('Erro ao conectar com o servidor. Tente novamente mais tarde.');
     }
 }
+
+function addReloadButton() {
+    if (document.querySelector('.reload-button')) return;
+
+    const button = document.createElement('button');
+    button.className = 'nav-button reload-button';
+
+    const img = document.createElement('img');
+    img.src = '/src/assets/img/reload-svgrepo-com.svg';
+    img.alt = 'Reload';
+    img.style.width = '24px';
+    img.style.height = '24px';
+
+    button.appendChild(img);
+    button.addEventListener('click', () => {
+        window.location.reload();
+    });
+    document.body.appendChild(button);
+}
+
+function addBackButton() {
+    if (document.querySelector('.back-button')) return;
+
+    const button = document.createElement('button');
+    button.className = 'nav-button back-button';
+    button.style.left = '80px';
+
+    const img = document.createElement('img');
+    img.src = '/src/assets/img/back-2-svgrepo-com.svg';
+    img.alt = 'Back';
+    img.style.width = '24px';
+    img.style.height = '24px';
+
+    button.appendChild(img);
+    button.addEventListener('click', () => {
+        window.history.back();
+    });
+    document.body.appendChild(button);
+}
+
 window.abrirLogin = abrirLogin;
 window.abrirCadastro = abrirCadastro;
 window.fecharCadastro = fecharCadastro;
-window.cadastrarUsuario = cadastrarUsuario;
+window.addReloadButton = addReloadButton;
+window.addBackButton = addBackButton;

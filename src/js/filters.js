@@ -23,8 +23,8 @@ function redirectToAllrecipes(filtros = {}) {
 
     const queryString = params.toString();
     const url = queryString ?
-        `src/assets/pages/allrecipes.html?${queryString}` :
-        'src/assets/pages/allrecipes.html';
+        `allrecipes.html?${queryString}` :
+        'allrecipes.html';
 
     window.location.href = url;
 }
