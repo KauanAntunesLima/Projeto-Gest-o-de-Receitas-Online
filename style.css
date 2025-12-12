@@ -46,7 +46,7 @@ header {
     display: flex;
     align-items: center;
     height: 100%;
-    margin-right: 97px;
+    margin-right: 150px;
     gap: 10px;
 }
 
@@ -80,6 +80,9 @@ select {
 }
 
 .profile {
+    position: fixed;
+    z-index: 1000;
+    right: 5%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -88,7 +91,6 @@ select {
     border-radius: 45px;
     background-color: var(--cor-secundaria);
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-    position: relative;
     cursor: pointer;
 }
 
