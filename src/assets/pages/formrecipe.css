@@ -344,6 +344,7 @@ textarea {
 }
 
 .btn-clear,
+.btn-delete,
 .btn-confirm {
     padding: 12px 30px;
     border: none;
@@ -370,6 +371,15 @@ textarea {
 
 .btn-confirm:hover {
     background: #169a16;
+}
+
+.btn-delete {
+    background: #dc3545;
+    color: white;
+}
+
+.btn-delete:hover {
+    background: #c82333;
 }
 
 @media (max-width: 1024px) {
@@ -496,7 +506,8 @@ textarea {
     }
 
     .btn-clear,
-    .btn-confirm {
+    .btn-confirm,
+    .btn-delete {
         width: 100%;
         padding: 15px;
     }

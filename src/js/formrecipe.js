@@ -2,11 +2,217 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const urlParams = new URLSearchParams(window.location.search);
     const usuarioId = urlParams.get('usuario_id');
+    const recipeData = urlParams.get('recipe');
 
-    if (!usuarioId) {
+    if (!usuarioId && !recipeData) {
         window.location.href = 'profile.html';
         return;
     }
+
+    // Se temos dados da receita, carregamos no formulário
+    if (recipeData) {
+        try {
+            const parsedData = JSON.parse(decodeURIComponent(recipeData));
+            // Extrair a receita da estrutura da API
+            const receitaBasica = parsedData.receita || parsedData.response?.receita?.[0] || parsedData;
+
+            // Buscar dados completos da API usando o ID
+            if (receitaBasica.id_receita) {
+                buscarReceitaPorId(receitaBasica.id_receita);
+            }
+        } catch (error) {
+            console.error('Erro ao carregar dados da receita:', error);
+        }
+    } else if (urlParams.get('id')) {
+        // Se temos ID da receita, buscar da API
+        const receitaId = urlParams.get('id');
+        buscarReceitaPorId(receitaId);
+    }
+
+    async function buscarReceitaPorId(receitaId) {
+        try {
+            const response = await fetch(`http://localhost:8080/v1/toque_gourmet/receita/${receitaId}`);
+            const data = await response.json();
+
+            if (data.status && data.response && data.response.receita) {
+                // A resposta pode vir como array ou objeto
+                const receita = Array.isArray(data.response.receita)
+                    ? data.response.receita[0]
+                    : data.response.receita;
+
+                carregarDadosReceitaNoFormulario(receita);
+            }
+        } catch (error) {
+            console.error('Erro ao buscar receita por ID:', error);
+        }
+    }
+
+    function carregarDadosReceitaNoFormulario(receita) {
+
+        // Carregar título
+        const tituloInput = document.querySelector('.top-infos input[type="text"]');
+        if (tituloInput && receita.titulo) {
+            tituloInput.value = receita.titulo;
+        }
+
+        // Carregar tempo de preparo
+        if (receita.tempo_preparo) {
+            const minutos = receita.tempo_preparo;
+            const horas = Math.floor(minutos / 60);
+            const mins = minutos % 60;
+
+            const horaInput = document.querySelector('.time-inputs input:nth-child(1)');
+            const minutoInput = document.querySelector('.time-inputs input:nth-child(2)');
+            const segundoInput = document.querySelector('.time-inputs input:nth-child(3)');
+
+            if (horaInput) horaInput.value = horas;
+            if (minutoInput) minutoInput.value = mins;
+            if (segundoInput) segundoInput.value = 0;
+        }
+
+        // Carregar categoria
+        const categoriaSelect = document.getElementById('categoria');
+        if (categoriaSelect && receita.categoria && receita.categoria.nome) {
+            categoriaSelect.value = receita.categoria.nome;
+        }
+
+        // Carregar dificuldade
+        const dificuldadeSelect = document.getElementById('dificuldade');
+        if (dificuldadeSelect && receita.dificuldade) {
+            dificuldadeSelect.value = receita.dificuldade;
+        }
+
+        // Carregar tipo de cozinha
+        const cozinhaSelect = document.getElementById('tipo_cozinha');
+        if (cozinhaSelect && receita.cozinha && receita.cozinha.length > 0) {
+            const nomeCozinha = receita.cozinha[0].nome.toLowerCase();
+
+            // Mapeamento correto para os valores do HTML
+            const cozinhaMap = {
+                'brasileira': 'brasileira',
+                'italiana': 'italiana',
+                'japonesa': 'japonesa',
+                'mexicana': 'mexicana',
+                'francesa': 'francesa'
+            };
+
+            cozinhaSelect.value = cozinhaMap[nomeCozinha] || 'outra';
+        }
+
+        // Carregar imagem
+        const previewImg = document.getElementById('preview-img');
+        if (previewImg && receita.imagem) {
+            previewImg.src = receita.imagem;
+        }
+
+        // Carregar ingredientes
+        if (receita.ingredientes && receita.ingredientes.length > 0) {
+            const ingredientsBox = document.querySelector('.ingredients-box');
+            if (ingredientsBox) {
+                const primeiroIngrediente = ingredientsBox.querySelector('.ingredient-row');
+
+                if (primeiroIngrediente) {
+                    // Limpar ingredientes existentes (exceto o primeiro)
+                    const ingredientesExistentes = ingredientsBox.querySelectorAll('.ingredient-row');
+                    ingredientesExistentes.forEach((ing, index) => {
+                        if (index > 0) ing.remove();
+                    });
+
+                    // Carregar primeiro ingrediente
+                    if (receita.ingredientes[0]) {
+                        const inputs = primeiroIngrediente.querySelectorAll('input[type="text"]');
+                        if (inputs[0]) inputs[0].value = receita.ingredientes[0].nome || '';
+                        if (inputs[1]) inputs[1].value = receita.ingredientes[0].quantidade || '';
+                        if (inputs[2]) inputs[2].value = receita.ingredientes[0].unidade || '';
+                    }
+
+                    // Adicionar demais ingredientes
+                    for (let i = 1; i < receita.ingredientes.length; i++) {
+                        const novoIngrediente = criarNovoIngrediente();
+                        const inputs = novoIngrediente.querySelectorAll('input[type="text"]');
+                        if (inputs[0]) inputs[0].value = receita.ingredientes[i].nome || '';
+                        if (inputs[1]) inputs[1].value = receita.ingredientes[i].quantidade || '';
+                        if (inputs[2]) inputs[2].value = receita.ingredientes[i].unidade || '';
+
+                        const ultimoIngrediente = ingredientsBox.querySelector('.ingredient-row:last-of-type');
+                        ingredientsBox.insertBefore(novoIngrediente, ultimoIngrediente.nextSibling);
+                    }
+                    atualizarBotoesIngredientes();
+                }
+            }
+        }
+
+        // Carregar modo de preparo
+        if (receita.modo_preparo && receita.modo_preparo.length > 0) {
+            const stepsList = document.querySelector('.steps-list');
+            if (stepsList) {
+                const primeiroStep = stepsList.querySelector('.step-item');
+
+                if (primeiroStep) {
+                    // Limpar passos existentes (exceto o primeiro)
+                    const passosExistentes = stepsList.querySelectorAll('.step-item');
+                    passosExistentes.forEach((passo, index) => {
+                        if (index > 0) passo.remove();
+                    });
+
+                    // Carregar primeiro passo
+                    if (receita.modo_preparo[0]) {
+                        const textarea = primeiroStep.querySelector('textarea');
+                        if (textarea) {
+                            textarea.value = receita.modo_preparo[0].descricao || '';
+                        }
+                    }
+
+                    // Adicionar demais passos
+                    for (let i = 1; i < receita.modo_preparo.length; i++) {
+                        const novoStep = criarNovoStep();
+                        const textarea = novoStep.querySelector('textarea');
+                        if (textarea) {
+                            textarea.value = receita.modo_preparo[i].descricao || '';
+                        }
+
+                        const ultimoStep = stepsList.querySelector('.step-item:last-of-type');
+                        stepsList.insertBefore(novoStep, ultimoStep.nextSibling);
+                    }
+                    atualizarBotoesSteps();
+                }
+            }
+        }
+
+        // Adicionar botão de excluir receita
+        adicionarBotaoExcluirReceita(receita.id_receita);
+    }
+
+    function adicionarBotaoExcluirReceita(receitaId) {
+        const formActions = document.querySelector('.form-actions');
+        if (!formActions) return;
+
+        // Verificar se o botão já existe
+        const existingBtn = document.getElementById('btn-delete');
+        if (existingBtn) return;
+
+        // Criar botão de excluir
+        const deleteBtn = document.createElement('button');
+        deleteBtn.type = 'button';
+        deleteBtn.className = 'btn-delete';
+        deleteBtn.id = 'btn-delete';
+        deleteBtn.textContent = 'Excluir Receita';
+
+        deleteBtn.addEventListener('click', function() {
+            if (confirm('Tem certeza que deseja excluir esta receita? Esta ação não pode ser desfeita.')) {
+                excluirReceita(receitaId);
+            }
+        });
+
+        // Inserir o botão antes do botão de limpar
+        const clearBtn = document.getElementById('btn-clear');
+        if (clearBtn) {
+            formActions.insertBefore(deleteBtn, clearBtn);
+        } else {
+            formActions.appendChild(deleteBtn);
+        }
+    }
+
     function gerenciarPassos() {
         const stepsList = document.querySelector('.steps-list');
 
@@ -568,6 +774,26 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
         }
+    }
+
+    function excluirReceita(receitaId) {
+        fetch(`http://localhost:8080/v1/toque_gourmet/receita/${receitaId}`, {
+            method: 'DELETE'
+        })
+        .then(response => response.json())
+        .then(result => {
+            if (result.status || result.status_code === 200) {
+                alert('Receita excluída com sucesso!');
+                // Redirecionar para o perfil após exclusão
+                window.location.href = 'profile.html';
+            } else {
+                alert('Erro ao excluir receita: ' + (result.message || result.mensagem || 'Tente novamente.'));
+            }
+        })
+        .catch(error => {
+            console.error('Erro ao excluir receita:', error);
+            alert('Erro ao excluir receita. Tente novamente mais tarde.');
+        });
     }
 
     gerenciarPassos();
