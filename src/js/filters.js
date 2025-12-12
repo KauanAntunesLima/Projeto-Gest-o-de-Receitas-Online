@@ -83,9 +83,8 @@ async function capturarFiltros() {
         alergenos: Array.from(document.querySelectorAll('input[name="alergenos"]:checked')).map(cb => cb.value)
     };
 
-    // Converte tempo para tempo_max (número em minutos)
     if (tempoSelecionado.length > 0) {
-        // Pega o menor tempo selecionado (max permitido)
+
         const menorTempo = Math.min(...tempoSelecionado.map(Number));
         filtros.tempo_max = menorTempo;
     }
@@ -204,7 +203,6 @@ function exibirResultados(receitas, termo) {
         return card;
     }
 
-    // Montar linhas de 4
     while (receitaIndex < receitas.length) {
         const rowDiv = document.createElement('div');
         rowDiv.classList.add('recipe-cards');
@@ -239,7 +237,6 @@ document.addEventListener('click', function(e) {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Se está na página allrecipes, inicializa o carregamento
     if (isAllrecipesPage()) {
         inicializarPaginaAllrecipes();
     }
@@ -273,30 +270,28 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// Função para inicializar a página allrecipes corretamente
 async function inicializarPaginaAllrecipes() {
     const urlParams = new URLSearchParams(window.location.search);
     const filtrosSalvos = localStorage.getItem('recipeFilters');
     const nomeBusca = urlParams.get('nome');
 
-    // Verifica se há filtro de nome na URL
+
     if (nomeBusca) {
-        // Se há nome na URL, faz a busca direta
+
         console.log('Buscando por nome:', nomeBusca);
         const receitas = await buscarPorNome(nomeBusca);
         exibirResultados(receitas, nomeBusca);
         return;
     }
 
-    // Verifica se há outros filtros na URL ou no localStorage
     const temFiltrosNaURL = urlParams.toString().length > 0;
     const temFiltrosSalvos = filtrosSalvos && Object.keys(JSON.parse(filtrosSalvos)).length > 0;
 
     if (temFiltrosNaURL || temFiltrosSalvos) {
-        // Se há outros filtros, aplica os filtros
+
         await capturarFiltros();
     } else {
-        // Se não há filtros, carrega todas as receitas
+
         try {
             const response = await fetch('http://localhost:8080/v1/toque_gourmet/receita');
             const data = await response.json();

@@ -383,7 +383,6 @@ main {
     }
 }
 
-/* Estilos para os botões do formulário */
 .form-actions {
     display: flex;
     justify-content: flex-end;

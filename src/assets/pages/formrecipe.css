@@ -222,7 +222,6 @@ textarea {
     width: 20%;
 }
 
-/* Estilos para ingredientes numerados */
 .ingredients-header {
     display: grid;
     grid-template-columns: 40px 2fr 1fr 1fr auto auto;
@@ -256,7 +255,6 @@ textarea {
     color: #666;
 }
 
-/* Estilos para seção de alérgenos */
 .allergens-section {
     margin-bottom: 30px;
 }

@@ -135,23 +135,18 @@ export async function initRecipeDetails() {
     let receita = data?.receita || data?.response?.receita?.[0] || data;
     if (!receita) return;
 
-    // IMAGEM
     const bgImg = document.getElementById('recipe-bg-img');
     if (bgImg) bgImg.src = receita.imagem;
 
-    // TÍTULO
     const titleEl = document.getElementById('recipe-title');
     if (titleEl) titleEl.textContent = receita.titulo;
 
-    // DIFICULDADE
     const diffEl = document.getElementById('recipe-difficulty-text');
     if (diffEl) diffEl.textContent = receita.dificuldade;
 
-    // ================= INGREDIENTES =================
     const ingredientsContainer = document.querySelector('.ingredients');
     if (ingredientsContainer && receita.ingredientes) {
 
-        // Remove tudo após o <h2>
         [...ingredientsContainer.querySelectorAll('.ingredient-info')].forEach(el => el.remove());
 
         receita.ingredientes.forEach(ing => {
@@ -165,7 +160,6 @@ export async function initRecipeDetails() {
         });
     }
 
-    // ================= MODO DE PREPARO =================
     const stepsContainer = document.getElementById('steps-list');
     if (stepsContainer && receita.modo_preparo) {
         clearContainer(stepsContainer);
@@ -179,9 +173,6 @@ export async function initRecipeDetails() {
         });
     }
 
-    // =============================================================
-    // FUNÇÃO compatível com a estrutura REAL da página
-    // =============================================================
     function criarIngredientInfo(nome, quantidade, medida) {
         const wrapper = document.createElement('div');
         wrapper.classList.add('ingredient-info');

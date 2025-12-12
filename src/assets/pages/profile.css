@@ -1,10 +1,8 @@
-/* CSS específico para a página de perfil */
 :root {
     --cor-primaria: #1C931C;
     --cor-secundaria: #FF8000;
 }
 
-/* Reset e estilos base */
 body {
     padding-inline: 120px;
     background-color: #f8f9fa;
@@ -24,7 +22,6 @@ header .options {
     margin: 0;
 }
 
-/* Estilos das informações do usuário */
 .user-info {
     display: flex;
     flex-direction: column;
@@ -61,7 +58,6 @@ header .options {
     opacity: 0.8;
 }
 
-/* Controles de receitas */
 .recipe-controls {
     display: flex;
     justify-content: space-between;
@@ -83,7 +79,6 @@ header .options {
     font-size: 1.5rem;
 }
 
-/* Container de filtros */
 .filter-container {
     position: relative;
 }
@@ -116,7 +111,6 @@ header .options {
     filter: brightness(0) invert(1);
 }
 
-/* Painel de filtros */
 .filters-panel {
     position: absolute;
     top: 100%;
@@ -215,13 +209,11 @@ header .options {
     background: #e0e0e0;
 }
 
-/* Container das receitas */
 .user-recipes {
     margin: 40px 0;
     min-height: 300px;
 }
 
-/* Cards de receita */
 .recipe-cards {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -372,7 +364,6 @@ header .options {
     filter: brightness(0) invert(1);
 }
 
-/* Mensagem de receitas vazias */
 .no-recipes {
     text-align: center;
     padding: 80px 20px;
@@ -433,7 +424,6 @@ header .options {
     box-shadow: 0 8px 25px rgba(255, 128, 0, 0.4);
 }
 
-/* Botão adicionar receita */
 .add-recipe-container {
     text-align: center;
     margin: 60px 0;
@@ -466,7 +456,6 @@ header .options {
     box-shadow: 0 10px 30px rgba(255, 128, 0, 0.4);
 }
 
-/* Loading */
 .loading {
     text-align: center;
     padding: 80px 20px;
@@ -477,7 +466,6 @@ header .options {
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
 }
 
-/* Mensagem de erro */
 .error-message {
     text-align: center;
     padding: 40px 20px;
@@ -490,7 +478,6 @@ header .options {
     max-width: 500px;
 }
 
-/* Responsividade */
 @media (max-width: 1360px) {
     .recipe-cards {
         grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));

@@ -122,7 +122,6 @@ select {
     transform: translateY(0);
 }
 
-/* Estilos para Modais */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -181,7 +180,6 @@ select {
     color: #333;
 }
 
-/* Estilos específicos do modal de login */
 .modal {
     padding: 40px;
     text-align: center;
@@ -254,7 +252,6 @@ select {
     border-radius: 4px;
 }
 
-/* Estilos específicos do modal de perfil */
 .profile-modal {
     padding: 30px;
     text-align: center;
@@ -932,9 +929,8 @@ footer .right-content {
         padding-left: 50px;
     }
 }
-/* Estilos simples para o dialog de login */
 .modal {
-    display: none; /* Escondido por padrão */
+    display: none;
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -948,7 +944,6 @@ footer .right-content {
     width: 90%;
 }
 
-/* Aparece apenas quando está aberto */
 .modal[open] {
     display: flex;
     position: fixed;

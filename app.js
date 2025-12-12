@@ -1,35 +1,28 @@
-// Arquivo principal responsável por inicializar as funcionalidades básicas
 import { initHome, initAllRecipes, initRecipeDetails } from './src/js/cards.js';
 
-// Função simples para abrir o dialog de login
 function abrirLogin() {
     const dialog = document.querySelector('.modal');
     if (dialog) {
         dialog.showModal();
 
-        // Fecha o dialog quando clicar fora
         dialog.addEventListener('click', (e) => {
             if (e.target === dialog) {
                 dialog.close();
             }
         });
 
-        // Fecha o dialog com ESC
         dialog.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 dialog.close();
             }
         });
 
-        // Adiciona funcionalidade aos botões
         const buttons = dialog.querySelectorAll('button');
         buttons[0].addEventListener('click', () => {
-            // Botão "Criar Conta"
             alert('Funcionalidade de criar conta em desenvolvimento');
         });
 
         buttons[1].addEventListener('click', async () => {
-            // Botão "Confirmar" - Login real com API
             const usuarioInput = document.getElementById('usuario-input');
             const senhaInput = document.getElementById('senha-input');
 
@@ -44,10 +37,8 @@ function abrirLogin() {
             }
 
             try {
-                // Debug para verificar os valores
                 console.log('Enviando login:', { usuario, senha });
 
-                // Fazer login na API
                 const response = await fetch('http://localhost:8080/v1/toque_gourmet/usuario/login', {
                     method: 'POST',
                     headers: {
@@ -62,13 +53,10 @@ function abrirLogin() {
                 if (response.ok) {
                 const responseData = await response.json();
 
-                // Pega o primeiro usuário do array de resposta
                 const userData = Array.isArray(responseData) ? responseData[0] : responseData;
 
-                // Salva dados do usuário no localStorage
                 localStorage.setItem('usuarioLogado', JSON.stringify(userData));
 
-                    // Redireciona para a página de perfil
                     window.location.href = './src/assets/pages/profile.html';
                     dialog.close();
                 } else {
@@ -83,7 +71,6 @@ function abrirLogin() {
     }
 }
 
-// Inicializa a página
 document.addEventListener('DOMContentLoaded', () => {
     const recipeTitle = document.getElementById('recipe-title');
 
@@ -92,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     else if (document.getElementById('all-recipes-container')) {
         initAllRecipes();
-    } 
+    }
     else {
         const homeContainers = document.querySelectorAll('.recipe-cards');
         if (homeContainers.length > 0) {
@@ -101,5 +88,4 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// Torna a função global para o onclick no HTML
 window.abrirLogin = abrirLogin;
