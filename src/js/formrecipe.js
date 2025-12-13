@@ -3,29 +3,28 @@ document.addEventListener('DOMContentLoaded', function() {
     const urlParams = new URLSearchParams(window.location.search);
     const usuarioId = urlParams.get('usuario_id');
     const recipeData = urlParams.get('recipe');
+    let receitaIdEditando = null;
 
     if (!usuarioId && !recipeData) {
         window.location.href = 'profile.html';
         return;
     }
 
-    // Se temos dados da receita, carregamos no formulário
     if (recipeData) {
         try {
             const parsedData = JSON.parse(decodeURIComponent(recipeData));
-            // Extrair a receita da estrutura da API
             const receitaBasica = parsedData.receita || parsedData.response?.receita?.[0] || parsedData;
 
-            // Buscar dados completos da API usando o ID
             if (receitaBasica.id_receita) {
+                receitaIdEditando = receitaBasica.id_receita;
                 buscarReceitaPorId(receitaBasica.id_receita);
             }
         } catch (error) {
             console.error('Erro ao carregar dados da receita:', error);
         }
     } else if (urlParams.get('id')) {
-        // Se temos ID da receita, buscar da API
         const receitaId = urlParams.get('id');
+        receitaIdEditando = receitaId;
         buscarReceitaPorId(receitaId);
     }
 
@@ -35,7 +34,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const data = await response.json();
 
             if (data.status && data.response && data.response.receita) {
-                // A resposta pode vir como array ou objeto
                 const receita = Array.isArray(data.response.receita)
                     ? data.response.receita[0]
                     : data.response.receita;
@@ -49,13 +47,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function carregarDadosReceitaNoFormulario(receita) {
 
-        // Carregar título
         const tituloInput = document.querySelector('.top-infos input[type="text"]');
         if (tituloInput && receita.titulo) {
             tituloInput.value = receita.titulo;
         }
-
-        // Carregar tempo de preparo
         if (receita.tempo_preparo) {
             const minutos = receita.tempo_preparo;
             const horas = Math.floor(minutos / 60);
@@ -70,24 +65,19 @@ document.addEventListener('DOMContentLoaded', function() {
             if (segundoInput) segundoInput.value = 0;
         }
 
-        // Carregar categoria
         const categoriaSelect = document.getElementById('categoria');
         if (categoriaSelect && receita.categoria && receita.categoria.nome) {
             categoriaSelect.value = receita.categoria.nome;
         }
 
-        // Carregar dificuldade
         const dificuldadeSelect = document.getElementById('dificuldade');
         if (dificuldadeSelect && receita.dificuldade) {
             dificuldadeSelect.value = receita.dificuldade;
         }
 
-        // Carregar tipo de cozinha
         const cozinhaSelect = document.getElementById('tipo_cozinha');
         if (cozinhaSelect && receita.cozinha && receita.cozinha.length > 0) {
             const nomeCozinha = receita.cozinha[0].nome.toLowerCase();
-
-            // Mapeamento correto para os valores do HTML
             const cozinhaMap = {
                 'brasileira': 'brasileira',
                 'italiana': 'italiana',
@@ -99,34 +89,28 @@ document.addEventListener('DOMContentLoaded', function() {
             cozinhaSelect.value = cozinhaMap[nomeCozinha] || 'outra';
         }
 
-        // Carregar imagem
         const previewImg = document.getElementById('preview-img');
         if (previewImg && receita.imagem) {
             previewImg.src = receita.imagem;
+            previewImg.dataset.originalImage = receita.imagem;
         }
-
-        // Carregar ingredientes
         if (receita.ingredientes && receita.ingredientes.length > 0) {
             const ingredientsBox = document.querySelector('.ingredients-box');
             if (ingredientsBox) {
                 const primeiroIngrediente = ingredientsBox.querySelector('.ingredient-row');
 
                 if (primeiroIngrediente) {
-                    // Limpar ingredientes existentes (exceto o primeiro)
                     const ingredientesExistentes = ingredientsBox.querySelectorAll('.ingredient-row');
                     ingredientesExistentes.forEach((ing, index) => {
                         if (index > 0) ing.remove();
                     });
 
-                    // Carregar primeiro ingrediente
                     if (receita.ingredientes[0]) {
                         const inputs = primeiroIngrediente.querySelectorAll('input[type="text"]');
                         if (inputs[0]) inputs[0].value = receita.ingredientes[0].nome || '';
                         if (inputs[1]) inputs[1].value = receita.ingredientes[0].quantidade || '';
                         if (inputs[2]) inputs[2].value = receita.ingredientes[0].unidade || '';
                     }
-
-                    // Adicionar demais ingredientes
                     for (let i = 1; i < receita.ingredientes.length; i++) {
                         const novoIngrediente = criarNovoIngrediente();
                         const inputs = novoIngrediente.querySelectorAll('input[type="text"]');
@@ -142,28 +126,23 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
-        // Carregar modo de preparo
         if (receita.modo_preparo && receita.modo_preparo.length > 0) {
             const stepsList = document.querySelector('.steps-list');
             if (stepsList) {
                 const primeiroStep = stepsList.querySelector('.step-item');
 
                 if (primeiroStep) {
-                    // Limpar passos existentes (exceto o primeiro)
                     const passosExistentes = stepsList.querySelectorAll('.step-item');
                     passosExistentes.forEach((passo, index) => {
                         if (index > 0) passo.remove();
                     });
 
-                    // Carregar primeiro passo
                     if (receita.modo_preparo[0]) {
                         const textarea = primeiroStep.querySelector('textarea');
                         if (textarea) {
                             textarea.value = receita.modo_preparo[0].descricao || '';
                         }
                     }
-
-                    // Adicionar demais passos
                     for (let i = 1; i < receita.modo_preparo.length; i++) {
                         const novoStep = criarNovoStep();
                         const textarea = novoStep.querySelector('textarea');
@@ -179,19 +158,16 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
-        // Adicionar botão de excluir receita
         adicionarBotaoExcluirReceita(receita.id_receita);
+        gerenciarBotoesPrincipais();
     }
 
     function adicionarBotaoExcluirReceita(receitaId) {
         const formActions = document.querySelector('.form-actions');
         if (!formActions) return;
 
-        // Verificar se o botão já existe
         const existingBtn = document.getElementById('btn-delete');
         if (existingBtn) return;
-
-        // Criar botão de excluir
         const deleteBtn = document.createElement('button');
         deleteBtn.type = 'button';
         deleteBtn.className = 'btn-delete';
@@ -204,7 +180,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        // Inserir o botão antes do botão de limpar
         const clearBtn = document.getElementById('btn-clear');
         if (clearBtn) {
             formActions.insertBefore(deleteBtn, clearBtn);
@@ -560,6 +535,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const btnClear = document.getElementById('btn-clear');
         const btnConfirm = document.getElementById('btn-confirm');
 
+        if (receitaIdEditando) {
+            btnConfirm.textContent = 'Atualizar Receita';
+        }
+
         btnClear.addEventListener('click', function() {
             if (confirm('Tem certeza que deseja limpar todos os campos?')) {
                 limparTodosCampos();
@@ -600,7 +579,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const stepsList = document.querySelector('.steps-list');
     const primeiroStep = stepsList.querySelector('.step-item');
 
-    // Remove todos os filhos mantendo primeiroStep
     while (stepsList.firstChild) {
         stepsList.removeChild(stepsList.firstChild);
     }
@@ -611,7 +589,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const header = ingredientsBox.querySelector('.ingredients-header');
         const primeiroIngrediente = ingredientsBox.querySelector('.ingredient-row');
 
-        // Remove todos os filhos mantendo header e primeiro ingrediente
         while (ingredientsBox.firstChild) {
             ingredientsBox.removeChild(ingredientsBox.firstChild);
         }
@@ -660,14 +637,17 @@ document.addEventListener('DOMContentLoaded', function() {
     function coletarDadosFormulario() {
         const formData = new FormData();
 
+        const usuarioLogado = localStorage.getItem('usuarioLogado');
+        const userData = usuarioLogado ? JSON.parse(usuarioLogado) : null;
+        const usuarioIdAtual = userData?.response?.usuario?.id_usuario || parseInt(usuarioId);
+
         const dados = {
-            id_usuario: parseInt(usuarioId),
+            id_usuario: usuarioIdAtual,
             titulo: document.querySelector('.top-infos input[type="text"]').value.trim(),
             descricao: document.querySelector('.top-infos input[type="text"]').value.trim(),
             tempo_preparo: 0,
             dificuldade: '',
             data_criacao: new Date().toISOString().slice(0, 10),
-            data_edicao: null,
             id_cozinha: 1,
             id_categoria: 1,
             ingredientes: [],
@@ -737,13 +717,34 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        formData.append('dados', JSON.stringify(dados));
-
-        const fileInput = document.getElementById('img-input');
-        if (fileInput && fileInput.files.length > 0) {
-            formData.append('imagem', fileInput.files[0]);
+        if (receitaIdEditando) {
+            const fileInput = document.getElementById('img-input');
+            if (fileInput && fileInput.files.length > 0) {
+                formData.append('imagem', fileInput.files[0]);
+                const previewImg = document.getElementById('preview-img');
+                if (previewImg && previewImg.dataset.originalImage && previewImg.dataset.originalImage !== 'null') {
+                    formData.append('link_imagem', previewImg.dataset.originalImage);
+                }
+                formData.append('dados', JSON.stringify(dados));
+                atualizarReceitaComImagem(receitaIdEditando, formData);
+            } else {
+                const previewImg = document.getElementById('preview-img');
+                if (previewImg && previewImg.dataset.originalImage && previewImg.dataset.originalImage !== 'null') {
+                    dados.imagem = previewImg.dataset.originalImage;
+                }
+                atualizarReceita(receitaIdEditando, dados);
+            }
+        } else {
+            const fileInput = document.getElementById('img-input');
+            if (fileInput && fileInput.files.length > 0) {
+                formData.append('imagem', fileInput.files[0]);
+            }
+            formData.append('dados', JSON.stringify(dados));
+            cadastrarReceita(formData);
         }
+    }
 
+    function cadastrarReceita(formData) {
         fetch('http://localhost:8080/v1/toque_gourmet/receita/upload', {
             method: 'POST',
             body: formData
@@ -756,6 +757,59 @@ document.addEventListener('DOMContentLoaded', function() {
                   alert('Erro: ' + result.message);
               }
           });
+    }
+
+    function atualizarReceita(receitaId, dados) {
+        const confirmMessage = 'Deseja atualizar esta receita? As alterações serão salvas.';
+        if (!confirm(confirmMessage)) {
+            return;
+        }
+
+        fetch(`http://localhost:8080/v1/toque_gourmet/receita/${receitaId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(dados)
+        })
+        .then(response => response.json())
+        .then(result => {
+            if (result.status) {
+                alert('Receita atualizada com sucesso!');
+                window.location.href = 'profile.html';
+            } else {
+                alert('Erro ao atualizar receita: ' + (result.message || 'Tente novamente.'));
+            }
+        })
+        .catch(error => {
+            console.error('Erro ao atualizar receita:', error);
+            alert('Erro ao atualizar receita. Tente novamente mais tarde.');
+        });
+    }
+
+    function atualizarReceitaComImagem(receitaId, formData) {
+        const confirmMessage = 'Deseja atualizar esta receita? As alterações serão salvas.';
+        if (!confirm(confirmMessage)) {
+            return;
+        }
+
+        fetch(`http://localhost:8080/v1/toque_gourmet/receita/upload/${receitaId}`, {
+            method: 'PUT',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(result => {
+            if (result.status) {
+                alert('Receita atualizada com sucesso!');
+                window.location.href = 'profile.html';
+            } else {
+                alert('Erro ao atualizar receita: ' + (result.message || 'Tente novamente.'));
+            }
+        })
+        .catch(error => {
+            console.error('Erro ao atualizar receita:', error);
+            alert('Erro ao atualizar receita. Tente novamente mais tarde.');
+        });
     }
 
     function gerenciarPreviewImagem() {
@@ -780,15 +834,15 @@ document.addEventListener('DOMContentLoaded', function() {
         fetch(`http://localhost:8080/v1/toque_gourmet/receita/${receitaId}`, {
             method: 'DELETE'
         })
-        .then(response => response.json())
-        .then(result => {
-            if (result.status || result.status_code === 200) {
-                alert('Receita excluída com sucesso!');
-                // Redirecionar para o perfil após exclusão
-                window.location.href = 'profile.html';
-            } else {
-                alert('Erro ao excluir receita: ' + (result.message || result.mensagem || 'Tente novamente.'));
+        .then(response => {
+            if (response.ok) {
+                return response.json();
             }
+            throw new Error('Erro na resposta da API');
+        })
+        .then(result => {
+            alert('Receita excluída com sucesso!');
+            window.location.href = 'profile.html';
         })
         .catch(error => {
             console.error('Erro ao excluir receita:', error);
@@ -800,7 +854,9 @@ document.addEventListener('DOMContentLoaded', function() {
     gerenciarIngredientes();
     gerenciarAlergenos();
     gerenciarOutrosCampos();
-    gerenciarBotoesPrincipais();
+    if (!receitaIdEditando) {
+        gerenciarBotoesPrincipais();
+    }
     gerenciarPreviewImagem();
 
     atualizarSelectsAlergenos();

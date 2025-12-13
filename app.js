@@ -118,10 +118,8 @@ function carregarPerfil() {
 function configurarBuscaPerfil() {
     const searchInput = document.querySelector('.search-bar input');
     if (searchInput) {
-        // Limpar event listeners anteriores
         searchInput.removeEventListener('keypress', null);
         searchInput.removeEventListener('input', null);
-        // Event listener para Enter
         searchInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 e.preventDefault();
@@ -129,7 +127,6 @@ function configurarBuscaPerfil() {
                 if (termo) {
                     buscarReceitasLocal(termo);
                 } else {
-                    // Se buscar com campo vazio, mostrar todas as receitas
                     exibirReceitasEmGrid(receitasUsuario);
                     const receitasCount = document.querySelector('.info-filter span span');
                     if (receitasCount) {
@@ -138,7 +135,6 @@ function configurarBuscaPerfil() {
                 }
             }
         });
-        // Event listener para input com debounce
         let debounceTimer;
         searchInput.addEventListener('input', () => {
             clearTimeout(debounceTimer);
@@ -147,7 +143,6 @@ function configurarBuscaPerfil() {
                 if (termo) {
                     buscarReceitasLocal(termo);
                 } else {
-                    // Se campo ficar vazio, mostrar todas as receitas
                     exibirReceitasEmGrid(receitasUsuario);
                     const receitasCount = document.querySelector('.info-filter span span');
                     if (receitasCount) {
@@ -165,7 +160,6 @@ async function buscarReceitasUsuario(usuarioId) {
         if (response.ok) {
             const data = await response.json();
             const receitas = data.response.receitas || [];
-            // Armazenar receitas para busca local
             receitasUsuario = receitas;
             const receitasCount = document.querySelector('.info-filter span span');
             if (receitasCount) {
@@ -182,7 +176,6 @@ async function buscarReceitasUsuario(usuarioId) {
     }
 }
 function limparCardsReceitas() {
-    // Limpa apenas os cards criados dinamicamente na página profile
     const mainElement = document.querySelector('main');
     if (mainElement) {
         const recipeCards = mainElement.querySelectorAll('.recipe-cards');
@@ -205,7 +198,6 @@ function exibirReceitasEmGrid(receitas) {
             if (receitaIndex < receitas.length) {
                 const receitaAtual = receitas[receitaIndex];
                 const card = criarCard(receitaAtual);
-                // Remover o event listener padrão e adicionar o do perfil
                 card.removeEventListener('click', card._clickHandler);
                 card.addEventListener('click', () => {
                     const encodedData = encodeURIComponent(JSON.stringify(receitaAtual));
@@ -236,7 +228,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Adicionar botões de navegação em todas as páginas
     addReloadButton();
     addBackButton();
 });
