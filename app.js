@@ -611,13 +611,13 @@ app.post('/v1/toque_gourmet/usuario/login', cors(), bodyParserJSON, async functi
 
 //ambiente GET
 
-app.get('/v1/toque_gourmet/receita/avaliacao', cors(), bodyParserJSON, async function (req, res) {
+app.get('/v1/toque_gourmet/avaliacao', cors(), bodyParserJSON, async function (req, res) {
     let avaliacao = await controllerUsuarioNota.listarUsuarioNotasReceita()
     res.status(avaliacao.status_code)
     res.json(avaliacao)
 })
 
-app.get('/v1/toque_gourmet/receita/avaliacao/:id', cors(), async function (req, res) {
+app.get('/v1/toque_gourmet/avaliacao/:id', cors(), async function (req, res) {
 
     let idAvaliacao = req.params.id
     let avaliacao = await controllerUsuario.pegarIdUsuario(idAvaliacao)
@@ -627,7 +627,7 @@ app.get('/v1/toque_gourmet/receita/avaliacao/:id', cors(), async function (req, 
 
 //ambiente POST
 
-app.post('/v1/toque_gourmet/receita/avaliacao/', cors(), bodyParserJSON, async function (req, res) {
+app.post('/v1/toque_gourmet/avaliacao', cors(), bodyParserJSON, async function (req, res) {
 
     let dadosBody = req.body
     let contentType = req.headers['content-type']  
@@ -640,7 +640,7 @@ app.post('/v1/toque_gourmet/receita/avaliacao/', cors(), bodyParserJSON, async f
 
 //ambiente PUT
 
-app.put('/v1/toque_gourmet/receita/avaliacao/:id', cors(), bodyParserJSON, async function (req, res) {
+app.put('/v1/toque_gourmet/avaliacao/:id', cors(), bodyParserJSON, async function (req, res) {
 
     let dadosBody = req.body
     let idavaliacao = req.params.id
@@ -654,7 +654,7 @@ app.put('/v1/toque_gourmet/receita/avaliacao/:id', cors(), bodyParserJSON, async
 
 //ambiente DELETE
 
-app.delete('/v1/toque_gourmet/receita/avaliacao/:id', cors(), async function (request, response) {
+app.delete('/v1/toque_gourmet/avaliacao/:id', cors(), async function (request, response) {
 
     let idAvaliacao = request.params.id
     let avaliacao = await controllerUsuarioNota.excluirUsuarioNotasReceita(idAvaliacao)

@@ -115,6 +115,7 @@ const setUpdateModoPreparo = async function (modo_preparo) {
 }
 
 const setDeleteModoPreparo = async function (id) {
+
     try {
         const result = await prisma.$executeRaw`
             DELETE FROM tbl_modo_preparo WHERE id_modo_preparo = ${id}

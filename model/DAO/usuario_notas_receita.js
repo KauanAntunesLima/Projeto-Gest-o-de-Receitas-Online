@@ -67,41 +67,45 @@ const getSelectUsuarioNotasReceitaByUsuarioId = async function (id) {
 }
 
 const setinsertUsuarioNotasReceita = async function (usuarioNotasReceita) {
-
-    console.log(usuarioNotasReceita)
     try {
-        const sql = `
-        INSERT INTO tbl_usuario_notas_receita
-                    (id_usuario,
-                     id_receita,
-                     nota,
-                     descricao)
-                VALUES (${usuarioNotasReceita.id_usuario},
-                        ${usuarioNotasReceita.id_receita},
-                        ${usuarioNotasReceita.nota},
-                        "${usuarioNotasReceita.descricao}")
-    `
-
+     
+        let sql = `INSERT INTO tbl_usuario_notas_receita
+            (id_usuario,
+             id_receita,
+             nota,
+             descricao)
+         VALUES(${usuarioNotasReceita.id_usuario},
+                 ${usuarioNotasReceita.id_receita},
+                 '${usuarioNotasReceita.nota}', 
+                 '${usuarioNotasReceita.descricao}')`
+   
         let result = await prisma.$executeRawUnsafe(sql)
-
+ 
         if (result)
             return result
         else
             return false
     } catch (error) {
+       console.log(error)
         return false
     }
 }
 
+
+
 const getSelectLastIdUsuarioNotasReceita = async function () {
 
     try {
-        let sql = `select id_usuario_notas_receita from tbl_usuario_notas_receita order by id_usuario_notas_receita desc limit 1`
+      let sql = `SELECT id_usuario_notas_receita, id_usuario, id_receita 
+           FROM tbl_usuario_notas_receita 
+           ORDER BY id_usuario_notas_receita DESC 
+           LIMIT 1`
 
         let result = await prisma.$queryRawUnsafe(sql)
 
         if (Array.isArray(result)) {
-            return Number(result[0].id_usuario_notas_ingrediente)
+            return Number(result[0].id_usuario_notas_receita)
+
         } else {
             return false
         }
@@ -120,7 +124,7 @@ const setUpdateUsuarioNotasReceita = async function (usuarioNotasReceita) {
                         nota = '${usuarioNotasReceita.nota}',
                         descricao = '${usuarioNotasReceita.descricao}'
                     WHERE
-                        id_usuario_notas_receita = ${usuarioNotasReceita.id_notas_receita};
+                        id_usuario_notas_receita = ${usuarioNotasReceita.id_usuario_notas_receita};
 `
 
         let result = await prisma.$executeRawUnsafe(sql)

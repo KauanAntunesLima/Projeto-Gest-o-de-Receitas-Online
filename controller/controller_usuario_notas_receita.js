@@ -67,88 +67,23 @@ const buscarUsuarioNotasReceitaId = async function (id) {
     
 }
 
-const buscarUsuarioNotasReceitaByReceitaId = async function (id) {
-
-    let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
-
-       try {
-       //Validação de campo obrigatório
-       if (id != '' && id != null && id != undefined && !isNaN(id) && id > 0) {
-           //Chama a função para filtrar pelo ID
-           let result = await usuarioNotasReceitaDAO.getUsuario(parseInt(id))
-           if (result) {
-               if (result.length > 0) {
-                   MESSAGE.HEADER.status = MESSAGE.SUCCESS_REQUEST.status
-                   MESSAGE.HEADER.status_code = MESSAGE.SUCCESS_REQUEST.status_code
-                   MESSAGE.HEADER.response.usuarioNotasReceita = result
-
-                   return MESSAGE.HEADER //200
-               } else {
-                   return MESSAGE.ERROR_NOT_FOUND //404
-               }
-           } else {
-               return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
-           }
-       } else {
-           MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [ID] invalido!!'
-           return MESSAGE.ERROR_REQUIRED_FIELDS //400
-       }
-   } catch (error) {
-       return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER //500
-   }
-   
-}
-
-const listarReceitaIdUsuario = async function (idUsuario) {
-    //Realizando uma cópia do objeto MESSAGE_DEFAULT, permitindo que as alterações desta função
-    //não interfiram em outras funções
-    let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
-
-    try {
-        //Validação de campo obrigatório
-        if (idReceita != '' && idReceita != null && idReceita != undefined && !isNaN(idReceita) && idReceita > 0) {
-            //Chama a função para filtrar pelo ID
-            let result = await usuarioNotasReceitaDAO.getSelectUsuarioNotasReceitaByUsuarioId(parseInt(idUsuario))
-            if (result) {
-                if (result.length > 0) {
-                    MESSAGE.HEADER.status = MESSAGE.SUCCESS_REQUEST.status
-                    MESSAGE.HEADER.status_code = MESSAGE.SUCCESS_REQUEST.status_code
-                    MESSAGE.HEADER.response.receita = result
-
-                    return MESSAGE.HEADER //200
-                } else {
-                    return MESSAGE.ERROR_NOT_FOUND //404
-                }
-            } else {
-                return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
-            }
-        } else {
-            MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [ID_FILME] invalido!!'
-            return MESSAGE.ERROR_REQUIRED_FIELDS //400
-        }
-    } catch (error) {
-        return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER //500
-    }
-}
-
 const inserirUsuarioNotasReceita = async function (usuarioNotasReceita, contentType) {
 
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
         try {
-            console.log(contentType)
+           
         if (String(contentType).toUpperCase() == 'APPLICATION/JSON') {
-            
 
             let validarDados = await validarDadosUsuarioNotasReceita(usuarioNotasReceita)
 
             if (!validarDados) {
 
                 //Chama a função do DAO
-                let result = await usuarioNotasReceitaDAO.setinsertUsuarioNotasReceita(receitaCozinha)
+                let result = await usuarioNotasReceitaDAO.setinsertUsuarioNotasReceita(usuarioNotasReceita)
 
                 if (result) {
 
-                    let lastIdUsuarioNotasReceita = await usuarioNotasReceitaDAO.getSelectLastIdUsuarioNotasReceita()
+                    let lastIdUsuarioNotasReceita = await usuarioNotasReceitaDAO.getSelectLastIdUsuarioNotasReceita(usuarioNotasReceita)
 
                     if (lastIdUsuarioNotasReceita) {
 
@@ -233,11 +168,11 @@ const validarDadosUsuarioNotasReceita = async function (usuarioNotasReceita) {
 
    let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
 
-    if (usuarioNotasReceita.id_receita == '' || usuarioNotasReceita.id_receita == null || usuarioNotasReceita.id_receita == undefined || isNaN(usuarioNotasReceita.id_receita) || usuarioNotasReceita.id_receita <= 0) {
+    if (usuarioNotasReceita.id_receita == '' || usuarioNotasReceita.id_receita == null || usuarioNotasReceita.id_receita == undefined || isNaN(usuarioNotasReceita.id_receita) || usuarioNotasReceita.id_receita < 0) {
         MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [ID_RECEITA] invalido!!!'
         return MESSAGE.ERROR_REQUIRED_FIELDS //400
 
-    } else if (usuarioNotasReceita.id_usuario == '' || usuarioNotasReceita.id_usuario == null || usuarioNotasReceita.id_usuario == undefined || isNaN(usuarioNotasReceita.id_usuario) || usuarioNotasReceita.id_usuario <= 0) {
+    } else if (usuarioNotasReceita.id_usuario == '' || usuarioNotasReceita.id_usuario == null || usuarioNotasReceita.id_usuario == undefined || isNaN(usuarioNotasReceita.id_usuario) || usuarioNotasReceita.id_usuario < 0) {
         MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [ID_Usuario] invalido!!!'
         return MESSAGE.ERROR_REQUIRED_FIELDS //400
     } 
@@ -341,7 +276,6 @@ module.exports = {
     listarUsuarioNotasReceita,
     buscarUsuarioNotasReceitaId,
     listarUsuarioNotasReceita,
-    listarReceitaIdUsuario,
     inserirUsuarioNotasReceita,
     listarUsuarioNotasReceita,
     atualizarUsuarioNotasReceita,

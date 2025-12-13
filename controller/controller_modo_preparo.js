@@ -214,6 +214,7 @@ const inserirModoPreparo = async function (modoPreparo, contentType) {
 }
 
 const deletarModoPreparo = async function (id) {
+   
 
         let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
     

@@ -169,7 +169,7 @@ const inserirCozinha = async function (cozinha, contentType) {
 
 const deletarCozinha = async function (id) {
     
-
+console.log(id)
         let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
     
      try{
