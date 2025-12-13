@@ -95,20 +95,21 @@ const setUpdateReceita = async function (receita) {
         titulo          = '${receita.titulo}',
         descricao       = '${receita.descricao}',
         tempo_preparo   =  ${receita.tempo_preparo},
-        dificuldade     = '${receita.dificuldade}', 
+        dificuldade     = '${receita.dificuldade}',
         data_criacao    = '${receita.data_criacao}',
         data_edicao     = '${receita.data_edicao}',
         imagem          = '${receita.imagem}'
         where id_receita = ${receita.id_receita}`
 
         let result = await prisma.$executeRawUnsafe(sql)
-        console.log(result)
+        
         if(result){
             return true
         }else{
             return false
         }
     }catch (error){
+        console.log(error)
         return false
     }
     

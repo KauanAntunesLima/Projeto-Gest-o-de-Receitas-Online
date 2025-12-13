@@ -184,8 +184,6 @@ app.put('/v1/toque_gourmet/receita/upload/:id', cors(), upload.single('imagem'),
             })
         }
 
-        console.log('Imagem atualizada para:', urlImagem)
-
         // Adiciona a URL da imagem aos dados da receita
         let dadosReceita = JSON.parse(req.body.dados)
         dadosReceita.imagem = urlImagem
@@ -193,6 +191,7 @@ app.put('/v1/toque_gourmet/receita/upload/:id', cors(), upload.single('imagem'),
 
         // Atualiza a receita no banco com a nova URL da imagem
         let contentType = 'application/json'
+        console.log(dadosReceita)
         let receita = await controllerReceita.atualizarReceita(dadosReceita, req.params.id, contentType)
 
         res.status(receita.status_code)

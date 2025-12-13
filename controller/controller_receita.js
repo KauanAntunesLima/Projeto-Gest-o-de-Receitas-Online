@@ -303,6 +303,9 @@ const pegarIdReceita = async function (id) {
 }
 
 const atualizarReceita = async function (receita, id, contentType) {
+    const currentDate = new Date().toISOString().split('T')[0];
+    receita.data_edicao = currentDate;
+    receita.id_receita = parseInt(id);
 
     let MESSAGE = JSON.parse(JSON.stringify(MESSAGE_DEFAULT))
 
@@ -323,13 +326,63 @@ const atualizarReceita = async function (receita, id, contentType) {
                 //verifica se o id existe no BD, caso exista teremos o status 200
                 if (validarId.status_code == 200) {
 
-                    receita.id_receita = parseInt(id)
-
                     //Chama a função do DAO para atualizar um novo filme
                     let result = await receitaDAO.setUpdateReceita(receita)
 
                     if (result) {
 
+                        try {
+                            // Atualizar/inserir cozinha
+                            if (receita.id_cozinha) {
+                                await controllerReceitaCozinha.inserirReceitaCozinha({
+                                    id_receita: parseInt(id),
+                                    id_cozinha: receita.id_cozinha
+                                }, 'application/json');
+                            }
+
+                            // Atualizar/inserir categoria
+                            if (receita.id_categoria) {
+                                await controllerReceitaCategoria.inserirReceitaCategoria({
+                                    id_receita: parseInt(id),
+                                    id_categoria: receita.id_categoria
+                                }, 'application/json');
+                            }
+
+                            // Inserir ingredientes
+                            if (receita.ingredientes && Array.isArray(receita.ingredientes)) {
+                                for (let i = 0; i < receita.ingredientes.length; i++) {
+                                    let ingrediente = receita.ingredientes[i];
+                                    if (ingrediente.id_ingredientes) {
+                                        await controllerReceitaIngrediente.inserirReceitaIngrediente({
+                                            id_receita: parseInt(id),
+                                            id_ingrediente: ingrediente.id_ingredientes,
+                                            quantidade: ingrediente.quantidade || '',
+                                            unidade: ingrediente.unidade || ''
+                                        }, 'application/json');
+                                    }
+                                }
+                            }
+
+                            // Inserir modo de preparo
+                            if (receita.modo_preparo && Array.isArray(receita.modo_preparo)) {
+                                // Ordenar por número do passo
+                                let modoPreparoOrdenado = receita.modo_preparo.sort((a, b) => a.numero_passo - b.numero_passo);
+
+                                for (let i = 0; i < modoPreparoOrdenado.length; i++) {
+                                    let modoPreparo = modoPreparoOrdenado[i];
+                                    if (modoPreparo.numero_passo && modoPreparo.descricao) {
+                                        await controllerModoPreparo.inserirModoPreparo({
+                                            id_receita: parseInt(id),
+                                            numero_passo: modoPreparo.numero_passo,
+                                            descricao: modoPreparo.descricao
+                                        }, 'application/json');
+                                    }
+                                }
+                            }
+
+                        } catch (relacionamentoError) {
+                            console.log('ERRO ao atualizar relacionamentos:', relacionamentoError.message);
+                        }
 
                         MESSAGE.HEADER.status = MESSAGE.SUCCES_UPDATE_ITEM.status
                         MESSAGE.HEADER.status_code = MESSAGE.SUCCES_UPDATE_ITEM.status_code
@@ -470,7 +523,7 @@ const deletarReceita = async function (id) {
 
                 let result = await receitaDAO.setDeleteReceita(parseInt(id))
 
-                if (result) {
+                if (!result) {
                     MESSAGE.HEADER.status = MESSAGE.SUCCESS_DELETE_ITEM.status
                     MESSAGE.HEADER.status_code = MESSAGE.SUCCESS_DELETE_ITEM.status_code
                     MESSAGE.HEADER.message = MESSAGE.SUCCESS_DELETE_ITEM.message
@@ -519,10 +572,7 @@ const validarDadosReceita = async function (receita) {
         MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [data_criacao] invalido!!!'
         return MESSAGE.ERROR_REQUIRED_FIELDS
 
-    } else if (receita.data_edicao == '') {
-        MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [edicao] invalido!!!'
-        return MESSAGE.ERROR_REQUIRED_FIELDS
-
+    
     } else if (receita.imagem == '' || receita.imagem == null || receita.imagem == undefined || receita.imagem.length > 255) {
         MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [imagem] invalido!!!'
         return MESSAGE.ERROR_REQUIRED_FIELDS
