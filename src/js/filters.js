@@ -37,16 +37,12 @@ async function buscarPorNome(nome) {
 }
 
 async function buscarPorFiltros(filtros) {
-    console.log('Enviando requisição para:', 'http://localhost:8080/v1/toque_gourmet/receita/filtro');
-    console.log('Corpo da requisição:', JSON.stringify(filtros, null, 2));
-
     const data = await safeFetchJson('http://localhost:8080/v1/toque_gourmet/receita/filtro', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(filtros)
     });
 
-    console.log('Resposta da API:', data);
     return data?.status_code === 200 ? data.response.receitas || [] : [];
 }
 
@@ -243,65 +239,10 @@ function carregarFiltrosSalvos() {
             }
         }
     });
-
-    if (isAllrecipesPage()) {
-        capturarFiltros();
-    }
 }
 
-function criarCard(receita) {
-    const card = document.createElement('div');
-    card.className = 'card';
-    card.style.cursor = 'pointer';
-    card.addEventListener('click', () => abrirReceita(receita.id_receita));
-
-    const cardPreview = document.createElement('div');
-    cardPreview.className = 'card-preview';
-
-    const img = document.createElement('img');
-    img.src = receita.imagem ?? '';
-    img.alt = receita.titulo ?? '';
-    img.className = 'recipe-preview';
-
-    const cardTitleRatio = document.createElement('div');
-    cardTitleRatio.className = 'card-title-ratio';
-
-    const titulo = document.createElement('span');
-    titulo.textContent = receita.titulo ?? '';
-
-    const ratio = document.createElement('div');
-    ratio.className = 'ratio';
-
-    for (let i = 0; i < 5; i++) {
-        const star = document.createElement('img');
-        star.src = '../img/Star 5.svg';
-        star.alt = '5 estrelas';
-        star.className = 'star';
-        ratio.appendChild(star);
-    }
-
-    cardTitleRatio.appendChild(titulo);
-    cardTitleRatio.appendChild(ratio);
-    cardPreview.appendChild(img);
-    cardPreview.appendChild(cardTitleRatio);
-
-    const cardDescription = document.createElement('div');
-    cardDescription.className = 'card-description';
-
-    const descricao = document.createElement('p');
-    descricao.textContent = receita.descricao ?? '';
-
-    const recipeMeta = document.createElement('div');
-    recipeMeta.className = 'recipe-meta';
-
-    cardDescription.appendChild(descricao);
-    cardDescription.appendChild(recipeMeta);
-
-    card.appendChild(cardPreview);
-    card.appendChild(cardDescription);
-
-    return card;
-}
+// Função criarCard foi removida para usar a do cards.js (disponível globalmente via window.criarCard)
+// Isso elimina código duplicado e garante consistência em todos os cards do sistema
 
 function exibirResultados(receitas, termo) {
     const container = document.getElementById('all-recipes-container');
@@ -328,7 +269,8 @@ function exibirResultados(receitas, termo) {
         row.className = 'recipe-cards';
 
         for (let i = 0; i < 4 && index < receitas.length; i++, index++) {
-            row.appendChild(criarCard(receitas[index]));
+            const card = window.criarCard(receitas[index]);
+            row.appendChild(card);
         }
 
         container.appendChild(row);
@@ -367,9 +309,12 @@ async function inicializarFiltrosDinamicos() {
         filterChoices.addEventListener('change', onFilterChoicesChange, true);
     }
 
-    setTimeout(() => {
-        carregarFiltrosSalvos();
-    }, 60);
+    const urlParams = new URLSearchParams(window.location.search);
+    if (!urlParams.get('nome')) {
+        setTimeout(() => {
+            carregarFiltrosSalvos();
+        }, 60);
+    }
 }
 
 function onFilterChoicesChange(e) {
@@ -419,7 +364,13 @@ async function inicializarPaginaAllrecipes() {
     const urlParams = new URLSearchParams(window.location.search);
     const nomeBusca = urlParams.get('nome');
 
+    // Preenche o campo de busca com o valor da URL
     if (nomeBusca) {
+        const searchInput = document.querySelector('.search-bar input');
+        if (searchInput) {
+            searchInput.value = nomeBusca;
+        }
+
         const receitas = await buscarPorNome(nomeBusca);
         exibirResultados(receitas, nomeBusca);
         return;
@@ -439,10 +390,16 @@ async function inicializarPaginaAllrecipes() {
     }
 }
 
+let executandoBusca = false;
+
 async function executarBusca() {
+    if (executandoBusca) return; 
+
     const searchInput = document.querySelector('.search-bar input');
     const termo = searchInput ? searchInput.value.trim() : '';
     if (!termo) return;
+
+    executandoBusca = true;
 
     if (!isAllrecipesPage()) {
         const params = new URLSearchParams({ nome: termo });
@@ -450,6 +407,9 @@ async function executarBusca() {
     } else {
         const receitas = await buscarPorNome(termo);
         exibirResultados(receitas, termo);
+        setTimeout(() => {
+            executandoBusca = false;
+        }, 1000);
     }
 }
 
@@ -468,18 +428,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        let debounceTimer;
-        searchInput.addEventListener('input', () => {
-            clearTimeout(debounceTimer);
-            debounceTimer = setTimeout(() => {
-                if (searchInput.value.trim()) executarBusca();
-            }, 500);
-        });
     }
 });
 
 window.filtrarSistema = {
     executarBusca,
-    capturarFiltros,
-    redirectToAllrecipes
+    capturarFiltros
 };

@@ -153,6 +153,23 @@ function configurarBuscaPerfil() {
         });
     }
 }
+
+function configurarBuscaIndexERecipe() {
+    const searchInput = document.querySelector('.search-bar input');
+    if (searchInput) {
+        searchInput.removeEventListener('keypress', null);
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const termo = searchInput.value.trim();
+                if (termo) {
+                    // Redireciona para allrecipes.html com o termo da busca na URL
+                    window.location.href = `/src/assets/pages/allrecipes.html?nome=${encodeURIComponent(termo)}`;
+                }
+            }
+        });
+    }
+}
 async function buscarReceitasUsuario(usuarioId) {
     try {
         const url = `http://localhost:8080/v1/toque_gourmet/receita/usuario/${usuarioId}`;
@@ -214,9 +231,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const recipeTitle = document.getElementById('recipe-title');
     if (recipeTitle) {
         initRecipeDetails();
+        configurarBuscaIndexERecipe(); // Configura busca no recipe.html
     }
     else if (document.getElementById('all-recipes-container')) {
-        initAllRecipes();
+        // Só chama initAllRecipes() se não for uma busca por nome
+        const urlParams = new URLSearchParams(window.location.search);
+        if (!urlParams.get('nome')) {
+            initAllRecipes();
+        }
     }
     else if (document.querySelector('.user-info')) {
         carregarPerfil();
@@ -225,6 +247,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const homeContainers = document.querySelectorAll('.recipe-cards');
         if (homeContainers.length > 0) {
             initHome();
+            configurarBuscaIndexERecipe(); // Configura busca no index.html
         }
     }
 
@@ -373,3 +396,6 @@ window.abrirCadastro = abrirCadastro;
 window.fecharCadastro = fecharCadastro;
 window.addReloadButton = addReloadButton;
 window.addBackButton = addBackButton;
+
+// Exportar criarCard para uso global (ex: filters.js)
+window.criarCard = criarCard;
