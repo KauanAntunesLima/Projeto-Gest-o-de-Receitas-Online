@@ -1,0 +1,32 @@
+# Node.js
+node_modules/
+npm-debug.log*
+
+# Back-end específico
+back-end/node_modules/
+back-end/generated/
+back-end/.env
+
+# Front-end específico
+front-end/node_modules/
+
+# Git
+.git/
+.gitignore
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# IDE
+.vscode/
+.idea/
+
+# SO
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log

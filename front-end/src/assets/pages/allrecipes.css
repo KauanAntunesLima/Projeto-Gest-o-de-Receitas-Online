@@ -1,0 +1,332 @@
+:root {
+    --cor-primaria: #1C931C;
+    --cor-secundaria: #FF8000;
+}
+
+header {
+    margin-top: 30px;
+    padding-inline: 53px;
+
+}
+
+header .options {
+
+    margin-right: 63px;
+}
+
+main {
+    margin-top: 100px;
+    display: flex;
+    gap: 26px;
+    flex-direction: column;
+    padding-inline: 120px;
+
+}
+
+.recipe-cards {
+    padding: 0;
+}
+.recipe-cards:last-child:has(.card:hover){
+    margin-bottom: 200px;
+}
+.card span {
+    font-size: 1.9rem;
+}
+
+.filter-options {
+    position: relative;
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--cor-primaria);
+    border-radius: 10px;
+    width: 87px;
+    height: 46px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.filter-choices {
+    position: absolute;
+    top: 50px;
+    left: 0;
+    height: 0px;
+    background-color: var(--cor-primaria);
+    border-radius: 10px;
+    padding: 0px;
+    width: 210px;
+    transition: 0.8s;
+    overflow: hidden;
+    max-height: 0px;
+    min-height: 0px;
+}
+
+.filter-options:hover .filter-choices {
+    background-color: var(--cor-secundaria);
+    transition: 0.6s;
+    width: 300px;
+    padding: 20px;
+    min-height: 450px;
+    overflow-y: auto;
+    scrollbar-width: none;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.filtro-group {
+    margin-bottom: 15px;
+}
+
+.filtro-group h3 {
+    color: white;
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.filtro-group label {
+    display: block;
+    color: white;
+    font-size: 14px;
+    font-weight: 300;
+    margin-bottom: 5px;
+    cursor: pointer;
+    padding: 3px 0;
+}
+
+.filtro-group label:hover {
+    color: #FF8000;
+}
+
+.filtro-group input[type="checkbox"] {
+    margin-right: 8px;
+    accent-color: #FF8000;
+}
+
+.multi-select-container {
+    width: 100%;
+    position: relative;
+}
+
+.multi-select-display {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: white;
+    color: #000000;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 38px;
+    position: relative;
+}
+
+.multi-select-display .arrow {
+    color: #666;
+    transition: transform 0.2s;
+}
+
+.multi-select-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-top: none;
+    border-radius: 0 0 5px 5px;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+/* Quando o dropdown está visível */
+.multi-select-dropdown.show {
+    display: block;
+}
+
+/* Estilo para o filtro de categorias dinâmico */
+#filtro-categorias {
+    margin-bottom: 15px;
+}
+
+#filtro-categorias h3 {
+    color: white;
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+#filtro-categorias label {
+    display: flex;
+    color: white;
+    font-weight: 300;
+    margin-bottom: 5px;
+    cursor: pointer;
+    padding: 3px 0;
+}
+#filtro-categorias label span{
+    font-size: 14px;
+}
+
+#filtro-categorias label:hover {
+    color: #FF8000;
+}
+#filtro-alergenos label {
+    display: flex;
+    color: white;
+    font-weight: 300;
+    margin-bottom: 5px;
+    cursor: pointer;
+    padding: 3px 0;
+}
+#filtro-alergenos label span{
+    font-size: 14px;
+}
+
+#filtro-alergenos label:hover {
+    color: #FF8000;
+}
+
+#filtro-categorias input[type="checkbox"] {
+    margin-right: 8px;
+    accent-color: #FF8000;
+}
+
+/* Estilos para os checkboxes dinâmicos de categoria */
+.multi-select-dropdown label {
+    display: block !important;
+    color: #333 !important;
+    font-size: 14px !important;
+    font-weight: 300 !important;
+    margin-bottom: 0 !important;
+    cursor: pointer !important;
+    padding: 8px 12px !important;
+    transition: background-color 0.2s !important;
+}
+
+.multi-select-dropdown label:hover {
+    background-color: #f0f0f0 !important;
+}
+
+.multi-select-dropdown input[type="checkbox"] {
+    margin-right: 8px !important;
+    accent-color: var(--cor-secundaria) !important;
+}
+
+.multi-select-option {
+    display: block;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.multi-select-option:hover {
+    background-color: #f0f0f0;
+}
+
+.multi-select-option input {
+    margin-right: 8px;
+    accent-color: #FF8000;
+}
+
+.alergenos-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    flex: 1;
+    margin-right: 20px;
+}
+
+.alergeno-badge {
+    background-color: #FF8000;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 12px;
+    font-size: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.alergeno-badge .remove {
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 50%;
+    width: 14px;
+    height: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.alergeno-badge .remove:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+#alergenos-placeholder {
+    color: #999;
+    flex: 1;
+    margin-right: 20px;
+}
+
+.filter-options span {
+    color: white;
+    font-size: 24px;
+    font-weight: 300;
+}
+
+@media (max-width: 768px) {
+    header {
+        padding-inline: 20px;
+    }
+
+    header .logo {
+        gap: 10px;
+    }
+
+    header .logo span {
+        font-size: 30px;
+    }
+
+    header .logo img {
+        display: block;
+    }
+
+    header .options {
+        width: 100%;
+        margin-right: 0;
+    }
+
+    .options .profile {
+        display: none;
+    }
+
+    .options .search-bar {
+        width: 100%;
+    }
+
+    main {
+        margin-top: 0;
+        padding: 20px;
+    }
+    .recipe-cards{
+        transition: 1s;
+    }
+    .recipe-cards:has(.card:hover){
+        transition: 1s;
+        min-height: 1150px;
+    }
+    .recipe-cards .card:nth-child(n + 3) {
+        display: block;
+    }
+
+    .card {
+        height: 10%;
+    }
+    
+}
