@@ -41,13 +41,14 @@ const getSelectByIdUsuarioNotasReceita = async function (id) {
 const getUsuarioNotasReceitaByReceitaId = async function (id) {
     try {
 
-        let sql = `select * from tbl_usuario_notas_receita where id_receitas=${id} order by id_usuario_notas_receita desc`
+        let sql = `select * from tbl_usuario_notas_receita where id_receita=${id} order by id_usuario_notas_receita desc`
         let result = await prisma.$queryRawUnsafe(sql)
 
         if (Array.isArray(result)) {
             return result
         }
     } catch (error) {
+
         return false
     }
 }

@@ -73,21 +73,21 @@ const listarReceita = async function () {
 
                                 let ingredientesAlergenosDaReceita = await controllerIngredienteAlergenos.pegarIngredientesAlergenosPorIngredientesId(ingrediente.id_ingredientes)
                                 if (ingredientesAlergenosDaReceita.length > 0)
-                                for (let alergeno of ingredientesAlergenosDaReceita.response.alergenos) {
+                                    for (let alergeno of ingredientesAlergenosDaReceita.response.alergenos) {
 
-                                    let alergenos = await controllerAlergenos.pegarIdAlergenos(alergeno.id_alergenos)
+                                        let alergenos = await controllerAlergenos.pegarIdAlergenos(alergeno.id_alergenos)
 
-                                    for (let alergenoNome of alergenos.response.alergenos) {
+                                        for (let alergenoNome of alergenos.response.alergenos) {
 
-                                        let alergenosAchado = {
-                                            id_ingrediente: alergeno.id_ingredientes,
-                                            ingrediente_nome: ingrediente.nome,
-                                            alergeno: alergenoNome.nome
+                                            let alergenosAchado = {
+                                                id_ingrediente: alergeno.id_ingredientes,
+                                                ingrediente_nome: ingrediente.nome,
+                                                alergeno: alergenoNome.nome
+                                            }
+
+                                            receita.alergenos.push(alergenosAchado)
                                         }
-
-                                        receita.alergenos.push(alergenosAchado)
                                     }
-                                }
                             }
                         }
                     }
@@ -186,109 +186,131 @@ const pegarIdReceita = async function (id) {
     try {
         //Validação de campo obrigatório
         if (id != '' && id != null && id != undefined && !isNaN(id) && id > 0) {
+            let receitaAvaliacao = await controllerUsuarioNota.buscarUsuarioNotasReceitaId(id)
+            console.log(receitaAvaliacao.response)
+            if (receitaAvaliacao) {
+                //Chama a função para filtrar pelo ID
+                let result = await receitaDAO.getSelectByIdReceita(parseInt(id))
 
-            //Chama a função para filtrar pelo ID
-            let result = await receitaDAO.getSelectByIdReceita(parseInt(id))
+                if (result) {
+                    if (result.length > 0) {
 
-            if (result) {
-                if (result.length > 0) {
+                        if (receitaAvaliacao.status_code === 200) {
+                            let somaNotas = 0
+                            let totalNotas = receitaAvaliacao.response.usuarioNotasReceita.length
 
-                    let cozinhaId = await controllerReceitaCozinha.buscarCozinhaReceitaId(id)
-
-                    if (cozinhaId) {
-                        let cozinha = await controllerCozinha.pegarIdCozinha(cozinhaId.response.receitaCozinha[0].id_cozinha)
-
-                        if (cozinha) {
-                            result[0].cozinha = cozinha.response.cozinha
-
-                            let categoriaId = await controllerReceitaCategoria.pegarReceitaCategoriaPorIdReceita(id)
-                            if (categoriaId && categoriaId.response && categoriaId.response.receita_categoria && categoriaId.response.receita_categoria.length > 0) {
-                                let categoria = await controllerCategoria.pegarIdCategoria(categoriaId.response.receita_categoria[0].id_categoria)
-                                if (categoria && categoria.response && categoria.response.categoria) {
-                                    result[0].categoria = categoria.response.categoria[0]
-                                }
-                            }
-
-                            let infoIngredienteDaReceita = await controllerReceitaIngrediente.pegarReceitaIngredientePorIdReceita(id)
-                            if (infoIngredienteDaReceita) {
-
-                                result[0].ingredientes = []
-                                result[0].alergenos = []
-                                result[0].modo_preparo = []
-
-                                let modoDePreparo = await controllerModoPreparo.pegarModoPreparoPorIdReceita(result[0].id_receita)
+                            receitaAvaliacao.response.usuarioNotasReceita.forEach(nota => {
                                 
-                                for (let modo_preparo of modoDePreparo.response.modo_preparo) {
+                                somaNotas += Number(nota.nota);
+                            });
 
-                                    let preparo = {
-                                        numero_passo: modo_preparo.numero_passo,
-                                        descricao: modo_preparo.descricao
+                            let mediaNotas = parseFloat((somaNotas / totalNotas).toFixed(1));
+                            result[0].nota = mediaNotas;
+
+
+                        } else if(receitaAvaliacao.status_code = 404) {
+                            result[0].nota = 0;
+                        }
+
+                        let cozinhaId = await controllerReceitaCozinha.buscarCozinhaReceitaId(id)
+
+                        if (cozinhaId) {
+                            let cozinha = await controllerCozinha.pegarIdCozinha(cozinhaId.response.receitaCozinha[0].id_cozinha)
+
+                            if (cozinha) {
+                                result[0].cozinha = cozinha.response.cozinha
+
+                                let categoriaId = await controllerReceitaCategoria.pegarReceitaCategoriaPorIdReceita(id)
+                                if (categoriaId && categoriaId.response && categoriaId.response.receita_categoria && categoriaId.response.receita_categoria.length > 0) {
+                                    let categoria = await controllerCategoria.pegarIdCategoria(categoriaId.response.receita_categoria[0].id_categoria)
+                                    if (categoria && categoria.response && categoria.response.categoria) {
+                                        result[0].categoria = categoria.response.categoria[0]
+                                    }
+                                }
+
+                                let infoIngredienteDaReceita = await controllerReceitaIngrediente.pegarReceitaIngredientePorIdReceita(id)
+                                if (infoIngredienteDaReceita) {
+
+                                    result[0].ingredientes = []
+                                    result[0].alergenos = []
+                                    result[0].modo_preparo = []
+
+                                    let modoDePreparo = await controllerModoPreparo.pegarModoPreparoPorIdReceita(result[0].id_receita)
+
+                                    for (let modo_preparo of modoDePreparo.response.modo_preparo) {
+
+                                        let preparo = {
+                                            numero_passo: modo_preparo.numero_passo,
+                                            descricao: modo_preparo.descricao
+
+                                        }
+
+                                        result[0].modo_preparo.push(preparo)
 
                                     }
+                                    for (id of infoIngredienteDaReceita.response.receita_ingredientes) {
 
-                                    result[0].modo_preparo.push(preparo)
+                                        let ingredienteAchado = await controllerIngrediente.pegarIdIngrediente(id.id_ingredientes)
+                                        if (ingredienteAchado) {
 
-                                }
-                                for (id of infoIngredienteDaReceita.response.receita_ingredientes) {
+                                            for (let ingrediente of ingredienteAchado.response.ingrediente) {
 
-                                    let ingredienteAchado = await controllerIngrediente.pegarIdIngrediente(id.id_ingredientes)
-                                    if (ingredienteAchado) {
+                                                let novoIngrediente = {
+                                                    id_ingrediente: ingrediente.id_ingredientes,
+                                                    nome: ingrediente.nome,
+                                                    tipo: ingrediente.tipo,
+                                                    quantidade: id.quantidade,
+                                                    unidade: id.unidade
+                                                }
+                                                let ingredientesAlergenosDaReceita = await controllerIngredienteAlergenos.pegarIngredientesAlergenosPorIngredientesId(ingrediente.id_ingredientes)
+                                                if (ingredientesAlergenosDaReceita > 0)
+                                                    for (let alergeno of ingredientesAlergenosDaReceita.response.alergenos) {
 
-                                        for (let ingrediente of ingredienteAchado.response.ingrediente) {
+                                                        let alergenos = await controllerAlergenos.pegarIdAlergenos(alergeno.id_alergenos)
 
-                                            let novoIngrediente = {
-                                                id_ingrediente: ingrediente.id_ingredientes,
-                                                nome: ingrediente.nome,
-                                                tipo: ingrediente.tipo,
-                                                quantidade: id.quantidade,
-                                                unidade: id.unidade
-                                            }
-                                            let ingredientesAlergenosDaReceita = await controllerIngredienteAlergenos.pegarIngredientesAlergenosPorIngredientesId(ingrediente.id_ingredientes)
-                                            if(ingredientesAlergenosDaReceita > 0)
-                                            for (let alergeno of ingredientesAlergenosDaReceita.response.alergenos) {
+                                                        for (let alergenoNome of alergenos.response.alergenos) {
 
-                                                let alergenos = await controllerAlergenos.pegarIdAlergenos(alergeno.id_alergenos)
+                                                            let alergenosAchado = {
+                                                                id_ingrediente: alergeno.id_ingredientes,
+                                                                ingrediente_nome: ingrediente.nome,
+                                                                alergeno: alergenoNome.nome
+                                                            }
 
-                                                for (let alergenoNome of alergenos.response.alergenos) {
-
-                                                    let alergenosAchado = {
-                                                        id_ingrediente: alergeno.id_ingredientes,
-                                                        ingrediente_nome: ingrediente.nome,
-                                                        alergeno: alergenoNome.nome
+                                                            result[0].alergenos.push(alergenosAchado)
+                                                        }
                                                     }
 
-                                                    result[0].alergenos.push(alergenosAchado)
-                                                }
+                                                result[0].ingredientes.push(novoIngrediente)
                                             }
-
-                                            result[0].ingredientes.push(novoIngrediente)
+                                        } else {
+                                            return ingredienteAchado
                                         }
-                                    } else {
-                                        return ingredienteAchado
+
                                     }
 
+                                    MESSAGE.HEADER.status = MESSAGE.SUCCESS_REQUEST.status
+                                    MESSAGE.HEADER.status_code = MESSAGE.SUCCESS_REQUEST.status_code
+                                    MESSAGE.HEADER.response.receita = result
+
+                                    return MESSAGE.HEADER //200
+                                } else {
+                                    return data
                                 }
-
-                                MESSAGE.HEADER.status = MESSAGE.SUCCESS_REQUEST.status
-                                MESSAGE.HEADER.status_code = MESSAGE.SUCCESS_REQUEST.status_code
-                                MESSAGE.HEADER.response.receita = result
-
-                                return MESSAGE.HEADER //200
                             } else {
-                                return data
+                                return cozinha
                             }
                         } else {
-                            return cozinha
+                            return cozinhaId
                         }
                     } else {
-                        return cozinhaId
+                        return MESSAGE.ERROR_NOT_FOUND //404
                     }
-                } else {
-                    return MESSAGE.ERROR_NOT_FOUND //404
-                }
 
+                } else {
+                    return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
+                }
             } else {
-                return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
+                return receitaAvaliacao
             }
         } else {
             MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [ID] inválido' //400
@@ -472,15 +494,15 @@ const inserirReceita = async function (receita, contentType) {
                             await controllerModoPreparo.inserirModoPreparo(modoPreparoList, 'application/json')
 
                         }
-                      /*   for (let avaliacao of receita.avaliacao){
-                            let notasList = {
-                                id_usuario: avaliacao.id_usuario,
-                                id_receita: avaliacao.id_receita,
-                                nota: avaliacao.nota,
-                                descricao: avaliacao.descricao
-                            }
-                            await controllerUsuarioNota.inserirUsuarioNotasReceita(notasList, 'application/json')
-                        } */
+                        /*   for (let avaliacao of receita.avaliacao){
+                              let notasList = {
+                                  id_usuario: avaliacao.id_usuario,
+                                  id_receita: avaliacao.id_receita,
+                                  nota: avaliacao.nota,
+                                  descricao: avaliacao.descricao
+                              }
+                              await controllerUsuarioNota.inserirUsuarioNotasReceita(notasList, 'application/json')
+                          } */
 
                         //adiciona no Json de filme o ID que foi gerado no BD
                         receita.id = lastIdReceita
@@ -523,7 +545,7 @@ const deletarReceita = async function (id) {
 
                 let result = await receitaDAO.setDeleteReceita(parseInt(id))
 
-                if (!result) {
+                if (result) {
                     MESSAGE.HEADER.status = MESSAGE.SUCCESS_DELETE_ITEM.status
                     MESSAGE.HEADER.status_code = MESSAGE.SUCCESS_DELETE_ITEM.status_code
                     MESSAGE.HEADER.message = MESSAGE.SUCCESS_DELETE_ITEM.message
@@ -541,6 +563,7 @@ const deletarReceita = async function (id) {
             return MESSAGE.ERROR_REQUIRED_FIELDS // 400
         }
     } catch (error) {
+        console.log(error)
         return MESSAGE.ERROR_INTERNAL_SERVER_MODEL
     }
 }
@@ -572,7 +595,7 @@ const validarDadosReceita = async function (receita) {
         MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [data_criacao] invalido!!!'
         return MESSAGE.ERROR_REQUIRED_FIELDS
 
-    
+
     } else if (receita.imagem == '' || receita.imagem == null || receita.imagem == undefined || receita.imagem.length > 255) {
         MESSAGE.ERROR_REQUIRED_FIELDS.invalid_field = 'Atributo [imagem] invalido!!!'
         return MESSAGE.ERROR_REQUIRED_FIELDS

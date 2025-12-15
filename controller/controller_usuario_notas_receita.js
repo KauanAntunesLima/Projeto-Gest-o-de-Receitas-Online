@@ -43,7 +43,8 @@ const buscarUsuarioNotasReceitaId = async function (id) {
         //Validação de campo obrigatório
         if (id != '' && id != null && id != undefined && !isNaN(id) && id > 0) {
             //Chama a função para filtrar pelo ID
-            let result = await usuarioNotasReceitaDAO.getSelectByIdUsuarioNotasReceita(parseInt(id))
+            let result = await usuarioNotasReceitaDAO.getUsuarioNotasReceitaByReceitaId(parseInt(id))
+
             if (result) {
                 if (result.length > 0) {
                     MESSAGE.HEADER.status = MESSAGE.SUCCESS_REQUEST.status
@@ -88,9 +89,9 @@ const inserirUsuarioNotasReceita = async function (usuarioNotasReceita, contentT
                     if (lastIdUsuarioNotasReceita) {
 
                         usuarioNotasReceita.id_usuario_notas_receita = lastIdUsuarioNotasReceita
-                        MESSAGE.HEADER.status = MESSAGE.SUCCESS_CREATED_ITEM.status
-                        MESSAGE.HEADER.status_code = MESSAGE.SUCCESS_CREATED_ITEM.status_code
-                        MESSAGE.HEADER.message = MESSAGE.SUCCESS_CREATED_ITEM.message
+                        MESSAGE.HEADER.status = MESSAGE.SUCCES_CREATED_ITEM.status
+                        MESSAGE.HEADER.status_code = MESSAGE.SUCCES_CREATED_ITEM.status_code
+                        MESSAGE.HEADER.message = MESSAGE.SUCCES_CREATED_ITEM.message
                         MESSAGE.HEADER.response = usuarioNotasReceita
 
                         return MESSAGE.HEADER //201
