@@ -158,9 +158,9 @@ const filtrarReceitas = async function (filtrosRequest) {
             ingredientes: filtrosRequest.ingredientes ? [].concat(filtrosRequest.ingredientes) : undefined,
             alergenos: filtrosRequest.alergenos ? [].concat(filtrosRequest.alergenos) : undefined
         }
-        console.log(filtros)
+
         let result = await receitaDAO.getSelectReceitasComFiltrosView(filtros)
-        console.log(result)
+
         if (result !== false) {
             if (result.length > 0) {
                 MESSAGE.HEADER.status = MESSAGE.SUCCESS_REQUEST.status
@@ -187,7 +187,7 @@ const pegarIdReceita = async function (id) {
         //Validação de campo obrigatório
         if (id != '' && id != null && id != undefined && !isNaN(id) && id > 0) {
             let receitaAvaliacao = await controllerUsuarioNota.buscarUsuarioNotasReceitaId(id)
-            console.log(receitaAvaliacao.response)
+
             if (receitaAvaliacao) {
                 //Chama a função para filtrar pelo ID
                 let result = await receitaDAO.getSelectByIdReceita(parseInt(id))

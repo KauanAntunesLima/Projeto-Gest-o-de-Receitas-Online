@@ -247,7 +247,6 @@ const excluirNotaReceitaPorUsuario = async function (id) {
 
                 let result = await usuarioNotasReceitaDAO.setDeleteByIdUsuarioAndReceitaId(parseInt(id))
 
-                console.log(result)
                 if (result) {
                     MESSAGE.HEADER.status = MESSAGE.SUCCESS_DELETE_ITEM.status
                     MESSAGE.HEADER.status_code = MESSAGE.SUCCESS_DELETE_ITEM.status_code
