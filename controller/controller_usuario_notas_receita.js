@@ -43,7 +43,8 @@ const buscarUsuarioNotasReceitaId = async function (id) {
         //Validação de campo obrigatório
         if (id != '' && id != null && id != undefined && !isNaN(id) && id > 0) {
             //Chama a função para filtrar pelo ID
-            let result = await usuarioNotasReceitaDAO.getSelectByIdUsuarioNotasReceita(parseInt(id))
+            let result = await usuarioNotasReceitaDAO.getUsuarioNotasReceitaByReceitaId(parseInt(id))
+
             if (result) {
                 if (result.length > 0) {
                     MESSAGE.HEADER.status = MESSAGE.SUCCESS_REQUEST.status
