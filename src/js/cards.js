@@ -169,6 +169,36 @@ export async function initRecipeDetails() {
     const diffEl = document.getElementById('recipe-difficulty-text');
     if (diffEl) diffEl.textContent = receita.dificuldade;
 
+    const reviewStarsContainer = document.querySelector('.review-stars');
+    if (reviewStarsContainer && receita.nota !== undefined) {
+
+        const btnAvaliar = reviewStarsContainer.querySelector('#avaliar-btn');
+        reviewStarsContainer.innerHTML = '';
+
+        const nota = parseFloat(receita.nota) || 0;
+
+        for (let i = 1; i <= 5; i++) {
+            const star = document.createElement('img');
+            star.src = '/src/assets/img/Star 5.svg';
+            star.alt = 'star';
+            star.classList.add('star');
+
+            if (i <= Math.floor(nota)) {
+                star.style.opacity = '1';
+            } else if (i - 0.5 <= nota) {
+                star.style.opacity = '0.7';
+            } else {
+                star.style.opacity = '0.3';
+            }
+
+            reviewStarsContainer.appendChild(star);
+        }
+
+        if (btnAvaliar) {
+            reviewStarsContainer.appendChild(btnAvaliar);
+        }
+    }
+
     const ingredientsContainer = document.querySelector('.ingredients');
     if (ingredientsContainer && receita.ingredientes) {
 

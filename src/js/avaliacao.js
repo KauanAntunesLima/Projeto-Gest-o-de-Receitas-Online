@@ -52,7 +52,7 @@ function abrirFeedback() {
     const starsElements = modal.querySelectorAll('.star');
 
     starsElements.forEach((star, index) => {
-        star.src = '../img/Star 4.svg'; // Começa com estrela vazia
+        star.src = '../img/Star 4.svg'; 
 
         star.addEventListener('click', () => {
             selectedRating = index + 1;
@@ -168,13 +168,13 @@ document.addEventListener('DOMContentLoaded', () => {
         avaliarBtn.addEventListener('click', avaliarReceita);
     }
 
-    // Verifica se o usuário precisa avaliar após o login
+
     const avaliarAposLogin = sessionStorage.getItem('avaliarAposLogin');
     if (avaliarAposLogin === 'true') {
         sessionStorage.removeItem('avaliarAposLogin');
         const usuarioLogado = localStorage.getItem('usuarioLogado');
         if (usuarioLogado) {
-            // Pequeno delay para garantir que o modal de login foi fechado
+
             setTimeout(() => {
                 abrirFeedback();
             }, 300);

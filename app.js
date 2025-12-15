@@ -1,4 +1,8 @@
 import { initHome, initAllRecipes, initRecipeDetails, criarCard } from './src/js/cards.js';
+import './src/js/filters.js';
+import './src/js/avaliacao.js';
+import './src/js/slide.js';
+import './src/js/criar-categorias.js';
 let receitasUsuario = [];
 function buscarReceitasLocal(termo) {
     termo = termo.toLowerCase();
@@ -163,7 +167,7 @@ function configurarBuscaIndexERecipe() {
                 e.preventDefault();
                 const termo = searchInput.value.trim();
                 if (termo) {
-                    // Redireciona para allrecipes.html com o termo da busca na URL
+                    
                     window.location.href = `/src/assets/pages/allrecipes.html?nome=${encodeURIComponent(termo)}`;
                 }
             }
@@ -231,23 +235,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const recipeTitle = document.getElementById('recipe-title');
     if (recipeTitle) {
         initRecipeDetails();
-        configurarBuscaIndexERecipe(); // Configura busca no recipe.html
+        configurarBuscaIndexERecipe(); 
     }
     else if (document.getElementById('all-recipes-container')) {
-        // Só chama initAllRecipes() se não for uma busca por nome
+
         const urlParams = new URLSearchParams(window.location.search);
         if (!urlParams.get('nome')) {
             initAllRecipes();
         }
     }
-    else if (document.querySelector('.user-info')) {
+    else if (window.location.pathname.includes('profile.html') && document.querySelector('.user-info')) {
         carregarPerfil();
     }
     else {
         const homeContainers = document.querySelectorAll('.recipe-cards');
         if (homeContainers.length > 0) {
             initHome();
-            configurarBuscaIndexERecipe(); // Configura busca no index.html
+            configurarBuscaIndexERecipe(); 
         }
     }
 
@@ -391,11 +395,8 @@ function addBackButton() {
     document.body.appendChild(button);
 }
 
-window.abrirLogin = abrirLogin;
-window.abrirCadastro = abrirCadastro;
-window.fecharCadastro = fecharCadastro;
-window.addReloadButton = addReloadButton;
-window.addBackButton = addBackButton;
+document.getElementById('loginBtn').addEventListener('click', abrirLogin);
 
-// Exportar criarCard para uso global (ex: filters.js)
-window.criarCard = criarCard;
+
+
+

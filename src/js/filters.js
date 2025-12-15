@@ -153,7 +153,6 @@ async function capturarFiltros() {
         alergenos: Array.from(document.querySelectorAll('input[name="alergenos"]:checked')).map(cb => cb.value)
     };
 
-    // Capturar ingredientes do input de texto
     const ingredientesInput = document.getElementById('ingredientes-input');
     if (ingredientesInput && ingredientesInput.value.trim()) {
         const ingredientes = ingredientesInput.value
@@ -174,7 +173,7 @@ async function capturarFiltros() {
         if (v === null || v === undefined) delete filtros[k];
         if (Array.isArray(v) && v.length === 0) delete filtros[k];
         if (Array.isArray(v) && v.length === 1 && k === 'dificuldade') {
-            // Se for apenas uma dificuldade, converte para string para manter compatibilidade
+
             if (v[0]) {
                 filtros[k] = v[0];
             } else {
@@ -241,8 +240,7 @@ function carregarFiltrosSalvos() {
     });
 }
 
-// Função criarCard foi removida para usar a do cards.js (disponível globalmente via window.criarCard)
-// Isso elimina código duplicado e garante consistência em todos os cards do sistema
+import { criarCard } from './cards.js';
 
 function exibirResultados(receitas, termo) {
     const container = document.getElementById('all-recipes-container');
@@ -269,7 +267,7 @@ function exibirResultados(receitas, termo) {
         row.className = 'recipe-cards';
 
         for (let i = 0; i < 4 && index < receitas.length; i++, index++) {
-            const card = window.criarCard(receitas[index]);
+            const card = criarCard(receitas[index]);
             row.appendChild(card);
         }
 

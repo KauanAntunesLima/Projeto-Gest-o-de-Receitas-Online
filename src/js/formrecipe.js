@@ -6,8 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let receitaIdEditando = null;
 
     if (!usuarioId && !recipeData) {
-        window.location.href = 'profile.html';
-        return;
+        return; 
     }
 
     if (recipeData) {
