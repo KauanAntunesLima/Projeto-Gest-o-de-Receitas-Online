@@ -109,7 +109,7 @@ const pegarModoPreparoPorIdReceita = async function (id) {
         }
 
     } catch (error) {
-        console.log(error)
+      
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER //500
 
     }
@@ -209,6 +209,7 @@ const inserirModoPreparo = async function (modoPreparo, contentType) {
         }
     }
 }catch (eror){
+    console.log(eror)
     return MESSAGE_DEFAULT.ERROR_INTERNAL_SERVER_CONTROLLER //500
 }
 }

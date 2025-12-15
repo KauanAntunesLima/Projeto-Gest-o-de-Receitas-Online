@@ -115,23 +115,24 @@ const setUpdateReceita = async function (receita) {
     
 }
 const setDeleteReceita = async function (id) {
-
     try {
-        let sql = `DELETE FROM tbl_receita where id_receita = ${id}`
 
-        //$executeRawUnsafe()  -> permite apenas executar scripts sql que não tem retorno de dados (INSERT, UPDATE, DELETE)
-        let result = await prisma.$executeRawUnsafe(sql)
-
-        if (result) {
-            return true
-        } else {
+        if (!id || isNaN(id)) {
             return false
         }
+
+        const result = await prisma.$executeRaw`
+            DELETE FROM tbl_receita WHERE id_receita = ${Number(id)}
+        `
+
+        return result > 0
+
     } catch (error) {
-        console.log(error)
+        console.error('Erro ao deletar receita:', error)
         return false
     }
 }
+
 
 // Buscar receitas por nome usando LIKE
 const getSelectReceitaByNome = async function (nome) {

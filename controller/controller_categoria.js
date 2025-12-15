@@ -157,7 +157,7 @@ const atualizarCategoria = async function (categoria, id, contentType) {
                         return MESSAGE.ERROR_INTERNAL_SERVER_MODEL//500
                     }
                 } else {
-                    console.log('111111111111111')
+          
                     return validarId 
                 }
 
@@ -203,7 +203,7 @@ const deletarCategoria = async function (id) {
             let excluirCategoria = await pegarIdCategoria(id)
            
             if (excluirCategoria.status_code == 200) {
-            /*     console.log(excluirEmpresa, "AAAAAAAS") */
+
              
             let result = await categoriaDAO.setDeleteCategoria(parseInt(id))
          if(result){

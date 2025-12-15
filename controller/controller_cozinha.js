@@ -143,7 +143,6 @@ const inserirCozinha = async function (cozinha, contentType) {
 
                 if (lastIdCozinha) {
 
-         
                     cozinha.id_cozinha = lastIdCozinha
                     MESSAGE.HEADER.status = MESSAGE.SUCCES_CREATED_ITEM.status
                     MESSAGE.HEADER.status_code = MESSAGE.SUCCES_CREATED_ITEM.status_code
@@ -163,6 +162,7 @@ const inserirCozinha = async function (cozinha, contentType) {
         }
     }
 }catch (eror){
+    console.log(eror)
     return MESSAGE_DEFAULT.ERROR_INTERNAL_SERVER_CONTROLLER //500
 }
 }

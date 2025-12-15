@@ -6,6 +6,7 @@
  * Versão: 2.0
  ****************************************************************************************/
 const usuarioDAO = require('../model/DAO/usuario.js')
+
 const criptografia = require('../modulo/crypto-password.js')
 
 const MESSAGE_DEFAULT = require('../modulo/config_messages.js')

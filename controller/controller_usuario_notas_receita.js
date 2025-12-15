@@ -88,9 +88,9 @@ const inserirUsuarioNotasReceita = async function (usuarioNotasReceita, contentT
                     if (lastIdUsuarioNotasReceita) {
 
                         usuarioNotasReceita.id_usuario_notas_receita = lastIdUsuarioNotasReceita
-                        MESSAGE.HEADER.status = MESSAGE.SUCCESS_CREATED_ITEM.status
-                        MESSAGE.HEADER.status_code = MESSAGE.SUCCESS_CREATED_ITEM.status_code
-                        MESSAGE.HEADER.message = MESSAGE.SUCCESS_CREATED_ITEM.message
+                        MESSAGE.HEADER.status = MESSAGE.SUCCES_CREATED_ITEM.status
+                        MESSAGE.HEADER.status_code = MESSAGE.SUCCES_CREATED_ITEM.status_code
+                        MESSAGE.HEADER.message = MESSAGE.SUCCES_CREATED_ITEM.message
                         MESSAGE.HEADER.response = usuarioNotasReceita
 
                         return MESSAGE.HEADER //201
@@ -139,9 +139,9 @@ const atualizarUsuarioNotasReceita = async function (usuarioNotasReceita, id, co
                     let result = await usuarioNotasReceitaDAO.setUpdateUsuarioNotasReceita(usuarioNotasReceita)
 
                     if (result) {
-                        MESSAGE.HEADER.status = MESSAGE.SUCCESS_UPDATED_ITEM.status
-                        MESSAGE.HEADER.status_code = MESSAGE.SUCCESS_UPDATED_ITEM.status_code
-                        MESSAGE.HEADER.message = MESSAGE.SUCCESS_UPDATED_ITEM.message
+                        MESSAGE.HEADER.status = MESSAGE.SUCCES_UPDATED_ITEM.status
+                        MESSAGE.HEADER.status_code = MESSAGE.SUCCES_UPDATED_ITEM.status_code
+                        MESSAGE.HEADER.message = MESSAGE.SUCCES_UPDATED_ITEM.message
                         MESSAGE.HEADER.response = usuarioNotasReceita
 
                         return MESSAGE.HEADER //200

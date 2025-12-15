@@ -78,15 +78,19 @@ const setinsertUsuarioNotasReceita = async function (usuarioNotasReceita) {
                  ${usuarioNotasReceita.id_receita},
                  '${usuarioNotasReceita.nota}', 
                  '${usuarioNotasReceita.descricao}')`
-   
+
+  
         let result = await prisma.$executeRawUnsafe(sql)
- 
-        if (result)
-            return result
-        else
-            return false
+         
+        if (result){
+         return result
+        } else{
+            console.log(false)
+             return false
+        }
+           
     } catch (error) {
-       console.log(error)
+        console.log(error)
         return false
     }
 }
@@ -121,7 +125,7 @@ const setUpdateUsuarioNotasReceita = async function (usuarioNotasReceita) {
                     SET
                         id_usuario = ${usuarioNotasReceita.id_usuario},
                         id_receita = ${usuarioNotasReceita.id_receita},
-                        nota = '${usuarioNotasReceita.nota}',
+                        nota =       ${usuarioNotasReceita.nota},
                         descricao = '${usuarioNotasReceita.descricao}'
                     WHERE
                         id_usuario_notas_receita = ${usuarioNotasReceita.id_usuario_notas_receita};

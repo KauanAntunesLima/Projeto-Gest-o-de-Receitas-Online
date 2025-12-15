@@ -77,6 +77,7 @@ const setInsertModoPreparo = async function (modo_preparo) {
         ${modo_preparo.numero_passo},
         '${modo_preparo.descricao}')`
 
+
         let result = await prisma.$executeRawUnsafe(sql)
         if (result) {
             return true

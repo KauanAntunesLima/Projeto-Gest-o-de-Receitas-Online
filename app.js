@@ -606,7 +606,7 @@ app.post('/v1/toque_gourmet/usuario/login', cors(), bodyParserJSON, async functi
 })
 
 /***********************
- * EndPoints tbl_usuario
+ * EndPoints tbl_usuario_notas
  * **********************/
 
 //ambiente GET
@@ -620,7 +620,7 @@ app.get('/v1/toque_gourmet/avaliacao', cors(), bodyParserJSON, async function (r
 app.get('/v1/toque_gourmet/avaliacao/:id', cors(), async function (req, res) {
 
     let idAvaliacao = req.params.id
-    let avaliacao = await controllerUsuario.pegarIdUsuario(idAvaliacao)
+    let avaliacao = await controllerUsuarioNota.buscarUsuarioNotasReceitaId(idAvaliacao)
     res.status(avaliacao.status_code)
     res.json(avaliacao)
 })

@@ -37,7 +37,6 @@ const getSelectByIdCozinha = async function (id) {
 }
 
 const setInsertCozinha = async function (cozinha){
-
     try{
         let sql = `insert into tbl_cozinha (
         nome)
@@ -51,6 +50,7 @@ const setInsertCozinha = async function (cozinha){
             return false
         }
     }catch(error){
+        console.log(error)
         return false
     }
 }

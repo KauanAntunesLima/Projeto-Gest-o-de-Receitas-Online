@@ -71,7 +71,7 @@ const getSelectLastIdReceitaCozinha = async function () {
 
 const setInsertReceitaCozinha = async function (receitaCozinha) {
     try {
-      // Corrigindo o SQL (faltavam vírgulas, aspas e parênteses errados)
+    
       let sql = `
         INSERT INTO tbl_receita_cozinha (
           id_receita, 
