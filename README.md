@@ -288,7 +288,7 @@ cp .env.example .env
 
 Arquivo `.env`:
 ```env
-DATABASE_URL="mysql://usuario:senha@localhost:3306/toque_gourmet"
+DATABASE_URL="mysql://SeuUsuario:SuaSenha@localhost:3306/toque_gourmet"
 PORT=8080
 ```
 
