@@ -1,0 +1,586 @@
+openapi: 3.0.1
+info:
+  title: Toque Gourmet
+  description: |-
+    API destinada ao gerenciamento de receitas culinarias, usuarios, ingredientes, cozinhas e categorias.
+    A API permite operacoes CRUD nas principais entidades e inclui um endpoint de filtro unificado.
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: gabrielcavalcantedossantos743@email.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+externalDocs:
+  description: Mais sobre a Gestão de Receitas
+  url: Localhost:8080/toque_gourmet/
+servers:
+  - url: Localhost:8080/toque_gourmet/
+    description: Servidor Local
+paths:
+  # ==================================================================
+  # Rotas de Usuarios
+  # ==================================================================
+  /usuarios:
+    post:
+      tags:
+        - Usuario
+      summary: Adiciona um novo Usuário
+      description: Registra um novo usuário no sistema.
+      requestBody:
+        description: JSON contendo os dados do novo usuário.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Usuario'
+        required: true
+      responses:
+        '201':
+          description: Usuário criado com sucesso
+        '400':
+          description: Entrada inválida (dados incorretos)
+    get:
+      tags:
+        - Usuario
+      summary: Lista todos os Usuários
+      description: Listagem de todos os usuários registrados.
+      responses:
+        '200':
+          description: Operação bem-sucedida
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Usuario'
+        '404':
+          description: Não Encontrado
+  /usuarios/{id_usuario}:
+    get:
+      tags:
+        - Usuario
+      summary: Busca um Usuário pelo ID
+      description: Retorna um usuário pelo ID.
+      parameters:
+        - name: id_usuario
+          in: path
+          description: ID do usuário a ser retornado
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Operação bem-sucedida
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usuario'
+        '400':
+          description: ID inválido
+        '404':
+          description: Usuário não encontrado
+    put:
+      tags:
+        - Usuario
+      summary: Atualiza um Usuário existente
+      description: Atualiza um usuário existente pelo ID.
+      parameters:
+        - name: id_usuario
+          in: path
+          description: ID do usuário a ser atualizado
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: JSON com os dados atualizados do usuário.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Usuario'
+        required: true
+      responses:
+        '200':
+          description: Usuário atualizado com sucesso
+        '400':
+          description: ID ou dados inválidos
+        '404':
+          description: Usuário não encontrado
+    delete:
+      tags:
+        - Usuario
+      summary: Exclui um Usuário
+      description: Exclui um usuário pelo ID.
+      parameters:
+        - name: id_usuario
+          in: path
+          description: ID do usuário a ser excluído
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Usuário excluído com sucesso
+        '400':
+          description: ID inválido
+        '404':
+          description: Usuário não encontrado
+  
+  # ==================================================================
+  # Rotas de Receitas
+  # ==================================================================
+  /receitas:
+    post:
+      tags:
+        - Receita
+      summary: Adiciona uma nova Receita
+      description: Cria um novo registro de receita, incluindo ingredientes, modo de preparo, etc.
+      requestBody:
+        description: JSON contendo os dados da nova receita.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReceitaCompleta'
+        required: true
+      responses:
+        '201':
+          description: Receita criada com sucesso
+        '400':
+          description: Entrada inválida
+    get:
+      tags:
+        - Receita
+      summary: Lista todas as Receitas
+      description: Retorna uma lista de todas as receitas.
+      responses:
+        '200':
+          description: Operação bem-sucedida
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Receita'
+        '404':
+          description: Não Encontrado
+  /receitas/{id_receita}:
+    get:
+      tags:
+        - Receita
+      summary: Busca uma Receita pelo ID
+      description: Retorna a receita completa (com ingredientes e modo de preparo) pelo ID.
+      parameters:
+        - name: id_receita
+          in: path
+          description: ID da receita a ser retornada
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Operação bem-sucedida
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReceitaCompleta'
+        '400':
+          description: ID inválido
+        '404':
+          description: Receita não encontrada
+    put:
+      tags:
+        - Receita
+      summary: Atualiza uma Receita existente
+      description: Atualiza uma receita pelo ID.
+      parameters:
+        - name: id_receita
+          in: path
+          description: ID da receita a ser atualizada
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: JSON com os dados atualizados da receita.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReceitaCompleta'
+        required: true
+      responses:
+        '200':
+          description: Receita atualizada com sucesso
+        '400':
+          description: ID ou dados inválidos
+        '404':
+          description: Receita não encontrada
+    delete:
+      tags:
+        - Receita
+      summary: Exclui uma Receita
+      description: Exclui uma receita pelo ID, incluindo todas as suas relações (ingredientes, modo de preparo, notas).
+      parameters:
+        - name: id_receita
+          in: path
+          description: ID da receita a ser excluída
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Receita excluída com sucesso
+        '400':
+          description: ID inválido
+        '404':
+          description: Receita não encontrada
+
+
+  # Rotas de Filtro 
+
+  /receitas/filtrar:
+    get:
+      tags:
+        - Filtros
+      summary: Busca e Filtra Receitas
+      description: Retorna receitas baseadas em múltiplos critérios de filtro (tempo, dificuldade, categoria, nome ou exclusão de alérgenos). Todos os filtros são opcionais.
+      parameters:
+        - name: tempo_max
+          in: query
+          description: Tempo máximo de preparo (em minutos). (Simula filtrar_por_tempo_maximo)
+          required: false
+          schema:
+            type: integer
+            example: 30
+        - name: dificuldade
+          in: query
+          description: Nível de dificuldade da receita. (Simula filtrar_por_dificuldade)
+          required: false
+          schema:
+            type: string
+            enum:
+              - facil
+              - medio
+              - dificil
+        - name: categoria
+          in: query
+          description: Filtra por categoria específica (Nome da Categoria). (Simula filtrar_por_categoria)
+          required: false
+          schema:
+            type: string
+            enum:
+              - entradas
+              - pratos_principais
+              - acompanhamentos
+              - saladas
+              - sopas
+              - massas
+              - carnes
+              - frango
+              - peixes_e_frutos_do_mar
+              - lanches
+              - petiscos
+              - sobremesas
+              - bolos_e_tortas
+              - bebidas
+              - vegano
+              - vegetariano
+              - light__fit
+              - cafe_da_manha
+              - brunch
+        - name: nome
+          in: query
+          description: Busca por parte do título da receita ou nome de um ingrediente contido. (Simula filtrar_por_ingrediente ou busca geral)
+          required: false
+          schema:
+            type: string
+            example: Bolo
+        - name: alergenos
+          in: query
+          description: Exclui receitas que contenham ingredientes com o alérgeno especificado (Nome do Alérgeno). (Simula filtrar_excluir_alergeno)
+          required: false
+          schema:
+            type: string
+            enum:
+              - Gluten
+              - Lactose
+              - Amendoim
+              - Ovos
+              - Soja
+      responses:
+        '200':
+          description: Lista de receitas filtradas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Receita'
+        '400':
+          description: Parâmetro(s) de filtro inválido(s)
+
+  
+  # Rotas de Ingredientes 
+
+  /ingredientes:
+    get:
+      tags:
+        - Ingrediente
+      summary: Lista todos os Ingredientes
+      responses:
+        '200':
+          description: Operação bem-sucedida
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Ingrediente'
+  /ingredientes/{id_ingredientes}:
+    get:
+      tags:
+        - Ingrediente
+      summary: Busca Ingrediente pelo ID
+      parameters:
+        - name: id_ingredientes
+          in: path
+          description: ID do Ingrediente
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Operação bem-sucedida
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IngredienteDetalhe' 
+
+components:
+  schemas:
+    
+    # Esquemas para Usuario
+    
+    Usuario:
+      type: object
+      required:
+        - nome
+        - email
+        - senha
+      properties:
+        id_usuario:
+          type: integer
+          readOnly: true
+          example: 1
+        nome:
+          type: string
+          example: Kauan Silva
+        email:
+          type: string
+          format: email
+          example: kauan1@email.com
+        senha:
+          type: string
+          writeOnly: true
+          example: '12345'
+        imagem:
+          type: string
+          nullable: true
+          example: user1.png
+
+    
+    # Esquemas para Receita
+    
+    Receita:
+      type: object
+      required:
+        - titulo
+        - descricao
+        - tempo_preparo
+        - dificuldade
+        - imagem
+        - id_usuario
+      properties:
+        id_receita:
+          type: integer
+          readOnly: true
+          example: 6
+        id_usuario:
+          type: integer
+          example: 1
+        titulo:
+          type: string
+          example: Penne ao Molho Branco com Presunto
+        descricao:
+          type: string
+          example: Massa penne com molho cremoso e cubos de presunto.
+        tempo_preparo:
+          type: integer
+          description: Tempo em minutos
+          example: 25
+        dificuldade:
+          type: string
+          enum:
+            - facil
+            - medio
+            - dificil
+          example: facil
+        data_criacao:
+          type: string
+          format: date
+          readOnly: true
+        data_edicao:
+          type: string
+          format: date
+          nullable: true
+          readOnly: true
+        imagem:
+          type: string
+          example: https://toquesenaistorage.blob.core.windows.net/tgsenai/Comidacompresunto.jpeg
+    
+    ReceitaCompleta:
+      allOf:
+        - $ref: '#/components/schemas/Receita'
+        - type: object
+          properties:
+            ingredientes_detalhe:
+              type: array
+              description: Detalhes dos ingredientes e quantidades para esta receita.
+              items:
+                $ref: '#/components/schemas/ReceitaIngrediente'
+            modo_preparo:
+              type: array
+              description: Passos detalhados para o preparo da receita.
+              items:
+                $ref: '#/components/schemas/ModoPreparoPasso'
+            cozinhas:
+              type: array
+              description: Tipos de cozinha associados.
+              items:
+                $ref: '#/components/schemas/Cozinha'
+            categorias:
+              type: array
+              description: Categorias associadas à receita.
+              items:
+                $ref: '#/components/schemas/Categoria'
+    
+    
+    # Esquemas para Ingredientes
+    
+    Ingrediente:
+      type: object
+      required:
+        - nome
+        - tipo
+      properties:
+        id_ingredientes:
+          type: integer
+          readOnly: true
+          example: 6
+        nome:
+          type: string
+          example: Penne
+        tipo:
+          type: string
+          example: Seco
+    
+    IngredienteDetalhe:
+      allOf:
+        - $ref: '#/components/schemas/Ingrediente'
+        - type: object
+          properties:
+            alergenos:
+              type: array
+              description: Alérgenos associados a este ingrediente.
+              items:
+                $ref: '#/components/schemas/Alergeno'
+
+    # Esquema de Juncao para Receita
+
+    ReceitaIngrediente:
+      type: object
+      required:
+        - id_ingredientes
+        - quantidade
+        - unidade
+      properties:
+        id_ingredientes:
+          type: integer
+          example: 6
+        nome:
+          type: string
+          readOnly: true
+          example: Penne
+        quantidade:
+          type: number
+          format: float
+          example: 250.00
+        unidade:
+          type: string
+          example: g
+
+    
+    # Esquemas para Componentes de Receita
+
+    ModoPreparoPasso:
+      type: object
+      required:
+        - numero_passo
+        - descricao
+      properties:
+        numero_passo:
+          type: integer
+          example: 1
+        descricao:
+          type: string
+          example: Coloque 2 litros de água a ferver com uma pitada generosa de sal.
+          
+    Cozinha:
+      type: object
+      required:
+        - nome
+      properties:
+        id_cozinha:
+          type: integer
+          readOnly: true
+          example: 2
+        nome:
+          type: string
+          example: Italiana
+
+    Categoria:
+      type: object
+      required:
+        - nome
+      properties:
+        id_categoria:
+          type: integer
+          readOnly: true
+          example: 6
+        nome:
+          type: string
+          example: massas
+        descricao:
+          type: string
+          nullable: true
+          example: Categoria de massas
+
+    Alergeno:
+      type: object
+      required:
+        - nome
+      properties:
+        id_alergenos:
+          type: integer
+          readOnly: true
+          example: 1
+        nome:
+          type: string
+          example: Glúten
+        descricao:
+          type: string
+          example: Proteína presente no trigo

@@ -1,0 +1,471 @@
+header .logo {
+    padding-inline: 0;
+}
+
+header {
+    padding-top: 60px;
+    padding-inline: 188px;
+}
+
+.options {
+    margin: 0;
+}
+
+body {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    background-color: black;
+}
+
+.background {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    position: absolute;
+    z-index: -999;
+}
+
+.background img {
+    position: relative;
+    object-fit: cover;
+    object-position: bottom;
+    height: 1189px;
+    z-index: -999;
+    width: 100%;
+}
+
+.search-bar {
+    background-color: white;
+
+}
+
+.search-bar input::placeholder {
+    font-weight: 400;
+    color: black;
+}
+
+.search-bar input {
+    color: black;
+    font-weight: 500;
+}
+
+.background-effect {
+    height: 1189px;
+    width: 100%;
+    position: absolute;
+    z-index: -998;
+    background: #ffffff;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(212, 200, 200, 0.45) 43%, rgba(0, 0, 0, 1) 100%);
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    height: fit-content;
+    width: 100%;
+    padding-top: 60px;
+    padding-inline: 188px;
+    color: white;
+}
+
+.recipe-introduction {
+    display: flex;
+    align-items: center;
+    padding-top: 8%;
+    padding-bottom: 26px;
+    padding-inline: 18px;
+
+}
+
+.recipe-introduction h1 {
+    font-size: 3.2rem;
+    font-weight: 400;
+    width: 50%;
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.recipe-introduction .dificulty {
+    display: flex;
+    margin-left: 10%;
+    flex-direction: column;
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.dificulty span {
+    font-size: 26px;
+}
+
+.dificulty span:nth-child(2) {
+    font-size: 50px;
+}
+
+.review {
+    display: flex;
+    flex-direction: column;
+    padding-left: 5%;
+    gap: 1rem;
+    height: 125px;
+    width: 523px;
+    font-size: 26px;
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.review-stars {
+
+    display: flex;
+    align-items: center;
+}
+
+.review-stars img {
+    height: 3.26rem;
+}
+
+.review-stars button {
+    background-color: white;
+    color: black;
+    margin-left: 14%;
+    width: 122px;
+    height: 38px;
+    border-radius: 20px;
+}
+
+.recipe-details {
+    display: flex;
+    padding-top: 85px;
+    background-color: white;
+    color: black;
+    width: 100%;
+    min-height: 1000px;
+    font-size: 35px;
+
+}
+
+.recipe-details h2 {
+    font-weight: 400;
+}
+
+.ingredients {
+    display: flex;
+    flex-direction: column;
+    padding-left: 78px;
+    background-color: rgb(255, 255, 255);
+    width: calc(40% - 1px);
+    gap: 20px;
+    padding-bottom: 20px;
+}
+
+.ingredient-info {
+    display: flex;
+    justify-content: center;
+    padding: 15px;
+    padding-left: 20px;
+    flex-direction: column;
+    gap: 5px;
+
+    height: 10%;
+    width: 80%;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+
+    font-weight: 500;
+    color: #2b2b2b;
+    gap: 4px;
+}
+
+.ingredient-info span {
+    font-size: 25px;
+}
+
+.unity-info {
+    display: flex;
+    gap: 20px;
+
+}
+
+.unity-info span {
+    font-size: 20px;
+}
+
+.divider {
+    width: 2px;
+    background-color: rgb(0, 0, 0);
+}
+
+.steps {
+    padding-left: 88px;
+    background-color: rgb(255, 255, 255);
+    width: 55%;
+    counter-reset: step-counter;
+}
+
+.step {
+    position: relative;
+    padding: 12px 16px;
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: 10px;
+    font-size: 20px;
+    color: #222;
+    counter-increment: step-counter;
+}
+.step::before {
+  content: counter(step-counter) " - ";
+  font-weight: 700;
+  font-size: 22px;
+}
+@media (max-width: 768px) {
+
+    header {
+        padding: 20px;
+        padding-bottom: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+    header .logo img{
+        display: block;
+    }
+    header .options{
+        justify-content: start;
+        width: 100%;
+    }
+    .logo span{
+        font-size: 30px;
+    }
+    .search-bar{
+        width: 100%;
+        padding-left: 20px;
+        flex-grow: 1;
+    }
+    .search-bar input::placeholder{
+        font-size: 16px;
+    }
+    .background,
+    .background img,
+    .background-effect {
+        filter: brightness(0.8);
+        height: 260px;
+    }
+
+    .background img {
+        object-fit: cover;
+        object-position: center;
+    }
+
+    main {
+        padding: 0;
+        margin-top: 35px;
+        display: flex;
+        justify-content: center;
+    }
+
+    .recipe-introduction,
+    .recipe-details {
+        background: white;
+        width: 100%;
+        padding: 26px;
+        margin: 0 auto;
+        box-sizing: border-box;
+    }
+
+    .recipe-introduction {
+        border-radius: 20px 20px 0px 0px;
+        flex-direction: column;
+        text-align: left;
+        align-items: flex-start;
+        padding-top: 35px;
+        color: black    ;
+    }
+
+    .recipe-introduction h1 {
+        font-size: 1.7rem;
+        width: 100%;
+        margin-bottom: 15px;
+        text-shadow: none;
+        color: black;
+    }
+    .dificulty{
+        width: fit-content;
+        margin-top: 10px;
+        align-self: flex-start;
+        order: 3;
+    }
+    .recipe-introduction .dificulty{
+        gap: 10px;
+        margin-left: 0;
+    }
+    .dificulty span {
+        font-size: 18px;
+        
+    }
+
+    .dificulty span:nth-child(2) {
+        font-size: 20px;
+        font-weight: 600;
+    }
+    .review{
+        padding-inline: 0;
+        height: fit-content;
+    }
+    .review span{
+        display: none;
+    }
+    .review-stars{
+        width: 50%;
+        flex-direction: row-reverse;
+        gap: 12px;
+    }
+    .review-stars img {
+        height: 25px;
+    }
+
+    .review-stars button {
+        width: auto;
+        height: 30px;
+        padding: 0 15px;
+        margin-left: 8px;
+        border-radius: 12px;
+        font-size: 14px;
+        background-color: orange;
+    }
+
+    .recipe-details {
+        flex-direction: column;
+        font-size: 20px;
+    }
+
+    .divider {
+        display: none;
+    }
+
+    .ingredients {
+        width: 100%;
+        padding: 0;
+        gap: 15px;
+    }
+
+    .ingredient-info {
+        width: 100%;
+        height: auto;
+        padding: 12px;
+        font-size: 16px;
+        border-radius: 14px;
+    }
+
+    .ingredient-info span {
+        font-size: 17px;
+    }
+
+    .unity-info span {
+        font-size: 15px;
+    }
+
+    .steps {
+        margin-top: 30px;
+        width: 100%;
+        padding-left: 0;
+    }
+
+    .steps h2 {
+        font-size: 1.6rem;
+    }
+
+    .step {
+        font-size: 16px;
+        background: #f9f9f9;
+        border-radius: 10px;
+        padding: 10px 14px;
+        margin-bottom: 12px;
+    }
+
+    .step::before {
+        font-size: 18px;
+    }
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 20px;
+    padding: 30px 0;
+    width: 100%;
+}
+
+.btn-clear,
+.btn-confirm {
+
+    padding: 12px 30px;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.btn-clear {
+    background-color: #ff0000;
+    color: white;
+}
+
+.btn-clear:hover {
+    background-color: #5a6268;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-confirm {
+    background-color: #28a745;
+    color: white;
+}
+
+.btn-confirm:hover {
+    background-color: #218838;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+
+@media (max-width: 768px) {
+    *{
+        box-sizing: border-box;
+    }
+    .form-actions {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 15px;
+        padding: 20px 0;
+    }
+    .recipe-details {
+        max-width: 100%;
+        width: 100%;
+    }
+    .ingredients{
+        padding: 0;
+        width: 100%;
+        height: fit-content;
+    }
+
+    body,
+    html {
+        overflow-x: hidden;
+        width: 100%;
+    }
+    
+    .steps{
+        padding: 0;
+        width: 100%;
+        height: fit-content;
+        width: 100%;
+    }
+    .btn-clear,
+    .btn-confirm {
+        width: 100%;
+        padding: 15px;
+        font-size: 18px;
+    }
+}

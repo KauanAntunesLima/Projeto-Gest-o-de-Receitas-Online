@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="./allrecipes.css">
+    <script src="/app.js" type="module" defer></script>
+    <title>Toque Gourmet</title>
+</head>
+
+<body>
+    <header>
+        <div class="logo"> <span>TOQUE <span>GOURMET</span></span>
+            <img src="../img/gourmetlogo.svg" alt="">
+        </div>
+        <div class="options">
+            <div class="search-bar">
+                <input type="text" placeholder="Procure uma receita">
+            </div>
+        </div>
+    </header>
+    
+    <main>
+        <div class="filter-options"><span>Filtro</span>
+        <div class="filter-choices">
+            <div class="filtro-group">
+                <h3>Tempo Máximo</h3>
+                <label><input type="checkbox" name="tempo" value="15"> 15 min</label>
+                <label><input type="checkbox" name="tempo" value="30"> 30 min</label>
+                <label><input type="checkbox" name="tempo" value="60"> 1 hora</label>
+                <label><input type="checkbox" name="tempo" value="120"> 2 horas</label>
+            </div>
+            <div class="filtro-group">
+                <h3>Dificuldade</h3>
+                <label><input type="checkbox" name="dificuldade" value="facil"> Fácil</label>
+                <label><input type="checkbox" name="dificuldade" value="medio"> Médio</label>
+                <label><input type="checkbox" name="dificuldade" value="dificil"> Difícil</label>
+            </div>
+            <div class="filtro-group" id="filtro-alergenos">
+                <h3>Alergênos</h3>
+            </div>
+            <div class="filtro-group">
+                <h3>Ingredientes</h3>
+                <input type="text"
+                       id="ingredientes-input"
+                       placeholder="Digite ingredientes separados por vírgula"
+                       name="ingredientes">
+            </div>
+
+
+        </div>
+    </div>
+            <div id="all-recipes-container">
+        </div>
+    </main>
+</body>
+
+</html>

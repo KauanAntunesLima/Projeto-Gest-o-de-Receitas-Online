@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="./recipe.css">
+    <link rel="stylesheet" href="./formrecipe.css">
+    <script src="/app.js" type="module" defer></script>
+<script src="../../js/formrecipe.js" defer></script>
+    <title>Toque Gourmet</title>
+</head>
+
+<body>
+    <header>
+        <div class="logo"> <span>TOQUE <span>GOURMET</span></span>
+            <img src="./src/img/gourmetlogo.svg" alt="">
+        </div>
+        <div class="options">
+            <span>CADASTRO DE <span>RECEITAS</span></span>
+        </div>
+        </div>
+    </header>
+
+    <main class="recipe-form" id="recipe-form">
+
+        <section class="top-infos">
+            <div class="input-group">
+                <label>Nome da Receita</label>
+                <input type="text" placeholder="Ex: Lasanha à Bolonhesa"/>
+            </div>
+
+            <div class="time-group">
+                <label>Tempo de preparo</label>
+                <div class="time-inputs">
+                    <input type="number" placeholder="Horas" value="0" min="0"/>
+                    <input type="number" placeholder="Minutos" value="45" min="0"/>
+                    <input type="number" placeholder="Segundos" value="0" min="0"/>
+                </div>
+            </div>
+        </section>
+
+        <section class="steps-section">
+            <h3>Passo a Passo</h3>
+
+            <div class="steps-list">
+
+                <div class="step-item">
+                    <textarea placeholder="Descreva o primeiro passo da receita..."></textarea>
+
+                    <div class="step-actions">
+                        <button class="delete"><img src="../img/remove.png" alt=""></button>
+                        <button class="add"><img src="../img/add.png" alt=""></button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="ingredients-photo">
+
+            <div class="ingredients-box">
+                <div class="ingredients-header">
+                    <h3>Ingredientes</h3>
+                </div>
+                <div class="ingredient-row" data-ingredient-id="1">
+                    <span class="ingredient-number">1</span>
+                    <input type="text" placeholder="Ex: Farinha de trigo"/>
+                    <input type="text" placeholder="Ex: 500"/>
+                    <input type="text" placeholder="Ex: gramas"/>
+                    <button class="delete"><img src="../img/remove.png" alt=""></button>
+                    <button class="add"><img src="../img/add.png" alt=""></button>
+                </div>
+
+            </div>
+
+            <div class="photo-upload">
+                <label class="photo-preview">
+                    <input type="file" id="img-input" accept="image/*" onchange="preview(event)" />
+                    <img id="preview-img" src="https://via.placeholder.com/500x300?text=Preview" />
+                </label>
+            </div>
+
+        </section>
+
+        <section class="extra-info">
+
+            <div class="allergens-section">
+                <h3>Alérgenos</h3>
+                <div class="allergens-header">
+                </div>
+
+                <div class="allergen-row">
+                    <input type="text" placeholder="Ex: Glúten"/>
+                    <select class="ingredient-select">
+                        <option value="">Selecione um ingrediente</option>
+                        <option value="1">1 - Farinha de trigo</option>
+                        <option value="2">2 - Ovos</option>
+                    </select>
+                    <button class="delete"><img src="../img/remove.png" alt=""></button>
+                    <button class="add"><img src="../img/add.png" alt=""></button>
+                </div>
+
+
+            </div>
+
+            <div class="other-fields">
+                <div class="extra-row">
+                    <label>Categoria</label>
+                    <select name="categoria" id="categoria">
+                        <option value="">Selecione a categoria</option>
+                        <option value="entradas">Entradas</option>
+                        <option value="pratos_principais">Pratos Principais</option>
+                        <option value="acompanhamentos">Acompanhamentos</option>
+                        <option value="saladas">Saladas</option>
+                        <option value="sopas">Sopas</option>
+                        <option value="massas">Massas</option>
+                        <option value="carnes">Carnes</option>
+                        <option value="frango">Frango</option>
+                        <option value="peixes_e_frutos_do_mar">Peixes e Frutos do Mar</option>
+                        <option value="lanches">Lanches</option>
+                        <option value="petiscos">Petiscos</option>
+                        <option value="sobremesas">Sobremesas</option>
+                        <option value="bolos_e_tortas">Bolos e Tortas</option>
+                        <option value="bebidas">Bebidas</option>
+                        <option value="vegano">Vegano</option>
+                        <option value="vegetariano">Vegetariano</option>
+                        <option value="light__fit">Light / Fit</option>
+                        <option value="café_da_manhã">Café da Manhã</option>
+                        <option value="brunch">Brunch</option>
+                    </select>
+                </div>
+
+                <div class="extra-row">
+                    <label>Nível de Dificuldade</label>
+                    <select name="dificuldade" id="dificuldade">
+                        <option value="">Selecione...</option>
+                        <option value="facil">Fácil</option>
+                        <option value="medio" selected>Médio</option>
+                        <option value="dificil">Difícil</option>
+                    </select>
+                </div>
+
+                <div class="extra-row">
+                    <label>Tipo de Cozinha</label>
+                    <select name="tipo_cozinha" id="tipo_cozinha">
+                        <option value="">Selecione o tipo de cozinha</option>
+                        <option value="brasileira">Brasileira</option>
+                        <option value="japonesa">Japonesa</option>
+                        <option value="italiana">Italiana</option>
+                        <option value="mexicana">Mexicana</option>
+                        <option value="francesa">Francesa</option>
+                        <option value="outra">Outra</option>
+                    </select>
+                </div>
+            </div>
+
+        </section>
+
+        <section class="form-actions">
+            <button type="button" class="btn-clear" id="btn-clear">Limpar Campos</button>
+            <button type="button" class="btn-confirm" id="btn-confirm">Confirmar</button>
+        </section>
+
+    </main>
+
+</body>
+
+</html>

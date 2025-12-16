@@ -1,0 +1,71 @@
+version: '3.8'
+
+services:
+  # Serviço do MySQL
+  mysql:
+    image: mysql:8.0
+    container_name: mysql_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: db_receitas
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - "5506:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./back-end/database/backup.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+      interval: 10s
+      start_period: 40s
+    networks:
+      - app-network
+
+  # Serviço do Back-end
+  back-end:
+    build:
+      context: ./back-end
+      dockerfile: Dockerfile
+    container_name: backend_api
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      DATABASE_URL: "mysql://root:password@mysql:3306/db_receitas"
+      NODE_ENV: production
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - app-network
+    volumes:
+      - ./back-end:/app
+      - /app/node_modules
+
+  # Serviço do Front-end
+  front-end:
+    build:
+      context: ./front-end
+      dockerfile: Dockerfile
+    container_name: frontend_web
+    restart: always
+    ports:
+      - "3000:80"
+    depends_on:
+      back-end:
+        condition: service_started
+    networks:
+      - app-network
+    volumes:
+      - ./front-end:/usr/share/nginx/html
+
+volumes:
+  mysql_data:
+
+networks:
+  app-network:
+    driver: bridge

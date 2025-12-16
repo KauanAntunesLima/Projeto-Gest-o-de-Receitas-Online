@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="./recipe.css">
+    <link rel="stylesheet" href="../../components/feedback.css">
+    <script src="/app.js" type="module" defer></script>
+    <title>Toque Gourmet</title>
+</head>
+
+<body>
+    <div class="background">
+        <img id="recipe-bg-img" src="https://toquesenaistorage.blob.core.windows.net/tgsenai/1765462243808icons8-gmail-novo-50.png" alt="Imagem da Receita">
+    </div>
+    <div class="background-effect"></div>
+    <header>
+        <div class="logo"> <span>TOQUE <span>GOURMET</span></span>
+            <img src="../img/gourmetlogo.svg" alt="">
+        </div>
+        <div class="options">
+            <div class="search-bar">
+                <input type="text" placeholder="Procure uma receita">
+            </div>
+        </div>
+    </header>
+    <main>
+        <div class="recipe-introduction">
+            <h1 id="recipe-title">Carregando Receita...</h1>
+            <div class="dificulty">
+                <span>Dificuldade</span>
+                <span id="recipe-difficulty-text">--</span>
+            </div>
+            <div class="review">
+                <span>Avaliação</span>
+                <div class="review-stars">
+                    <!-- Estrelas serão adicionadas dinamicamente pelo JavaScript -->
+                    <button id="avaliar-btn">Avalie</button>
+                </div>
+            </div>
+        </div>
+        <div class="recipe-details">
+            <div class="ingredients">
+                <h2>Ingredientes</h2>
+
+            </div>
+            <div class="divider"></div>
+            <div class="steps">
+                <h2>Passo a Passo</h2>
+                <div id="steps-list" class="steps-description">
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>
