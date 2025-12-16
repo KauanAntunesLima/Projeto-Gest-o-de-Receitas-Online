@@ -5,7 +5,7 @@
  * Objetivo: Arquivo responsavel pelarealização do CRUD no Banco de dados my sql da tabela de receitas
  ************************************/
 //Import da biblioteca do PrismaClient
-const { PrismaClient } = require('../../generated/prisma')
+const { PrismaClient } = require('../../prisma/generated/prisma/index.js')
 
 //Cria um objeto do prisma client para manipular os scripts SQL
 const prisma = new PrismaClient()
@@ -15,11 +15,12 @@ const getSelectAllreceita = async function () {
 
         let sql = `select * from tbl_receita order by id_receita desc`
         let result = await prisma.$queryRawUnsafe(sql)
-
+        console.log(result)
         if (Array.isArray(result)){
             return result
         }
     }catch(error){
+        console.log(error)
         return false
     }   
 }

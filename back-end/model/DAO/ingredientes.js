@@ -5,7 +5,7 @@
  * Objetivo: Arquivo responsavel pelarealização do CRUD no Banco de dados my sql da tabela de alergenos
  ************************************/
 //import da biblioteca
-const { PrismaClient } = require('../../generated/prisma')
+const { PrismaClient } = require('../../prisma/generated/prisma/index.js')
 
 const prisma = new PrismaClient()
 

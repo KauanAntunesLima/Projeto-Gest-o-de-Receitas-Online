@@ -6,7 +6,7 @@
  ************************************/
 
 //Import da biblioteca do PrismaClient
-const { PrismaClient } = require('../../generated/prisma')
+const { PrismaClient } = require('../../prisma/generated/prisma/index.js')
 
 //Cria um objeto do prisma client para manipular os scripts SQL
 const prisma = new PrismaClient()

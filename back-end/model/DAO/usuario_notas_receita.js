@@ -4,7 +4,7 @@
  * versão: 1.0
  * Objetivo: Arquivo responsavel pelarealização do CRUD no Banco de dados my sql da tabela relacional usuario_notas_receita
  ************************************/
-const { PrismaClient } = require('../../generated/prisma')
+const { PrismaClient } = require('../../prisma/generated/prisma/index.js')
 
 const prisma = new PrismaClient()
 

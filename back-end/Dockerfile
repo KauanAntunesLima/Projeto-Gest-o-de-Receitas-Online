@@ -8,7 +8,10 @@ WORKDIR /app
 COPY package*.json ./
 
 # Instalar dependências
-RUN npm ci --only=production
+RUN npm i
+
+# Copiar a pasta prisma antes de gerar o client
+COPY ./prisma ./prisma
 
 # Gerar o Prisma Client
 RUN npx prisma generate

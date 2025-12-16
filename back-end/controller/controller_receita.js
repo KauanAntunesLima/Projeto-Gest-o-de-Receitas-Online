@@ -25,7 +25,7 @@ const listarReceita = async function () {
 
     try {
         let result = await receitaDAO.getSelectAllreceita()
-
+        console.log(result)
         if (result && result.length > 0) {
 
             for (let receita of result) {
