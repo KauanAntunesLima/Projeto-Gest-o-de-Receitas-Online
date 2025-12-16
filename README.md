@@ -71,7 +71,7 @@ O sistema é totalmente responsivo e funciona corretamente em:
 
 ---
 
-## 🐳 Execução com Docker (Recomendado)
+## 🐳 Execução com Docker (Execução sem Docker abaixo)
 
  A implementação do Docker neste projeto foi realizada a partir de estudos externos, com apoio e orientação do meu irmão, o que contribuiu para o entendimento do processo de conteinerização, configuração dos serviços e integração entre back-end, front-end e banco de dados. - Roger R.
 
@@ -228,3 +228,4 @@ Front-end disponível em: [http://localhost:5500](http://localhost:5500) (ou por
 * Docker é o método recomendado
 * Banco é inicializado automaticamente no Docker
 * Cada usuário gerencia apenas suas próprias receitas
+
